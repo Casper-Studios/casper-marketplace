@@ -1,16 +1,18 @@
 {
   "name": "casper",
-  "version": "1.0.0",
-  "description": "Casper Studios plugin marketplace",
   "owner": {
     "name": "Casper Studios"
+  },
+  "metadata": {
+    "description": "Casper Studios plugin marketplace",
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "casper",
       "description": "Company context and secure coding environment",
-      "source": "local",
-      "path": "."
+      "source": "./.",
+      "version": "1.0.0"
     }
   ]
 }
