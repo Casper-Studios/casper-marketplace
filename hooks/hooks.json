@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "LC_ALL=C ${CLAUDE_PLUGIN_ROOT}/scripts/validate-bash.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "LC_ALL=C ${CLAUDE_PLUGIN_ROOT}/scripts/load-env.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

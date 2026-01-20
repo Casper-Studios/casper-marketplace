@@ -1,0 +1,7 @@
+{
+  "name": "casper",
+  "version": "1.0.0",
+  "description": "Company context and secure coding environment for teams",
+  "author": { "name": "Your Team" },
+  "keywords": ["company", "context", "security", "enterprise"]
+}

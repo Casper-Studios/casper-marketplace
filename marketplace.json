@@ -1,0 +1,15 @@
+{
+  "name": "casper",
+  "version": "1.0.0",
+  "description": "Casper Studios plugin marketplace",
+  "plugins": [
+    {
+      "name": "casper",
+      "description": "Company context and secure coding environment",
+      "source": {
+        "source": "local",
+        "path": "."
+      }
+    }
+  ]
+}

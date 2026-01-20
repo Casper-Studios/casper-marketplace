@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(.env.local)",
+      "Read(.env.production)",
+      "Read(**/secrets/**)",
+      "Read(**/.secrets/**)",
+      "Read(**/*credentials*)"
+    ],
+    "allow": [
+      "Skill(casper:setup)",
+      "Skill(casper:company)",
+      "Skill(casper:projects)",
+      "Skill(casper:transcripts)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)",
+      "Bash(npm install:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  },
+  "env": {
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1"
+  }
+}
