@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "casper",
-      "description": "Company context and secure coding environment",
+      "description": "Company context and secure coding environment for Casper Studios",
       "source": "./.",
       "version": "1.0.0"
     }

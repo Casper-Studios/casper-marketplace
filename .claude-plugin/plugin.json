@@ -1,7 +1,7 @@
 {
   "name": "casper",
   "version": "1.0.0",
-  "description": "Company context and secure coding environment for teams",
-  "author": { "name": "Your Team" },
+  "description": "Company context and secure coding environment for Casper Studios",
+  "author": { "name": "Casper Studios" },
   "keywords": ["company", "context", "security", "enterprise"]
 }
