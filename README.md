@@ -13,40 +13,33 @@ Casper provides company/client context and security-focused settings for teams u
 
 ### Option 1: Marketplace (Recommended)
 
-#### For Private Repo
-
 ```bash
-# 1. Set GitHub token (add to ~/.bashrc or ~/.zshrc)
-export GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+# 1. Add the Casper Studios marketplace
+/plugin marketplace add Casper-Studios/plugin-marketplace
 
-# 2. Add the marketplace
-/plugin marketplace add casperstudios/casper
-
-# 3. Install the plugin
+# 2. Install the plugin
 /plugin install casper
 
-# 4. Run setup to apply security settings
+# 3. Run setup to apply security settings
 /casper:setup
 ```
 
-#### For Public Repo
+### Option 2: Git Clone + Local Plugin Directory
 
 ```bash
-/plugin marketplace add casperstudios/casper
-/plugin install casper
-/casper:setup
-```
+# Clone the repository
+git clone git@github.com:Casper-Studios/plugin-marketplace.git
 
-### Option 2: Local Plugin Directory
-```bash
-# Clone or copy the casper directory to your project
-claude --plugin-dir ./casper
+# Run Claude Code with the plugin directory
+claude --plugin-dir ./plugin-marketplace
 ```
 
 ### Option 3: Copy to Claude Plugins Directory
+
 ```bash
-# Copy to your home plugins directory
-cp -r casper ~/.claude/plugins/
+# Clone and copy to your home plugins directory
+git clone git@github.com:Casper-Studios/plugin-marketplace.git
+cp -r plugin-marketplace ~/.claude/plugins/casper
 ```
 
 ## Setup
