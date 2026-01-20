@@ -9,6 +9,49 @@ Casper provides company/client context and security-focused settings for teams u
 - **Secure .env Loading**: Environment variables available to subprocesses without exposing raw values
 - **Privacy Settings**: Telemetry and error reporting disabled by default
 
+## Getting Started (New to Git?)
+
+If you're new to Git and GitHub, follow these steps first:
+
+### 1. Join the Casper Studios GitHub Organization
+
+- Check your email for an invite from GitHub/Casper-Studios
+- If you haven't received one, ask eng to add you to the org
+
+### 2. Install Git
+
+**Mac:**
+Open Terminal and run:
+
+```bash
+xcode-select --install
+```
+
+**Windows:**
+Download and install from https://git-scm.com/download/win (use all default options)
+
+### 3. Set Up Git (one-time)
+
+Open Terminal (Mac) or Git Bash (Windows) and run:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@casper-studios.com"
+```
+
+### 4. Install the Plugin
+
+Open Claude Code and run:
+```
+/plugin marketplace add git@github.com:Casper-Studios/plugin-marketplace.git
+/plugin install casper
+/casper:setup
+```
+
+You'll be prompted to log in to GitHub - use your Casper Studios credentials.
+
+---
+
 ## Installation
 
 ### Option 1: Marketplace (Recommended)
@@ -51,6 +94,7 @@ After installing, run the setup command to apply security settings:
 ```
 
 This will:
+
 1. Apply security deny rules (blocks dangerous commands)
 2. Apply security allow rules (permits safe git/npm operations)
 3. Set environment variables to disable telemetry
@@ -61,20 +105,26 @@ This will:
 ## Commands
 
 ### `/casper:company` - Layer 1: Company Overview
+
 View high-level company information and client list.
+
 - Company description and tech stack
 - Coding standards
 - List of clients with brief descriptions
 
 ### `/casper:projects` - Layer 2: Project Details
+
 View detailed project information and requirements.
+
 - Project goals and status
 - Technical design
 - Phase breakdown
 - Supports filtering by client: `/casper:projects client-name`
 
 ### `/casper:transcripts` - Layer 3: Meeting History
+
 View meeting transcripts and decision logs.
+
 - Meeting summaries
 - Key decisions
 - Action items
@@ -83,10 +133,13 @@ View meeting transcripts and decision logs.
 ## Security Features
 
 ### Philosophy
+
 This plugin focuses on preventing **irreversible, catastrophic** operations rather than blocking everything potentially dangerous. [Research shows](https://flatt.tech/research/posts/pwning-claude-code-in-8-different-ways/) that denylists are inherently bypassable through encoding, subshells, or script files. These rules are a safety net, not a security boundary.
 
 ### Catastrophic Command Blocking
+
 The bash validator hook blocks truly dangerous commands:
+
 - **System destruction**: `rm -rf /`, `rm -rf ~`, `rm -rf *`
 - **Remote code execution**: `curl | bash`, `wget | sh` (piped to shell)
 - **Disk destruction**: `dd of=/dev/sd*`, `mkfs` on unmounted drives
@@ -95,7 +148,9 @@ The bash validator hook blocks truly dangerous commands:
 Commands like `curl`, `wget`, `chmod`, and `sudo` are **not** blocked because they have many legitimate uses.
 
 ### .env Protection
+
 Defense for secrets:
+
 1. **SessionStart Hook**: Loads `.env` into subprocess environment
 2. **Read Deny Rules**: Blocks direct reading of `.env`, `.env.*`, `**/secrets/**`
 
@@ -104,25 +159,32 @@ Defense for secrets:
 ## Customizing Your Data
 
 ### Company Information
+
 Edit `data/company.md` with your company's:
+
 - Overview and mission
 - Tech stack
 - Coding standards
 - Key contacts
 
 ### Adding Clients
+
 1. Edit `data/clients/_index.md` to add client summaries
 2. Create `data/clients/{client-name}.md` with detailed client info
 
 ### Adding Projects
+
 Create files in `data/projects/{client-name}/{project-name}.md` with:
+
 - Project goals and status
 - Requirements (P0/P1/P2)
 - Technical design
 - Phase breakdown
 
 ### Adding Transcripts
+
 Create files in `data/transcripts/{client-name}/{meeting-date-topic}.md` with:
+
 - Date, attendees, agenda
 - Discussion summary
 - Decisions made
@@ -172,14 +234,17 @@ After setup, verify the plugin is working:
 ## Troubleshooting
 
 ### Commands not appearing
+
 - Ensure plugin directory is correctly specified with `--plugin-dir`
 - Check that `.claude-plugin/plugin.json` exists and is valid JSON
 
 ### Hooks not working
+
 - Run `/casper:setup` and restart Claude Code
 - Check that scripts have execute permissions: `chmod +x scripts/*.sh`
 
 ### Settings not applied
+
 - Run `/casper:setup` to merge settings
 - Restart Claude Code after setup
 - Check `~/.claude/settings.json` for the applied rules
