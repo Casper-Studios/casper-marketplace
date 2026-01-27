@@ -1,0 +1,18 @@
+{
+  "name": "casper",
+  "owner": {
+    "name": "Casper Studios"
+  },
+  "metadata": {
+    "description": "Context management for consulting projects - company info, project PRDs, meeting transcripts",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "casper",
+      "description": "Context management for consulting projects - company info, project PRDs, meeting transcripts",
+      "source": "./.",
+      "version": "1.0.0"
+    }
+  ]
+}

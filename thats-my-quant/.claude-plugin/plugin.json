@@ -1,0 +1,7 @@
+{
+  "name": "thats-my-quant",
+  "version": "1.0.0",
+  "description": "Data analysis, visualization, and storytelling skill for financial and RevOps contexts",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["data", "analysis", "visualization", "financial", "revops", "saas", "dashboard", "marimo"]
+}
