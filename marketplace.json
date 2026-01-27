@@ -1,0 +1,23 @@
+{
+  "name": "Casper Studios Plugin Marketplace",
+  "version": "1.0.0",
+  "description": "A collection of Claude Code plugins for business automation, data analysis, and productivity",
+  "owner": {
+    "name": "Casper Studios",
+    "github": "Casper-Studios"
+  },
+  "plugins": [
+    {
+      "name": "casper",
+      "description": "Context management for consulting projects - company info, project PRDs, meeting transcripts",
+      "source": "./casper",
+      "version": "1.0.0"
+    },
+    {
+      "name": "thats-my-quant",
+      "description": "Data analysis and storytelling for financial and RevOps contexts",
+      "source": "./thats-my-quant",
+      "version": "1.0.0"
+    }
+  ]
+}
