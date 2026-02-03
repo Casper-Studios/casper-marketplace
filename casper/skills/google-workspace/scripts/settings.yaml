@@ -1,0 +1,15 @@
+client_config_backend: file
+client_config_file: client_secrets.json
+
+save_credentials: True
+save_credentials_backend: file
+save_credentials_file: mycreds.txt
+
+get_refresh_token: True
+
+oauth_scope:
+  - https://www.googleapis.com/auth/drive.readonly  # Read all files (no write/delete)
+  - https://www.googleapis.com/auth/drive.file  # Create/edit/delete files created by app only
+  - https://www.googleapis.com/auth/documents  # Create/edit docs (Google API doesn't support delete)
+  - https://www.googleapis.com/auth/spreadsheets  # Create/edit sheets (Google API doesn't support delete)
+  - https://www.googleapis.com/auth/presentations  # Create/edit slides (Google API doesn't support delete)
