@@ -8,6 +8,8 @@ A collection of Claude Code plugins for business automation, data analysis, and 
 |--------|-------------|
 | [casper](./casper/) | Context management for consulting projects - company info, project PRDs, meeting transcripts |
 | [thats-my-quant](./thats-my-quant/) | Data analysis and storytelling for financial and RevOps contexts |
+| [dev-toolkit](./dev-toolkit/) | Workflow automation skills for planning, commits, PR management, and code polishing |
+| [stack-patterns](./stack-patterns/) | Idiomatic usage patterns for React, TanStack Table, and better-all |
 
 ## Installation
 
@@ -20,6 +22,8 @@ A collection of Claude Code plugins for business automation, data analysis, and 
 # Install a specific plugin
 /plugin install casper
 /plugin install thats-my-quant
+/plugin install dev-toolkit
+/plugin install stack-patterns
 ```
 
 ### Install via Git Clone
@@ -39,12 +43,14 @@ Each plugin follows the standard Claude Code plugin structure:
 ```
 plugin-name/
 ├── .claude-plugin/
-│   ├── plugin.json          # Plugin manifest
-│   └── marketplace.json     # Marketplace metadata
+│   └── plugin.json          # Plugin manifest
+├── skills/                  # Skills with SKILL.md and references/
 ├── commands/                # Slash commands
 ├── scripts/                 # Utility scripts
 └── README.md               # Plugin documentation
 ```
+
+> **Note:** `dev-toolkit` and `stack-patterns` were created by the Ardmore Pod to share workflow skills and coding patterns across their repos. They're available to the whole team — install whichever ones are useful for your workflow.
 
 ## Contributing
 
