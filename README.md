@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" alt="Casper Studios" width="300">
+  <img src="casper-studios-logo.png" alt="Casper Studios" width="300">
 </p>
 
 # Casper Studios Plugin Marketplace
