@@ -18,6 +18,18 @@
       "description": "Data analysis and storytelling for financial and RevOps contexts",
       "source": "./thats-my-quant",
       "version": "1.0.0"
+    },
+    {
+      "name": "dev-toolkit",
+      "description": "A collection of skills for automating common development workflows like planning, committing, and code review.",
+      "source": "./dev-toolkit",
+      "version": "1.0.0"
+    },
+    {
+      "name": "stack-patterns",
+      "description": "A collection of skills that teach idiomatic patterns and conventions for popular libraries and frameworks.",
+      "source": "./stack-patterns",
+      "version": "1.0.0"
     }
   ]
 }

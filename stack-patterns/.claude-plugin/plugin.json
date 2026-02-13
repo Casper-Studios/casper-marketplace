@@ -1,0 +1,8 @@
+{
+  "name": "stack-patterns",
+  "version": "1.0.0",
+  "description": "Idiomatic usage patterns for React, TanStack, SQLAlchemy, Drizzle, Valibot, pytest, and OpenTelemetry.",
+  "author": {
+    "name": "Ardmore Pod"
+  }
+}
