@@ -2,8 +2,6 @@
   <img src="casper-studios-logo.png" alt="Casper Studios" width="300">
 </p>
 
-# Casper Studios Plugin Marketplace
-
 A collection of Claude Code plugins for business automation, data analysis, and productivity.
 
 ## Available Plugins
