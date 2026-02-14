@@ -1,0 +1,153 @@
+name: Weekly Marketplace Digest
+
+on:
+  schedule:
+    # Every Monday at 9 AM EST (14:00 UTC)
+    - cron: '0 14 * * 1'
+  workflow_dispatch: # Allow manual triggers for testing
+
+jobs:
+  weekly-digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate digest and send to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+
+          SINCE=$(date -d '7 days ago' '+%Y-%m-%dT%H:%M:%S' 2>/dev/null || date -v-7d '+%Y-%m-%dT%H:%M:%S')
+
+          echo "=== Marketplace Weekly Digest ==="
+          echo "Looking at changes since: $SINCE"
+
+          # Gather commits from the last 7 days
+          COMMITS=$(git log --since="$SINCE" --pretty=format:"%h %s (%an)" --no-merges 2>/dev/null || true)
+          COMMIT_COUNT=$(echo "$COMMITS" | grep -c . 2>/dev/null || echo "0")
+
+          # Find changed files in the last 7 days
+          CHANGED_FILES=$(git log --since="$SINCE" --name-only --pretty=format:"" --no-merges 2>/dev/null | sort -u | grep -v '^$' || true)
+
+          # Detect new or modified plugins (top-level dirs with .claude-plugin)
+          NEW_PLUGINS=""
+          UPDATED_PLUGINS=""
+          for dir in $(echo "$CHANGED_FILES" | cut -d'/' -f1 | sort -u); do
+            if [ -d "$dir/.claude-plugin" ] || [ -f "$dir/.claude-plugin" ]; then
+              # Check if plugin dir was created in the last 7 days
+              FIRST_COMMIT=$(git log --diff-filter=A --since="$SINCE" --name-only --pretty=format:"" -- "$dir/" 2>/dev/null | head -1 || true)
+              if [ -n "$FIRST_COMMIT" ]; then
+                # Check if the plugin existed before the time window
+                EXISTS_BEFORE=$(git log --until="$SINCE" --oneline -- "$dir/" 2>/dev/null | head -1 || true)
+                if [ -z "$EXISTS_BEFORE" ]; then
+                  NEW_PLUGINS="$NEW_PLUGINS$dir\n"
+                else
+                  UPDATED_PLUGINS="$UPDATED_PLUGINS$dir\n"
+                fi
+              else
+                UPDATED_PLUGINS="$UPDATED_PLUGINS$dir\n"
+              fi
+            fi
+          done
+
+          # Detect new or modified skills
+          NEW_SKILLS=""
+          UPDATED_SKILLS=""
+          SKILL_CHANGES=$(echo "$CHANGED_FILES" | grep '/skills/' || true)
+          if [ -n "$SKILL_CHANGES" ]; then
+            for skill_path in $(echo "$SKILL_CHANGES" | sed 's|/skills/|/skills/|' | awk -F'/skills/' '{print $1 "/skills/" $2}' | cut -d'/' -f1-3 | sort -u); do
+              skill_name=$(echo "$skill_path" | awk -F'/skills/' '{print $2}' | cut -d'/' -f1)
+              plugin_name=$(echo "$skill_path" | cut -d'/' -f1)
+              if [ -n "$skill_name" ]; then
+                EXISTS_BEFORE=$(git log --until="$SINCE" --oneline -- "$skill_path/" 2>/dev/null | head -1 || true)
+                if [ -z "$EXISTS_BEFORE" ]; then
+                  NEW_SKILLS="$NEW_SKILLS• $skill_name (in $plugin_name)\n"
+                else
+                  UPDATED_SKILLS="$UPDATED_SKILLS• $skill_name (in $plugin_name)\n"
+                fi
+              fi
+            done
+          fi
+
+          # Detect changes to commands
+          COMMAND_CHANGES=$(echo "$CHANGED_FILES" | grep '/commands/' || true)
+          NEW_COMMANDS=""
+          if [ -n "$COMMAND_CHANGES" ]; then
+            for cmd_path in $(echo "$COMMAND_CHANGES" | cut -d'/' -f1-3 | sort -u); do
+              cmd_name=$(echo "$cmd_path" | awk -F'/commands/' '{print $2}' | cut -d'/' -f1)
+              plugin_name=$(echo "$cmd_path" | cut -d'/' -f1)
+              if [ -n "$cmd_name" ]; then
+                NEW_COMMANDS="$NEW_COMMANDS• /$cmd_name (in $plugin_name)\n"
+              fi
+            done
+          fi
+
+          # Build Slack message
+          if [ "$COMMIT_COUNT" -eq 0 ]; then
+            echo "No changes in the last 7 days. Skipping Slack notification."
+            exit 0
+          fi
+
+          # Construct the blocks JSON
+          BLOCKS='[{"type":"header","text":{"type":"plain_text","text":"📦 Marketplace Weekly Digest","emoji":true}},{"type":"section","text":{"type":"mrkdwn","text":"Here'\''s what changed in the <https://github.com/Casper-Studios/casper-marketplace|Casper Marketplace> this past week."}},{"type":"divider"}'
+
+          # Summary section
+          BLOCKS="$BLOCKS,{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*📊 Summary*\n${COMMIT_COUNT} commit(s) this week\"}}"
+
+          # New plugins
+          if [ -n "$NEW_PLUGINS" ]; then
+            PLUGIN_LIST=$(echo -e "$NEW_PLUGINS" | sed '/^$/d' | while read -r p; do echo "• *${p}*"; done | tr '\n' '\\' | sed 's/\\/\\n/g' | sed 's/\\n$//')
+            BLOCKS="$BLOCKS,{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*🆕 New Plugins*\n${PLUGIN_LIST}\"}}"
+          fi
+
+          # Updated plugins
+          if [ -n "$UPDATED_PLUGINS" ]; then
+            PLUGIN_LIST=$(echo -e "$UPDATED_PLUGINS" | sed '/^$/d' | while read -r p; do echo "• ${p}"; done | tr '\n' '\\' | sed 's/\\/\\n/g' | sed 's/\\n$//')
+            BLOCKS="$BLOCKS,{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*🔄 Updated Plugins*\n${PLUGIN_LIST}\"}}"
+          fi
+
+          # New skills
+          if [ -n "$NEW_SKILLS" ]; then
+            SKILL_LIST=$(echo -e "$NEW_SKILLS" | sed '/^$/d' | tr '\n' '\\' | sed 's/\\/\\n/g' | sed 's/\\n$//')
+            BLOCKS="$BLOCKS,{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*✨ New Skills*\n${SKILL_LIST}\"}}"
+          fi
+
+          # Updated skills
+          if [ -n "$UPDATED_SKILLS" ]; then
+            SKILL_LIST=$(echo -e "$UPDATED_SKILLS" | sed '/^$/d' | tr '\n' '\\' | sed 's/\\/\\n/g' | sed 's/\\n$//')
+            BLOCKS="$BLOCKS,{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*🔧 Updated Skills*\n${SKILL_LIST}\"}}"
+          fi
+
+          # Command changes
+          if [ -n "$NEW_COMMANDS" ]; then
+            CMD_LIST=$(echo -e "$NEW_COMMANDS" | sed '/^$/d' | tr '\n' '\\' | sed 's/\\/\\n/g' | sed 's/\\n$//')
+            BLOCKS="$BLOCKS,{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*⚡ Command Changes*\n${CMD_LIST}\"}}"
+          fi
+
+          # Recent commits
+          COMMIT_LIST=$(echo "$COMMITS" | head -10 | while IFS= read -r line; do echo "• \`$(echo "$line" | cut -d' ' -f1)\` $(echo "$line" | cut -d' ' -f2-)"; done | tr '\n' '\\' | sed 's/\\/\\n/g' | sed 's/\\n$//')
+          BLOCKS="$BLOCKS,{\"type\":\"divider\"},{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*📝 Recent Commits*\n${COMMIT_LIST}\"}}"
+
+          # Footer
+          BLOCKS="$BLOCKS,{\"type\":\"context\",\"elements\":[{\"type\":\"mrkdwn\",\"text\":\"Generated automatically every Monday at 9 AM EST\"}]}]"
+
+          PAYLOAD="{\"blocks\":${BLOCKS}}"
+
+          echo "Sending Slack notification..."
+          echo "$PAYLOAD" | python3 -m json.tool > /dev/null 2>&1 || echo "Warning: JSON may be malformed"
+
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            -H 'Content-type: application/json' \
+            --data "$PAYLOAD" \
+            "$SLACK_WEBHOOK_URL")
+
+          if [ "$RESPONSE" = "200" ]; then
+            echo "Slack notification sent successfully!"
+          else
+            echo "Failed to send Slack notification. HTTP status: $RESPONSE"
+            exit 1
+          fi
