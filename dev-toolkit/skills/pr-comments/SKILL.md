@@ -29,7 +29,7 @@ Use GraphQL to get thread resolution status — this is the only reliable source
 ```bash
 gh api graphql -f query='
 {
-  repository(owner: "{OWNER}", name: "ardmore_workflow") {
+  repository(owner: "{OWNER}", name: "{REPO_NAME}") {
     pullRequest(number: {PR_NUMBER}) {
       reviewThreads(first: 100) {
         nodes {
@@ -67,7 +67,7 @@ Paginate if `hasNextPage` is true. Collect every thread.
 ### 1d. Also fetch issue-level comments (PR conversation tab)
 
 ```bash
-gh api --paginate "repos/{OWNER}/ardmore_workflow/issues/{PR_NUMBER}/comments?per_page=100"
+gh api --paginate "repos/{OWNER}/{REPO_NAME}/issues/{PR_NUMBER}/comments?per_page=100"
 ```
 
 Filter to comments from **human reviewers only** (not bots). These are often the most important.
@@ -195,7 +195,7 @@ For each ignored issue, resolve the GitHub thread with a brief comment explainin
 
 ```bash
 # Post a reply comment on the thread
-gh api -X POST "repos/{OWNER}/ardmore_workflow/pulls/{PR_NUMBER}/comments" \
+gh api -X POST "repos/{OWNER}/{REPO_NAME}/pulls/{PR_NUMBER}/comments" \
   -f body="Acknowledged — {reason}. Resolving." \
   -F in_reply_to={COMMENT_DATABASE_ID}
 

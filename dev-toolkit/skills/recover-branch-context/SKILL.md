@@ -167,44 +167,45 @@ Present findings in this structure:
 ## Example Output
 
 ```markdown
-# Branch Context: notes-flagging-server-actions
+# Branch Context: feat/comment-threads
 
-**Base branch**: dev
-**Commits since divergence**: 2
-**Linear ticket**: ENG-456
+**Base branch**: main
+**Commits since divergence**: 3
+**Linear ticket**: TASK-142
 
 ## Intent Summary
 
-This branch adds a notes/flagging system to the modeling color feature, allowing users to flag individual color outputs and add comments. The implementation uses server actions for mutations and includes a sidebar UI for viewing/editing notes.
+This branch adds threaded comments to tasks, allowing users to start discussion threads on individual tasks and reply to existing comments. The implementation includes a new database table, API routes for CRUD operations, and a collapsible thread UI in the task detail view.
 
 ## Feature Areas
 
-### Notes Data Layer
-**Purpose**: Database schema and server actions for storing flags and comments
+### Comments Data Layer
+**Purpose**: Database schema and API routes for storing and retrieving comment threads
 **Status**: Complete
 
 **Committed changes**:
-- `frontend/src/features/modelingColor/actions/notes.ts` - Server actions for CRUD operations
-- `drizzle/schema/modeling-color-notes.ts` - New notes table schema
+- `src/db/schema/comments.ts` - New comments table with parent_id for threading
+- `src/db/migrations/0012_add_comments.sql` - Migration file
+- `src/api/routes/comments.ts` - CRUD endpoints for comments
 
-### Notes UI Components
-**Purpose**: Sidebar and table cell components for displaying/editing notes
+### Thread UI Components
+**Purpose**: Components for displaying and composing threaded comments on tasks
 **Status**: In Progress
 
 **Committed changes**:
-- `frontend/src/components/modeling-color-job-detail/notes-sidebar/NotesSidebar.tsx` - Main sidebar component
+- `src/components/tasks/CommentThread.tsx` - Recursive thread display component
 
 **Uncommitted changes**:
-- `frontend/src/components/modeling-color-job-detail/generated-color/NotesCell.tsx` - Table cell with flag indicator
-- `frontend/src/contexts/NotesSidebarContext.tsx` - Context for sidebar state
+- `src/components/tasks/CommentComposer.tsx` - Reply/new comment input box
+- `src/hooks/useCommentThread.ts` - Data fetching hook for thread state
 
 ## Code vs Ticket Drift
 
-The Linear ticket originally scoped this for unattributed colors only, but the implementation supports both attributed and unattributed color tables.
+The ticket scoped comments as flat (non-threaded), but the implementation adds full threading support with nested replies via a parent_id column.
 
 ## Suggested Next Steps
 
-1. Complete the NotesCell component integration with the color tables
-2. Add tests for the server actions
-3. Wire up the sidebar toggle in the main layout
+1. Complete the CommentComposer component and wire it into CommentThread
+2. Add optimistic updates to useCommentThread for snappy UX
+3. Add tests for the comment API routes
 ```

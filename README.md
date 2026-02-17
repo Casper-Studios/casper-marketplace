@@ -50,7 +50,6 @@ plugin-name/
 └── README.md               # Plugin documentation
 ```
 
-> **Note:** `dev-toolkit` and `stack-patterns` were created by the Ardmore Pod to share workflow skills and coding patterns across their repos. They're available to the whole team — install whichever ones are useful for your workflow.
 
 ## Contributing
 
