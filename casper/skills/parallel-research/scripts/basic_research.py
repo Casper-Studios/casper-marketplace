@@ -37,7 +37,7 @@ load_dotenv()
 # Configuration
 PARALLEL_API_KEY = os.getenv("PARALLEL_API_KEY")
 TASK_API_URL = "https://api.parallel.ai/v1/tasks/runs"
-SHARED_DRIVE_ID = "0APeqlhKR8qTPUk9PVA"  # Casper Studios shared drive
+SHARED_DRIVE_ID = os.getenv("SHARED_DRIVE_ID", "")
 
 # Output directory
 OUTPUT_DIR = Path(".tmp/basic_research")

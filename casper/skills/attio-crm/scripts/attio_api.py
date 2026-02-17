@@ -16,7 +16,7 @@ Usage:
     python execution/attio_api.py create-note e26784a0-0933-45f2-99ea-e432ac41142e "Proposal Generated" "Link: https://docs.google.com/..."
 
     # Extract company ID from Attio URL
-    python execution/attio_api.py parse-url "https://app.attio.com/casperstudios/companies/view/e26784a0-0933-45f2-99ea-e432ac41142e"
+    python execution/attio_api.py parse-url "https://app.attio.com/yourworkspace/companies/view/e26784a0-0933-45f2-99ea-e432ac41142e"
 """
 
 import os

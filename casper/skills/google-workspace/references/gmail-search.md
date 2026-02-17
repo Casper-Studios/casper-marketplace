@@ -52,7 +52,7 @@ python scripts/gmail_search.py --domain "kit.com" --json
       "thread_id": "thread456",
       "subject": "Re: Proposal Review",
       "from": "John <john@client.com>",
-      "to": "giorgio@casperstudios.com",
+      "to": "user@yourcompany.com",
       "date": "2025-12-25T10:30:00",
       "snippet": "Thanks for sending over..."
     }
@@ -216,7 +216,7 @@ def search_client_mentions(service, client_name, internal_domain, days=14):
     }
 
 # Usage
-results = search_client_mentions(service, "Microsoft", "casperstudios.com", days=14)
+results = search_client_mentions(service, "Microsoft", "yourcompany.com", days=14)
 ```
 
 ### Get Thread with All Messages

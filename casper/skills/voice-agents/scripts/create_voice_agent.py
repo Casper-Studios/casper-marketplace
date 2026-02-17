@@ -37,10 +37,10 @@ load_dotenv()
 # Configuration
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-SHARED_DRIVE_ID = "0APeqlhKR8qTPUk9PVA"
+SHARED_DRIVE_ID = os.getenv("SHARED_DRIVE_ID", "")
 
 # ElevenLabs webhook ID for post-call processing
-POST_CALL_WEBHOOK_ID = "b9c2f306ac0a477bafd3dbf922aa2921"
+POST_CALL_WEBHOOK_ID = os.getenv("ELEVENLABS_WEBHOOK_ID", "")
 
 
 class VoiceAgentError(Exception):

@@ -59,7 +59,7 @@ except ImportError:
 # Configuration
 SETTINGS_FILE = "settings.yaml"
 CREDENTIALS_FILE = "mycreds.txt"
-DEFAULT_TEMPLATE_ID = "1LakD2oCGrTQSeoTDZJhEBD3c2gE_gwNKoG2bAlK8DNs"
+DEFAULT_TEMPLATE_ID = os.environ.get("DOC_TEMPLATE_ID", "")
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 # =============================================================================

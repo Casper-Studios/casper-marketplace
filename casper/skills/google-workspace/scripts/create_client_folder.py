@@ -40,9 +40,9 @@ SETTINGS_FILE = "settings.yaml"
 CREDENTIALS_FILE = "mycreds.txt"
 CLIENT_SECRETS_FILE = "client_secrets.json"
 
-# Casper Studios Client Projects shared drive
-SHARED_DRIVE_ID = "0APeqlhKR8qTPUk9PVA"
-SHARED_DRIVE_NAME = "[03] Casper Studios - Client Projects"
+# Shared drive configuration (set via env vars or .env)
+SHARED_DRIVE_ID = os.getenv("SHARED_DRIVE_ID", "")
+SHARED_DRIVE_NAME = os.getenv("SHARED_DRIVE_NAME", "Client Projects")
 
 # Standard client folder structure
 CLIENT_FOLDER_STRUCTURE = {
