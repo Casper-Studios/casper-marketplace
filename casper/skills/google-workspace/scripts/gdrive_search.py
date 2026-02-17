@@ -34,8 +34,8 @@ SETTINGS_FILE = "settings.yaml"
 CREDENTIALS_FILE = "mycreds.txt"
 CLIENT_SECRETS_FILE = "client_secrets.json"
 
-# Casper Studios shared drive
-SHARED_DRIVE_ID = "0APeqlhKR8qTPUk9PVA"
+# Shared drive configuration (set via env vars or .env)
+SHARED_DRIVE_ID = os.getenv("SHARED_DRIVE_ID", "")
 
 
 class DriveSearchError(Exception):

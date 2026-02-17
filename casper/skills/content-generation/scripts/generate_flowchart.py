@@ -296,8 +296,8 @@ def _call_openrouter(system_prompt: str, user_prompt: str) -> str:
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://github.com/casper-ai",
-        "X-Title": "Casper AI Flowchart Generator"
+        "HTTP-Referer": "https://github.com/your-org",
+        "X-Title": "Flowchart Generator"
     }
 
     payload = {

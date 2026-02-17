@@ -80,13 +80,13 @@ python scripts/attio_api.py list-notes <record_id> --limit 10
 ### URL Parsing
 
 ```bash
-python scripts/attio_api.py parse-url "https://app.attio.com/casperstudios/companies/view/abc-123"
+python scripts/attio_api.py parse-url "https://app.attio.com/yourworkspace/companies/view/abc-123"
 ```
 
 Output:
 ```json
 {
-  "workspace_slug": "casperstudios",
+  "workspace_slug": "yourworkspace",
   "object_type": "companies",
   "record_id": "abc-123"
 }
@@ -311,7 +311,7 @@ python scripts/attio_api.py list-notes "RECORD_ID" --limit 5
 #### URL Parsing
 ```bash
 # Parse Attio URL
-python scripts/attio_api.py parse-url "https://app.attio.com/casperstudios/companies/view/abc-123"
+python scripts/attio_api.py parse-url "https://app.attio.com/yourworkspace/companies/view/abc-123"
 ```
 
 ### Validation

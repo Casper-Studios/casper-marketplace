@@ -92,9 +92,9 @@ client.create_note(
 When you have an Attio URL, extract the record ID:
 
 ```python
-url = "https://app.attio.com/casperstudios/companies/view/abc-123-def"
+url = "https://app.attio.com/yourworkspace/companies/view/abc-123-def"
 parsed = client.parse_attio_url(url)
-# {'workspace_slug': 'casperstudios', 'object_type': 'companies', 'record_id': 'abc-123-def'}
+# {'workspace_slug': 'yourworkspace', 'object_type': 'companies', 'record_id': 'abc-123-def'}
 
 company = client.get_company(parsed["record_id"])
 ```

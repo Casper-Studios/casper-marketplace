@@ -5,7 +5,7 @@ Scrapes LinkedIn posts by author URL or search query using Apify.
 
 Usage:
     # Scrape posts from a specific profile
-    python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/jaysingh10125/"
+    python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/example-user/"
 
     # Scrape posts from multiple profiles
     python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/user1/" "https://www.linkedin.com/in/user2/"
@@ -14,10 +14,10 @@ Usage:
     python execution/scrape_linkedin_posts.py search "AI agents" "automation tools"
 
     # Customize max posts
-    python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/jaysingh10125/" --max-posts 50
+    python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/example-user/" --max-posts 50
 
     # Include comments and reactions
-    python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/jaysingh10125/" --scrape-comments --scrape-reactions
+    python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/example-user/" --scrape-comments --scrape-reactions
 """
 
 import os
@@ -263,7 +263,7 @@ def main():
         epilog="""
 Examples:
   # Scrape from a profile
-  python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/jaysingh10125/"
+  python execution/scrape_linkedin_posts.py author "https://www.linkedin.com/in/example-user/"
 
   # Search for posts
   python execution/scrape_linkedin_posts.py search "AI automation" "LLM agents"
