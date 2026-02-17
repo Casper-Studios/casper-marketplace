@@ -252,9 +252,10 @@ def connect_app(app_name: str) -> bool:
                 print(f"✓ {app_name} is already connected")
                 return True
 
-        # Initiate connection
+        # Initiate connection via entity (correct SDK method)
         print(f"Connecting to {app_name}...")
-        connection_request = client.connected_accounts.initiate(
+        entity = client.get_entity('default')
+        connection_request = entity.initiate_connection(
             app_name=app_name,
             redirect_url="https://app.composio.dev/redirect"
         )
