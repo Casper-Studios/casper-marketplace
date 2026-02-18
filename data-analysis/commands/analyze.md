@@ -34,7 +34,7 @@ Load these as needed during analysis:
 |-----------|-------------|
 | `${CLAUDE_PLUGIN_ROOT}/references/metrics.md` | Calculating SaaS/RevOps metrics |
 | `${CLAUDE_PLUGIN_ROOT}/references/biases.md` | Interpretation phase, before finalizing insights |
-| `${CLAUDE_PLUGIN_ROOT}/references/bullshit-detector.md` | Sanity checking claims, detecting issues |
+| `${CLAUDE_PLUGIN_ROOT}/references/data-quality-validator.md` | Data quality validation, detecting issues |
 | `${CLAUDE_PLUGIN_ROOT}/references/data-cleaning.md` | Data quality checks, cleaning patterns |
 | `${CLAUDE_PLUGIN_ROOT}/references/visualization-guide.md` | Choosing chart types, avoiding anti-patterns |
 | `${CLAUDE_PLUGIN_ROOT}/references/xlsx-patterns.md` | Excel output, financial model standards |
