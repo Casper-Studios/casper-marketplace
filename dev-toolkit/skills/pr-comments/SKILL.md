@@ -240,19 +240,16 @@ Do NOT touch unrelated code."
 ### 4c. After all subagents complete
 
 1. Resolve the fixed threads on GitHub (same GraphQL mutation as 4a, with a comment like "Fixed in latest push.")
-2. Run the project's validation commands:
-   - `docker compose exec frontend pnpm validate` (if frontend files changed)
-   - `docker compose exec backend uv run pytest` (if backend files changed)
-3. Report results to the user
+2. Report results to the user
 
 ## Known Bot Noise Patterns
 
 These are **almost always ignorable** — but verify before dismissing:
 
 1. **coderabbit on SKILL.md / AGENTS.md files** — flags markdown structure, irrelevant
-2. **gemini suggesting explicit return types** — contradicts project AGENTS.md
+2. **gemini suggesting explicit return types** — check project AGENTS.md or lint config before accepting
 3. **devin HTML comment metadata** — often duplicates what coderabbit already found
 4. **codex P3 style suggestions** — usually preferences, not bugs
-5. **Any bot suggesting `as` casts or non-null assertions** — project anti-pattern per AGENTS.md
+5. **Any bot suggesting `as` casts or non-null assertions** — check project conventions before accepting
 6. **vercel[bot] deployment comments** — pure noise, never actionable
 7. **Bot comments on migration files** — almost always false positives (auto-generated code)

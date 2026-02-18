@@ -28,6 +28,13 @@ A collection of Claude Code plugins for business automation, data analysis, and 
 /plugin install stack-patterns
 ```
 
+### Install via npx
+
+```bash
+npx skills add https://github.com/Casper-Studios/casper-marketplace --skill commit
+npx skills add https://github.com/Casper-Studios/casper-marketplace --skill pr-summary
+```
+
 ### Install via Git Clone
 
 ```bash
