@@ -9,69 +9,140 @@ A collection of skills for automating common development workflows like planning
 - **Code Quality**: Automated polishing that removes AI artifacts, checks guidelines, and runs review
 - **Session Continuity**: Branch context recovery and structured handoff documentation
 
-## Installation
+## Setup
 
-### Option 1: Marketplace (Recommended)
+### Prerequisites
+
+One of: **bun** (preferred), **pnpm**, or **npm**.
+
+### 1. Install skills globally
 
 ```bash
-# 1. Add the Casper Studios marketplace
-/plugin marketplace add Casper-Studios/plugin-marketplace
-
-# 2. Install the plugin
-/plugin install dev-toolkit
+npx skills add https://github.com/Casper-Studios/casper-marketplace \
+  --skill commit bump-deps create-handoff extract-my-action-items \
+         implement-plan polishing pr-comments pr-summary recover-branch-context \
+  -g -y
 ```
 
-### Option 2: Git Clone + Local Plugin Directory
+This installs the dev-toolkit skills to `~/.agents/skills/` and symlinks them into `~/.claude/skills/`, `~/.cursor/skills/`, and `~/.codeium/windsurf/skills/` automatically.
+
+To verify:
 
 ```bash
-# Clone the repository
-git clone git@github.com:Casper-Studios/plugin-marketplace.git
+npx skills list -g
+```
 
-# Run Claude Code with the plugin directory
-claude --plugin-dir ./plugin-marketplace
+### 2. Set up auto-sync (optional)
+
+Add a Claude Code SessionStart hook so skills stay up to date without manual intervention.
+
+#### a. Create the sync script
+
+```bash
+mkdir -p ~/.claude/hooks
+cat > ~/.claude/hooks/sync-skills.sh << 'SCRIPT'
+#!/usr/bin/env bash
+# Sync dev-toolkit skills from Casper marketplace on session start.
+# Runs optimistically — failures are silent and never block the session.
+
+set -euo pipefail
+
+MARKETPLACE="https://github.com/Casper-Studios/casper-marketplace"
+DEV_TOOLKIT_SKILLS="commit bump-deps create-handoff extract-my-action-items implement-plan polishing pr-comments pr-summary recover-branch-context"
+
+# 1. Detect package manager runner (prefer bun > pnpm > npm)
+if command -v bun &>/dev/null; then
+  RUN="bunx"
+elif command -v pnpm &>/dev/null; then
+  RUN="pnpx"
+elif command -v npx &>/dev/null; then
+  RUN="npx"
+else
+  exit 0
+fi
+
+# 2. Ensure the skills CLI is installed globally
+if ! command -v skills &>/dev/null; then
+  case "$RUN" in
+    bunx)  bun add -g skills  2>/dev/null ;;
+    pnpx)  pnpm add -g skills 2>/dev/null ;;
+    npx)   npm i -g skills    2>/dev/null ;;
+  esac
+fi
+
+if command -v skills &>/dev/null; then
+  SKILLS="skills"
+else
+  SKILLS="$RUN skills"
+fi
+
+# 3. Install or update dev-toolkit skills globally
+if $SKILLS list -g 2>/dev/null | grep -q "commit"; then
+  $SKILLS update -g -y 2>/dev/null || true
+else
+  $SKILLS add "$MARKETPLACE" --skill $DEV_TOOLKIT_SKILLS -g -y 2>/dev/null || true
+fi
+SCRIPT
+chmod +x ~/.claude/hooks/sync-skills.sh
+```
+
+#### b. Add the hook to Claude settings
+
+Open `~/.claude/settings.json` and add the `hooks` key:
+
+```jsonc
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/sync-skills.sh",
+            "timeout": 60,
+            "statusMessage": "Syncing dev-toolkit skills…",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+  // ... rest of your settings
+}
+```
+
+#### c. Test it
+
+```bash
+~/.claude/hooks/sync-skills.sh
+```
+
+No output = success. The next time you start a Claude session, it'll sync in the background automatically.
+
+### 3. Manual update
+
+Pull the latest skills without restarting Claude:
+
+```bash
+npx skills update -g -y
 ```
 
 ## Skills
 
-### `/commit` - Commit Changes
-
-Generate conventional commit messages and commit staged changes. Follows the conventional commits format (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`) with messages focused on "why" not "what".
-
-### `/planner` - Create Implementation Plans
-
-Interactive planning workflow that spawns parallel research sub-agents (codebase-locator, codebase-analyzer, codebase-pattern-finder) to produce detailed, phase-based implementation plans saved to `.claude/scratchpad/`.
-
-### `/implement-plan` - Execute Plans
-
-Execute approved implementation plans phase-by-phase with progress tracking. Reads plans from `.claude/scratchpad/` and adapts to codebase reality while maintaining plan intent.
-
-### `/research-codebase` - Deep Codebase Research
-
-Conduct comprehensive codebase research using parallel sub-agents. Produces research documents with `file:line` references and GitHub permalinks.
-
-### `/pr-summary` - Create Pull Requests
-
-Generate and create pull requests using a PR template. Compares against the dev branch, writes a draft to `.claude/scratchpad/PR.md` for review, then submits via GitHub API.
-
-### `/pr-comments` - Triage PR Review Comments
-
-Fetch unresolved PR review threads, deduplicate across bots, classify by severity (Critical/Major/Medium/Minor/Nitpick), and spawn parallel sub-agents to fix or resolve each issue.
-
-### `/polishing` - Polish Code Changes
-
-End-to-end code polishing that recovers branch context, checks against skill guidelines, removes AI artifacts (unnecessary comments, defensive code), and runs a final review pass.
-
-### `/bump-deps` - Upgrade Dependencies
-
-Analyze outdated dependencies and safely upgrade them. Detects the package manager (pnpm for frontend, uv for backend), analyzes breaking changes, and generates a PR with a safety analysis.
-
-### `/recover-branch-context` - Recover Branch Context
-
-Get up to speed on the current branch by analyzing commit history, uncommitted changes, and optional Linear tickets. Groups changes by intent and suggests next steps.
-
-### `/create-handoff` - Create Session Handoffs
-
-Create structured handoff documentation with YAML frontmatter for transitioning work-in-progress to another agent. Includes task status, critical references, learnings, and next steps.
+| Skill | Slash command | What it does |
+|-------|--------------|--------------|
+| commit | `/commit` | Conventional commits with generated messages |
+| bump-deps | `/bump-deps` | Dependency upgrades with breaking change detection |
+| create-handoff | `/create-handoff` | Session handoff docs for another agent |
+| extract-my-action-items | `/extract-my-action-items` | Action items from Fireflies transcripts |
+| implement-plan | `/implement-plan` | Execute plans from scratchpad |
+| planner | `/planner` | Interactive planning with parallel research sub-agents |
+| polishing | `/polishing` | Code polish, AI slop removal, final review |
+| pr-comments | `/pr-comments` | Triage and fix PR review comments |
+| pr-summary | `/pr-summary` | Create PRs with template |
+| recover-branch-context | `/recover-branch-context` | Get up to speed on a branch |
+| research-codebase | `/research-codebase` | Deep codebase research with parallel sub-agents |
 
 ## Directory Structure
 
