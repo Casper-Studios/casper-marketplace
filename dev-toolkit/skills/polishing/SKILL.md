@@ -42,9 +42,7 @@ This includes:
 
 ### Step 4: Final Review
 
-Run `/review` to get a final review of the changes.
-
-This catches any remaining issues and ensures the code is ready for PR.
+Do a final review of the changes — read through the diff and flag anything that looks off.
 
 ### Step 5: Report
 
