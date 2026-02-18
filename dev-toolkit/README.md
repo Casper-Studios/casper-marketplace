@@ -76,12 +76,10 @@ else
   SKILLS="$RUN skills"
 fi
 
-# 3. Install or update dev-toolkit skills globally
-if $SKILLS list -g 2>/dev/null | grep -q "commit"; then
-  $SKILLS update -g -y 2>/dev/null || true
-else
-  $SKILLS add "$MARKETPLACE" --skill $DEV_TOOLKIT_SKILLS -g -y 2>/dev/null || true
-fi
+# 3. Install / update all dev-toolkit skills globally
+# Always run `skills add` — it installs missing skills and updates existing
+# ones in a single pass. The --skill flag is additive, so this is idempotent.
+$SKILLS add "$MARKETPLACE" --skill $DEV_TOOLKIT_SKILLS -g -y 2>/dev/null || true
 SCRIPT
 chmod +x ~/.claude/hooks/sync-skills.sh
 ```
