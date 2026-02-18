@@ -14,9 +14,9 @@
       "version": "1.0.0"
     },
     {
-      "name": "thats-my-quant",
+      "name": "data-analysis",
       "description": "Data analysis and storytelling for financial and RevOps contexts",
-      "source": "./thats-my-quant",
+      "source": "./data-analysis",
       "version": "1.0.0"
     },
     {

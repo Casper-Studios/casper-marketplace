@@ -1,4 +1,4 @@
-# Bullshit Detector Reference
+# Data Quality Validation Reference
 
 Statistical sins, chart crimes, logic fallacies, and sanity checks for reviewing analytical claims.
 
@@ -9,7 +9,7 @@ Statistical sins, chart crimes, logic fallacies, and sanity checks for reviewing
 Before accepting any analytical finding, run through these checks:
 
 ```
-## BS Detection Checklist
+## Data Quality Validation Checklist
 
 ### Quick Smell Test
 - [ ] Does the conclusion seem too good/bad to be true?
@@ -678,7 +678,7 @@ When you spot issues, use these to push back professionally:
 ## Summary Checklist
 
 ```markdown
-## BS Detection Summary
+## Data Quality Validation Summary
 
 ### Before Presenting
 - [ ] All data sources documented

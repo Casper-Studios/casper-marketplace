@@ -1,5 +1,5 @@
 {
-  "name": "thats-my-quant",
+  "name": "data-analysis",
   "owner": {
     "name": "Casper Studios"
   },
@@ -9,7 +9,7 @@
   },
   "plugins": [
     {
-      "name": "thats-my-quant",
+      "name": "data-analysis",
       "description": "Data analysis, visualization, and storytelling skill for financial and RevOps contexts",
       "source": "./.",
       "version": "1.0.0"

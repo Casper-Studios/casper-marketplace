@@ -1,5 +1,5 @@
 ---
-name: thats-my-quant
+name: data-analysis
 description: >
   Data analysis, visualization, and storytelling skill for financial and RevOps contexts.
   Use when: analyzing revenue data, building forecasts, cohort analysis, churn modeling,
@@ -9,7 +9,7 @@ description: >
   (slide deck -> detailed report -> full notebook with all decisions documented).
 ---
 
-# That's My Quant
+# Data Analysis
 
 ## Overview
 
@@ -127,9 +127,9 @@ Quick check:
 
 ### Phase 5.5: Validation Gate (MANDATORY)
 
-**⚠️ GATE: Before proceeding to output, you MUST run the bullshit detector checklist.**
+**⚠️ GATE: Before proceeding to output, you MUST run the data quality validation checklist.**
 
-This is not optional. Run through `references/bullshit-detector.md` before finalizing:
+This is not optional. Run through `references/data-quality-validator.md` before finalizing:
 
 **Critical Patterns Checklist:**
 - [ ] **Market Context:** Are YoY changes compared to market/baseline?
@@ -248,13 +248,13 @@ Reference `references/dashboard-patterns.md` for:
 
 ---
 
-## Bullshit Detection Workflow
+## Data Quality Validation Workflow
 
 Before presenting or accepting analytical claims:
 
-### Run the BS Detection Checklist
+### Run the Data Quality Validation Checklist
 
-Reference `references/bullshit-detector.md` for comprehensive checklists:
+Reference `references/data-quality-validator.md` for comprehensive checklists:
 
 **Statistical Sins:**
 - P-hacking / multiple comparisons
@@ -345,7 +345,7 @@ Load these as needed during analysis:
 | `references/data-cleaning.md` | Data quality checks, cleaning patterns |
 | `references/datetime-handling.md` | Timezone, parsing, fiscal calendars |
 | `references/dashboard-patterns.md` | Marimo layouts, KPIs, interactivity |
-| `references/bullshit-detector.md` | Sanity checking claims, detecting issues |
+| `references/data-quality-validator.md` | Data quality validation, detecting issues |
 | `references/xlsx-patterns.md` | Excel output, financial model standards, formulas |
 | `references/pdf-patterns.md` | PDF extraction, report creation, manipulation |
 
@@ -394,8 +394,8 @@ Load these as needed during analysis:
 **Dashboard:**
 > "Build a dashboard to monitor our key SaaS metrics"
 
-**BS detection:**
-> "Sanity check these findings before I present them"
+**Data validation:**
+> "Validate these findings before I present them"
 
 **Excel output:**
 > "Export this analysis to Excel with proper formulas and formatting"
