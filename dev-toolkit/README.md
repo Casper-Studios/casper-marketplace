@@ -8,26 +8,121 @@ A collection of skills for automating common development workflows like planning
 - **Code Quality**: Automated polishing that removes AI artifacts, checks guidelines, and runs review
 - **Session Continuity**: Branch context recovery and structured handoff documentation
 
-## Installation
+## Setup
 
-### Option 1: Marketplace (Recommended)
+### Prerequisites
+
+One of: **bun** (preferred), **pnpm**, or **npm**.
+
+### 1. Install skills globally
 
 ```bash
-# 1. Add the Casper Studios marketplace
-/plugin marketplace add Casper-Studios/plugin-marketplace
-
-# 2. Install the plugin
-/plugin install dev-toolkit
+npx skills add https://github.com/Casper-Studios/casper-marketplace \
+  --skill commit bump-deps create-handoff extract-my-action-items \
+         implement-plan polishing pr-comments pr-summary recover-branch-context \
+  -g -y
 ```
 
-### Option 2: Git Clone + Local Plugin Directory
+This installs the dev-toolkit skills to `~/.agents/skills/` and symlinks them into `~/.claude/skills/`, `~/.cursor/skills/`, and `~/.codeium/windsurf/skills/` automatically.
+
+To verify:
 
 ```bash
-# Clone the repository
-git clone git@github.com:Casper-Studios/plugin-marketplace.git
+npx skills list -g
+```
 
-# Run Claude Code with the plugin directory
-claude --plugin-dir ./plugin-marketplace
+### 2. Set up auto-sync (optional)
+
+Add a Claude Code SessionStart hook so skills stay up to date without manual intervention.
+
+#### a. Create the sync script
+
+```bash
+mkdir -p ~/.claude/hooks
+cat > ~/.claude/hooks/sync-skills.sh << 'SCRIPT'
+#!/usr/bin/env bash
+# Sync dev-toolkit skills from Casper marketplace on session start.
+# Runs optimistically — failures are silent and never block the session.
+
+set -euo pipefail
+
+MARKETPLACE="https://github.com/Casper-Studios/casper-marketplace"
+DEV_TOOLKIT_SKILLS="commit bump-deps create-handoff extract-my-action-items implement-plan polishing pr-comments pr-summary recover-branch-context"
+
+# 1. Detect package manager runner (prefer bun > pnpm > npm)
+if command -v bun &>/dev/null; then
+  RUN="bunx"
+elif command -v pnpm &>/dev/null; then
+  RUN="pnpx"
+elif command -v npx &>/dev/null; then
+  RUN="npx"
+else
+  exit 0
+fi
+
+# 2. Ensure the skills CLI is installed globally
+if ! command -v skills &>/dev/null; then
+  case "$RUN" in
+    bunx)  bun add -g skills  2>/dev/null ;;
+    pnpx)  pnpm add -g skills 2>/dev/null ;;
+    npx)   npm i -g skills    2>/dev/null ;;
+  esac
+fi
+
+if command -v skills &>/dev/null; then
+  SKILLS="skills"
+else
+  SKILLS="$RUN skills"
+fi
+
+# 3. Install / update all dev-toolkit skills globally
+# Always run `skills add` — it installs missing skills and updates existing
+# ones in a single pass. The --skill flag is additive, so this is idempotent.
+$SKILLS add "$MARKETPLACE" --skill $DEV_TOOLKIT_SKILLS -g -y 2>/dev/null || true
+SCRIPT
+chmod +x ~/.claude/hooks/sync-skills.sh
+```
+
+#### b. Add the hook to Claude settings
+
+Open `~/.claude/settings.json` and add the `hooks` key:
+
+```jsonc
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/sync-skills.sh",
+            "timeout": 60,
+            "statusMessage": "Syncing dev-toolkit skills…",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+  // ... rest of your settings
+}
+```
+
+#### c. Test it
+
+```bash
+~/.claude/hooks/sync-skills.sh
+```
+
+No output = success. The next time you start a Claude session, it'll sync in the background automatically.
+
+### 3. Manual update
+
+Pull the latest skills without restarting Claude:
+
+```bash
+npx skills update -g -y
 ```
 
 ## Skills
@@ -63,6 +158,18 @@ Get up to speed on the current branch by analyzing commit history, uncommitted c
 ### `/create-handoff` - Create Session Handoffs
 
 Create structured handoff documentation with YAML frontmatter for transitioning work-in-progress to another agent. Includes task status, critical references, learnings, and next steps.
+
+### `/extract-my-action-items` - Extract Action Items
+
+Extract action items from Fireflies transcripts.
+
+### `/planner` - Interactive Planning
+
+Interactive planning with parallel research sub-agents.
+
+### `/research-codebase` - Deep Codebase Research
+
+Deep codebase research with parallel sub-agents.
 
 ## Directory Structure
 
