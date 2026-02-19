@@ -54,17 +54,17 @@ The palette is intentionally restrained. Most of the UI is neutral gray + white,
 
 ### Usage Rules
 
-| Role             | Token         | Hex       | When to use                                                |
-| ---------------- | ------------- | --------- | ---------------------------------------------------------- |
-| **Brand accent** | `brand-500`   | `#5900FF` | Active nav items, primary buttons, links, focus rings      |
-| **Brand subtle** | `brand-50`    | `#EEE5FF` | Active nav background, selected row highlight, hover tints |
-| **Brand light**  | `brand-100`   | `#DECCFF` | Icon circle backgrounds, soft tag fills                    |
-| **Default text** | `neutral-950` | `#0A0A0A` | Page titles, headings                                      |
-| **Body text**    | `neutral-900` | `#171717` | Primary body text                                          |
-| **Subtext**      | `neutral-500` | `#737373` | Metadata, timestamps, secondary labels                     |
-| **Borders**      | `neutral-200` | `#E5E5E5` | Card borders, dividers, table lines                        |
-| **Surface**      | `neutral-50`  | `#FAFAFA` | Page background behind cards                               |
-| **Card surface** | `white`       | `#FFFFFF` | Card backgrounds, panels                                   |
+| Role | Token | Hex | When to use |
+|---|---|---|---|
+| **Brand accent** | `brand-500` | `#5900FF` | Active nav items, primary buttons, links, focus rings |
+| **Brand subtle** | `brand-50` | `#EEE5FF` | Active nav background, selected row highlight, hover tints |
+| **Brand light** | `brand-100` | `#DECCFF` | Icon circle backgrounds, soft tag fills |
+| **Default text** | `neutral-950` | `#0A0A0A` | Page titles, headings |
+| **Body text** | `neutral-900` | `#171717` | Primary body text |
+| **Subtext** | `neutral-500` | `#737373` | Metadata, timestamps, secondary labels |
+| **Borders** | `neutral-200` | `#E5E5E5` | Card borders, dividers, table lines |
+| **Surface** | `neutral-50` | `#FAFAFA` | Page background behind cards |
+| **Card surface** | `white` | `#FFFFFF` | Card backgrounds, panels |
 
 ### Semantic Colors
 
@@ -89,15 +89,15 @@ All text is set in **Public Sans**. No other font family. Monospace (`font-mono`
 
 ### Scale
 
-| Style            | Size | Weight | Line Height | Use                                      |
-| ---------------- | ---- | ------ | ----------- | ---------------------------------------- |
-| **Heading 1**    | 30px | 500    | 36px        | Page titles only. One per view.          |
-| **Heading 2**    | 20px | 500    | 24px        | Section titles within a page             |
-| **Heading 3**    | 16px | 500    | 20px        | Card titles, subsection labels           |
-| **Body**         | 14px | 400    | 20px        | Default paragraph and UI text            |
-| **Body Bold**    | 14px | 500    | 20px        | Emphasis within body text, table headers |
-| **Caption**      | 12px | 400    | 16px        | Timestamps, helper text, metadata        |
-| **Caption Bold** | 12px | 500    | 16px        | Badge labels, small category tags        |
+| Style | Size | Weight | Line Height | Use |
+|---|---|---|---|---|
+| **Heading 1** | 30px | 500 | 36px | Page titles only. One per view. |
+| **Heading 2** | 20px | 500 | 24px | Section titles within a page |
+| **Heading 3** | 16px | 500 | 20px | Card titles, subsection labels |
+| **Body** | 14px | 400 | 20px | Default paragraph and UI text |
+| **Body Bold** | 14px | 500 | 20px | Emphasis within body text, table headers |
+| **Caption** | 12px | 400 | 16px | Timestamps, helper text, metadata |
+| **Caption Bold** | 12px | 500 | 16px | Badge labels, small category tags |
 
 ### Rules
 
@@ -136,12 +136,12 @@ Use Tailwind's default spacing scale. Key values:
 
 The design is predominantly flat. Shadows are used to indicate layers, not to add decoration.
 
-| Token            | Use                                     |
-| ---------------- | --------------------------------------- |
-| `shadow-sm`      | Cards, inputs at rest                   |
-| `shadow-default` | Same as sm — default for most elements  |
-| `shadow-md`      | Dropdown menus, popovers, tooltips      |
-| `shadow-lg`      | Modals, command palettes, overlays ONLY |
+| Token | Use |
+|---|---|
+| `shadow-sm` | Cards, inputs at rest |
+| `shadow-default` | Same as sm — default for most elements |
+| `shadow-md` | Dropdown menus, popovers, tooltips |
+| `shadow-lg` | Modals, command palettes, overlays ONLY |
 
 NEVER apply `shadow-lg` or `shadow-overlay` to cards or in-page elements.
 
@@ -149,12 +149,12 @@ NEVER apply `shadow-lg` or `shadow-overlay` to cards or in-page elements.
 
 ## Border Radius
 
-| Token                          | Value  | Use                                   |
-| ------------------------------ | ------ | ------------------------------------- |
-| `radius-sm`                    | 8px    | Inputs, small buttons, inner elements |
-| `radius-md` / `radius-DEFAULT` | 16px   | Cards, panels, large containers       |
-| `radius-lg`                    | 24px   | Modal containers, hero cards          |
-| `radius-full`                  | 9999px | Badges, pills, avatars, icon circles  |
+| Token | Value | Use |
+|---|---|---|
+| `radius-sm` | 8px | Inputs, small buttons, inner elements |
+| `radius-md` / `radius-DEFAULT` | 16px | Cards, panels, large containers |
+| `radius-lg` | 24px | Modal containers, hero cards |
+| `radius-full` | 9999px | Badges, pills, avatars, icon circles |
 
 Cards always use `radius-md` (16px). Nested elements inside cards should use `radius-sm` (8px) to maintain visual hierarchy — the inner radius should always be smaller than the outer.
 
@@ -256,7 +256,6 @@ For detailed code examples and composite definitions, read the appropriate refer
 - **Mobile** (<768px): Sidebar hidden (accessible via hamburger → Sheet), single-column layout, cards stack vertically
 
 Key rules:
-
 - Cards go full-width on mobile
 - Filter pills scroll horizontally on mobile
 - Tables become scrollable horizontally or switch to a card/list view
@@ -291,6 +290,27 @@ Apply `radius-md` to image containers. These are placeholders — they should lo
 - **No animated skeletons or shimmer effects** in static mockups.
 - **No drop shadows on text.** Ever.
 - **No border-radius mixing.** Don't put `rounded-lg` next to `rounded-sm` at the same hierarchy level.
+
+---
+
+## File Structure Convention
+
+When generating a new page or component:
+
+```
+src/
+├── components/
+│   ├── ui/              ← shadcn components (do not modify)
+│   ├── layout/          ← App shell, sidebar, top bar
+│   └── [feature]/       ← Feature-specific composites
+├── pages/               ← Full page compositions
+├── lib/
+│   └── utils.ts         ← cn() helper and utilities
+└── styles/
+    └── theme.css        ← Casper theme tokens (from references/theme.css)
+```
+
+Always use the `cn()` utility from shadcn for conditional class merging.
 
 ---
 
