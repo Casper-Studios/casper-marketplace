@@ -172,6 +172,30 @@ Cards always use `radius-md` (16px). Nested elements inside cards should use `ra
 
 ---
 
+## Logo
+
+Logo SVG files are in `assets/logos/`. Always use the SVG versions — never rasterize or recreate the logo.
+
+### Variants
+
+| File | Use when |
+|---|---|
+| `logo-on-white-default.svg` | **Primary.** Light backgrounds. Dark gray text + purple eyes + gradient icon. |
+| `logo-on-white-variant.svg` | Light backgrounds where purple loses contrast (e.g., logo over a purple-tinted surface). Black text + purple eyes. |
+| `logo-mono-black.svg` | Single-color contexts on light backgrounds. All black text + gradient icon. |
+| `logo-mono-white.svg` | Dark backgrounds. White text + gray icon. |
+
+### Rules
+
+- **Default choice is always `logo-on-white-default.svg`** unless background contrast requires a different variant.
+- If placing the logo on a dark surface (`neutral-800`+, dark images, or brand-500+ backgrounds), use `logo-mono-white.svg`.
+- If placing on a purple or brand-colored surface where the purple eyes would disappear, use `logo-on-white-variant.svg`.
+- Minimum width: `120px`. Do not scale below this.
+- Clear space: Maintain at least the width of the icon (the ghost character) as padding on all sides.
+- Do NOT modify colors, stretch, rotate, add effects, or place on busy backgrounds without sufficient contrast.
+
+---
+
 ## shadcn/ui Component Theming
 
 Use shadcn/ui components as your base layer. Theme them using the CSS variables in `references/theme.css`. Here is how specific components should be configured:
