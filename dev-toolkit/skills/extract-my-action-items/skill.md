@@ -141,18 +141,27 @@ Merge subagent results, deduplicate, and categorize. **Only include categories t
 1. [Person] — [Item with deadline or scheduled time]
 ```
 
-## Phase 5: Review & Post to Slack
+## Phase 5: Review & DM to Slack
 
-1. Use `AskUserQuestion`: **"Post action items to Slack?"** — options: "Post to Slack", "Skip — just keep the file"
-2. If approved, run the bundled script with the output file path:
+1. Use `AskUserQuestion`: **"DM action items to each person on Slack?"** — options: "Send DMs", "Skip — just keep the file"
+2. If approved, ensure `.claude/slack-users.local.json` exists in the project root:
+   - If **missing**, run `node [SKILL_DIR]/scripts/fetch-slack-users.mjs` (requires `SLACK_BOT_TOKEN` with `users:read` scope), present the output to the user for review, then save to `.claude/slack-users.local.json` (gitignored by `**/.claude/**/*.local.json`)
+   - If **present**, proceed directly
+3. Run the bundled script with the output file path:
 
 ```bash
 node [SKILL_DIR]/scripts/slack-post.mjs [OUTPUT_FILE_PATH]
 ```
 
-The script handles markdown-to-mrkdwn conversion, chunking by person section (max 3900 chars), and posting via `curl` + Slack API. Requires env vars `SLACK_BOT_TOKEN` and `SLACK_CHANNEL_ID`.
+The script sends Block Kit–formatted DMs to each person via `conversations.open` + `chat.postMessage`. Requires env var `SLACK_BOT_TOKEN` (with `chat:write` and `im:write` scopes).
 
-3. After posting (or skipping), delete all artifacts created during the run: `transcript.txt`, the action items markdown file, and any other temp files written to `.claude/scratchpad/` during this workflow.
+**Behavior by mode:**
+- **All-attendees:** Each person matched in `slack-users.local.json` receives a DM with only their action items. Unresolvable names are skipped with a warning.
+- **Single-person:** One DM to the target person.
+
+Name resolution supports exact match and fuzzy first-name match (e.g., "Jelvin" resolves to "Jelvin Base"). After the script runs, report any skipped names to the user.
+
+4. After posting (or skipping), delete all artifacts created during the run: `transcript.txt`, the action items markdown file, and any other temp files written to `.claude/scratchpad/` during this workflow.
 
 ## Example Invocations
 
