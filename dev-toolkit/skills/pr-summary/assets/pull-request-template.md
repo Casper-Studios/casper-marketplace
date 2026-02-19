@@ -38,7 +38,7 @@
 
 - None / describe clearly
 
-## Linear Tickets
+## Tickets
 
 - [Ticket here](link.com)
 

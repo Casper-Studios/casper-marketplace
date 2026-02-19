@@ -4,7 +4,6 @@ A collection of skills for automating common development workflows like planning
 
 ## Features
 
-- **Planning & Research**: Deep codebase research with parallel sub-agents, followed by structured implementation planning
 - **Git Workflows**: Conventional commits, PR creation with templates, and PR comment triage
 - **Code Quality**: Automated polishing that removes AI artifacts, checks guidelines, and runs review
 - **Session Continuity**: Branch context recovery and structured handoff documentation
@@ -128,19 +127,49 @@ npx skills update -g -y
 
 ## Skills
 
-| Skill | Slash command | What it does |
-|-------|--------------|--------------|
-| commit | `/commit` | Conventional commits with generated messages |
-| bump-deps | `/bump-deps` | Dependency upgrades with breaking change detection |
-| create-handoff | `/create-handoff` | Session handoff docs for another agent |
-| extract-my-action-items | `/extract-my-action-items` | Action items from Fireflies transcripts |
-| implement-plan | `/implement-plan` | Execute plans from scratchpad |
-| planner | `/planner` | Interactive planning with parallel research sub-agents |
-| polishing | `/polishing` | Code polish, AI slop removal, final review |
-| pr-comments | `/pr-comments` | Triage and fix PR review comments |
-| pr-summary | `/pr-summary` | Create PRs with template |
-| recover-branch-context | `/recover-branch-context` | Get up to speed on a branch |
-| research-codebase | `/research-codebase` | Deep codebase research with parallel sub-agents |
+### `/commit` - Commit Changes
+
+Generate conventional commit messages and commit staged changes. Follows the conventional commits format (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`) with messages focused on "why" not "what".
+
+### `/implement-plan` - Execute Plans
+
+Execute approved implementation plans phase-by-phase with progress tracking. Reads plans from `.claude/scratchpad/` and adapts to codebase reality while maintaining plan intent.
+
+### `/pr-summary` - Create Pull Requests
+
+Generate and create pull requests using a PR template. Compares against the dev branch, writes a draft to `.claude/scratchpad/PR.md` for review, then submits via GitHub API.
+
+### `/pr-comments` - Triage PR Review Comments
+
+Fetch unresolved PR review threads, deduplicate across bots, classify by severity (Critical/Major/Medium/Minor/Nitpick), and spawn parallel sub-agents to fix or resolve each issue.
+
+### `/polishing` - Polish Code Changes
+
+End-to-end code polishing that recovers branch context, checks against skill guidelines, removes AI artifacts (unnecessary comments, defensive code), and runs a final review pass.
+
+### `/bump-deps` - Upgrade Dependencies
+
+Analyze outdated dependencies and safely upgrade them. Detects the package manager (pnpm for frontend, uv for backend), analyzes breaking changes, and generates a PR with a safety analysis.
+
+### `/recover-branch-context` - Recover Branch Context
+
+Get up to speed on the current branch by analyzing commit history, uncommitted changes, and optional Linear tickets. Groups changes by intent and suggests next steps.
+
+### `/create-handoff` - Create Session Handoffs
+
+Create structured handoff documentation with YAML frontmatter for transitioning work-in-progress to another agent. Includes task status, critical references, learnings, and next steps.
+
+### `/extract-my-action-items` - Extract Action Items
+
+Extract action items from Fireflies transcripts.
+
+### `/planner` - Interactive Planning
+
+Interactive planning with parallel research sub-agents.
+
+### `/research-codebase` - Deep Codebase Research
+
+Deep codebase research with parallel sub-agents.
 
 ## Directory Structure
 
@@ -159,8 +188,6 @@ dev-toolkit/
 │   │   └── SKILL.md
 │   ├── implement-plan/
 │   │   └── SKILL.md
-│   ├── planner/
-│   │   └── SKILL.md
 │   ├── polishing/
 │   │   └── SKILL.md
 │   ├── pr-comments/
@@ -170,8 +197,6 @@ dev-toolkit/
 │   │   └── assets/
 │   ├── recover-branch-context/
 │   │   └── SKILL.md
-│   └── research-codebase/
-│       └── SKILL.md
 └── README.md                    # This file
 ```
 

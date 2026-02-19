@@ -1,4 +1,4 @@
-# That's My Quant - Data Analysis Plugin for Claude Code
+# Data Analysis - Data Analysis Plugin for Claude Code
 
 A comprehensive data analysis and storytelling skill optimized for financial, SaaS, and RevOps contexts. This plugin provides structured workflows for turning raw data into actionable insights with full transparency on analytical decisions, bias awareness, and progressive disclosure reporting.
 
@@ -19,7 +19,7 @@ A comprehensive data analysis and storytelling skill optimized for financial, Sa
 /plugin marketplace add Casper-Studios/plugin-marketplace
 
 # 2. Install the plugin
-/plugin install thats-my-quant
+/plugin install data-analysis
 ```
 
 ### Option 2: Git Clone + Local Plugin Directory
@@ -34,7 +34,7 @@ claude --plugin-dir ./plugin-marketplace
 
 ## Commands
 
-### `/thats-my-quant:analyze`
+### `/data-analysis:analyze`
 
 Run the full data analysis workflow with decision logging and bias checking.
 
@@ -58,7 +58,7 @@ Every analysis follows a 7-phase process:
 |-----------|-------------|
 | `references/metrics.md` | Calculating SaaS/RevOps metrics (ARR, MRR, NRR, churn, LTV, CAC) |
 | `references/biases.md` | Interpretation phase, before finalizing insights |
-| `references/bullshit-detector.md` | Sanity checking claims, detecting statistical sins |
+| `references/data-quality-validator.md` | Data quality validation, detecting statistical issues |
 | `references/data-cleaning.md` | Data quality checks, cleaning patterns |
 | `references/datetime-handling.md` | Timezone, parsing, fiscal calendars |
 | `references/dashboard-patterns.md` | Marimo layouts, KPIs, interactivity |
@@ -108,7 +108,7 @@ Every analysis follows a 7-phase process:
 ## Directory Structure
 
 ```
-thats-my-quant/
+data-analysis/
 ├── .claude-plugin/
 │   ├── plugin.json              # Plugin manifest
 │   └── marketplace.json         # Marketplace metadata
@@ -123,7 +123,7 @@ thats-my-quant/
 ├── references/
 │   ├── metrics.md               # SaaS metrics definitions
 │   ├── biases.md                # Analytical bias checklist
-│   ├── bullshit-detector.md     # Statistical sanity checks
+│   ├── data-quality-validator.md # Data quality validation checks
 │   ├── data-cleaning.md         # Cleaning patterns
 │   ├── datetime-handling.md     # Date/time patterns
 │   ├── dashboard-patterns.md    # Marimo dashboard patterns

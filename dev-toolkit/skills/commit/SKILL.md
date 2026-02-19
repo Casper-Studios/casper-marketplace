@@ -12,6 +12,8 @@ metadata:
 
 Generate a commit message and commit staged changes using git.
 
+Based on the [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) specification.
+
 ## Guidelines
 
 - Only generate the message for staged files/changes

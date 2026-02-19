@@ -324,8 +324,8 @@ When preparing deliverables for external stakeholders, translate internal proces
 
 | Internal Term | Client-Friendly Alternative |
 |--------------|----------------------------|
-| "Bullshit Detector Results" | "Data Quality & Limitations" |
-| "BS Detection" | "Validation Checks" |
+| "Data Quality Validation Results" | "Data Quality & Limitations" |
+| "Data Quality Validation" | "Validation Checks" |
 | "Sanity Checks" | "Verification Steps" |
 | "Smell Test" | "Reasonableness Check" |
 | Internal methodology names | Omit entirely |
@@ -357,7 +357,7 @@ When preparing deliverables for external stakeholders, translate internal proces
 
 **Internal Version:**
 ```
-## BS Detection Results
+## Data Quality Validation Results
 
 Ran the survivorship bias check. 29% of reps excluded due to
 incomplete data. Simpson's paradox detected in segment analysis.

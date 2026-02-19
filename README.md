@@ -9,7 +9,7 @@ A collection of Claude Code plugins for business automation, data analysis, and 
 | Plugin | Description |
 |--------|-------------|
 | [casper](./casper/) | Context management for consulting projects - company info, project PRDs, meeting transcripts |
-| [thats-my-quant](./thats-my-quant/) | Data analysis and storytelling for financial and RevOps contexts |
+| [data-analysis](./data-analysis/) | Data analysis and storytelling for financial and RevOps contexts |
 | [dev-toolkit](./dev-toolkit/) | Workflow automation skills for planning, commits, PR management, and code polishing |
 | [stack-patterns](./stack-patterns/) | Idiomatic usage patterns for React, TanStack Table, and better-all |
 
@@ -23,9 +23,16 @@ A collection of Claude Code plugins for business automation, data analysis, and 
 
 # Install a specific plugin
 /plugin install casper
-/plugin install thats-my-quant
+/plugin install data-analysis
 /plugin install dev-toolkit
 /plugin install stack-patterns
+```
+
+### Install via npx
+
+```bash
+npx skills add https://github.com/Casper-Studios/casper-marketplace --skill commit
+npx skills add https://github.com/Casper-Studios/casper-marketplace --skill pr-summary
 ```
 
 ### Install via Git Clone
