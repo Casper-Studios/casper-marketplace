@@ -293,27 +293,6 @@ Apply `radius-md` to image containers. These are placeholders — they should lo
 
 ---
 
-## File Structure Convention
-
-When generating a new page or component:
-
-```
-src/
-├── components/
-│   ├── ui/              ← shadcn components (do not modify)
-│   ├── layout/          ← App shell, sidebar, top bar
-│   └── [feature]/       ← Feature-specific composites
-├── pages/               ← Full page compositions
-├── lib/
-│   └── utils.ts         ← cn() helper and utilities
-└── styles/
-    └── theme.css        ← Casper theme tokens (from references/theme.css)
-```
-
-Always use the `cn()` utility from shadcn for conditional class merging.
-
----
-
 ## Checklist Before Output
 
 Before delivering any UI code, verify:
