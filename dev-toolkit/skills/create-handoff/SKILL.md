@@ -31,7 +31,7 @@ last_updated: [Current date in YYYY-MM-DD format]
 type: implementation_strategy
 ---
 
-# Handoff: ENG-XXXX {very concise description}
+# Handoff: {ticket-id} {very concise description}
 
 ## Task(s)
 

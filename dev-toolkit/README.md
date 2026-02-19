@@ -4,7 +4,6 @@ A collection of skills for automating common development workflows like planning
 
 ## Features
 
-- **Planning & Research**: Deep codebase research with parallel sub-agents, followed by structured implementation planning
 - **Git Workflows**: Conventional commits, PR creation with templates, and PR comment triage
 - **Code Quality**: Automated polishing that removes AI artifacts, checks guidelines, and runs review
 - **Session Continuity**: Branch context recovery and structured handoff documentation
@@ -37,17 +36,9 @@ claude --plugin-dir ./plugin-marketplace
 
 Generate conventional commit messages and commit staged changes. Follows the conventional commits format (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`) with messages focused on "why" not "what".
 
-### `/planner` - Create Implementation Plans
-
-Interactive planning workflow that spawns parallel research sub-agents (codebase-locator, codebase-analyzer, codebase-pattern-finder) to produce detailed, phase-based implementation plans saved to `.claude/scratchpad/`.
-
 ### `/implement-plan` - Execute Plans
 
 Execute approved implementation plans phase-by-phase with progress tracking. Reads plans from `.claude/scratchpad/` and adapts to codebase reality while maintaining plan intent.
-
-### `/research-codebase` - Deep Codebase Research
-
-Conduct comprehensive codebase research using parallel sub-agents. Produces research documents with `file:line` references and GitHub permalinks.
 
 ### `/pr-summary` - Create Pull Requests
 
@@ -90,8 +81,6 @@ dev-toolkit/
 │   │   └── SKILL.md
 │   ├── implement-plan/
 │   │   └── SKILL.md
-│   ├── planner/
-│   │   └── SKILL.md
 │   ├── polishing/
 │   │   └── SKILL.md
 │   ├── pr-comments/
@@ -101,8 +90,6 @@ dev-toolkit/
 │   │   └── assets/
 │   ├── recover-branch-context/
 │   │   └── SKILL.md
-│   └── research-codebase/
-│       └── SKILL.md
 └── README.md                    # This file
 ```
 

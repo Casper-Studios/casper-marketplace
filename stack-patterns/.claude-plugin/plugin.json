@@ -1,7 +1,7 @@
 {
   "name": "stack-patterns",
   "version": "1.0.0",
-  "description": "Idiomatic usage patterns for React, TanStack, SQLAlchemy, Drizzle, Valibot, pytest, and OpenTelemetry.",
+  "description": "Idiomatic usage patterns for React, TanStack Table, and better-all.",
   "author": {
     "name": "Casper Studios"
   }

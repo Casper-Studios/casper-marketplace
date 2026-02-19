@@ -23,11 +23,7 @@ This provides essential context about:
 
 Scan the `.agents/skills/` directory for skills that might have guidelines relevant to the changed files.
 
-For example:
-- If React components were changed, check `react-patterns`
-- If TanStack Table was used, check `tanstack-table`
-- If Drizzle queries were written, check `drizzle-orm`
-- If Next.js server actions or API routes were modified, check `nextjs-architecture`
+Match skills to the technologies used in the changed files. For example, if React components were changed, look for a React patterns skill; if an ORM was used, look for a relevant ORM skill.
 
 For each applicable skill:
 1. Spawn a subagent to review the changed files against those skill's guidelines
@@ -36,7 +32,7 @@ For each applicable skill:
 
 ### Step 3: Remove AI Slop
 
-Check the diff against main/dev, and remove all AI generated slop introduced in this branch.
+Check the diff against the default branch, and remove all AI generated slop introduced in this branch.
 
 This includes:
 - Extra comments that a human wouldn't add or is inconsistent with the rest of the file
@@ -46,9 +42,7 @@ This includes:
 
 ### Step 4: Final Review
 
-Run `/review` to get a final review of the changes.
-
-This catches any remaining issues and ensures the code is ready for PR.
+Do a final review of the changes — read through the diff and flag anything that looks off.
 
 ### Step 5: Report
 
