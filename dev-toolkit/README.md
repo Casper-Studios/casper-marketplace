@@ -14,76 +14,32 @@ A collection of skills for automating common development workflows like planning
 
 One of: **bun** (preferred), **pnpm**, or **npm**.
 
-### 1. Install skills globally
+### 1. Install the sync script
+
+The bundled `sync-skills.sh` clones the marketplace, discovers every skill directory automatically, and installs/updates them all. No hardcoded list — new skills are picked up every run.
 
 ```bash
-npx skills add https://github.com/Casper-Studios/casper-marketplace \
-  --skill commit bump-deps create-handoff extract-my-action-items \
-         implement-plan polishing pr-comments pr-summary recover-branch-context \
-  -g -y
+mkdir -p ~/.claude/hooks
+curl -sf https://raw.githubusercontent.com/Casper-Studios/casper-marketplace/main/dev-toolkit/sync-skills.sh \
+  -o ~/.claude/hooks/sync-skills.sh
+chmod +x ~/.claude/hooks/sync-skills.sh
 ```
 
-This installs the dev-toolkit skills to `~/.agents/skills/` and symlinks them into `~/.claude/skills/`, `~/.cursor/skills/`, and `~/.codeium/windsurf/skills/` automatically.
+### 2. Run it
 
-To verify:
+```bash
+~/.claude/hooks/sync-skills.sh
+```
+
+No output = success. Verify with:
 
 ```bash
 npx skills list -g
 ```
 
-### 2. Set up auto-sync (optional)
+### 3. Set up auto-sync (optional)
 
-Add a Claude Code SessionStart hook so skills stay up to date without manual intervention.
-
-#### a. Create the sync script
-
-```bash
-mkdir -p ~/.claude/hooks
-cat > ~/.claude/hooks/sync-skills.sh << 'SCRIPT'
-#!/usr/bin/env bash
-# Sync dev-toolkit skills from Casper marketplace on session start.
-# Runs optimistically — failures are silent and never block the session.
-
-set -euo pipefail
-
-MARKETPLACE="https://github.com/Casper-Studios/casper-marketplace"
-DEV_TOOLKIT_SKILLS="commit bump-deps create-handoff extract-my-action-items implement-plan polishing pr-comments pr-summary recover-branch-context"
-
-# 1. Detect package manager runner (prefer bun > pnpm > npm)
-if command -v bun &>/dev/null; then
-  RUN="bunx"
-elif command -v pnpm &>/dev/null; then
-  RUN="pnpx"
-elif command -v npx &>/dev/null; then
-  RUN="npx"
-else
-  exit 0
-fi
-
-# 2. Ensure the skills CLI is installed globally
-if ! command -v skills &>/dev/null; then
-  case "$RUN" in
-    bunx)  bun add -g skills  2>/dev/null ;;
-    pnpx)  pnpm add -g skills 2>/dev/null ;;
-    npx)   npm i -g skills    2>/dev/null ;;
-  esac
-fi
-
-if command -v skills &>/dev/null; then
-  SKILLS="skills"
-else
-  SKILLS="$RUN skills"
-fi
-
-# 3. Install / update all dev-toolkit skills globally
-# Always run `skills add` — it installs missing skills and updates existing
-# ones in a single pass. The --skill flag is additive, so this is idempotent.
-$SKILLS add "$MARKETPLACE" --skill $DEV_TOOLKIT_SKILLS -g -y 2>/dev/null || true
-SCRIPT
-chmod +x ~/.claude/hooks/sync-skills.sh
-```
-
-#### b. Add the hook to Claude settings
+Add a Claude Code SessionStart hook so skills stay current without manual intervention.
 
 Open `~/.claude/settings.json` and add the `hooks` key:
 
@@ -109,20 +65,12 @@ Open `~/.claude/settings.json` and add the `hooks` key:
 }
 ```
 
-#### c. Test it
+### 4. Manual update
+
+Re-run the sync script at any time:
 
 ```bash
 ~/.claude/hooks/sync-skills.sh
-```
-
-No output = success. The next time you start a Claude session, it'll sync in the background automatically.
-
-### 3. Manual update
-
-Pull the latest skills without restarting Claude:
-
-```bash
-npx skills update -g -y
 ```
 
 ## Skills
@@ -177,6 +125,7 @@ Deep codebase research with parallel sub-agents.
 dev-toolkit/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin manifest
+├── sync-skills.sh               # Dynamic skill sync script
 ├── skills/
 │   ├── bump-deps/
 │   │   ├── SKILL.md
@@ -186,6 +135,9 @@ dev-toolkit/
 │   │   └── SKILL.md
 │   ├── create-handoff/
 │   │   └── SKILL.md
+│   ├── extract-my-action-items/
+│   │   ├── skill.md
+│   │   └── scripts/
 │   ├── implement-plan/
 │   │   └── SKILL.md
 │   ├── polishing/
