@@ -1,9 +1,22 @@
 /*
- * Casper Studios — Design System Theme
+ * Casper Studios — Design System Brand Overrides
  * Tailwind CSS v4
  *
- * Copy this file into your project at src/styles/theme.css
- * and import it in your main CSS entry point.
+ * IMPORTANT: This file contains Casper-specific brand tokens (colors,
+ * typography, shadows, spacing). It is NOT a replacement for your
+ * project's globals.css or the shadcn/ui setup.
+ *
+ * Setup order:
+ *   1. Initialize a standard shadcn/ui project (shadcn init)
+ *   2. This gives you the shadcn semantic layer (--background,
+ *      --primary, --border, @theme inline mappings, tw-animate-css, etc.)
+ *   3. Import or merge the tokens below into your globals.css
+ *      alongside the shadcn defaults — they extend, not replace.
+ *
+ * The shadcn semantic variables (bg-background, text-foreground,
+ * bg-primary, text-primary-foreground, border-border, etc.) come
+ * from the shadcn setup itself. This file adds the Casper brand
+ * palette, typography scale, shadows, and spacing on top.
  */
 
 @theme {
@@ -70,12 +83,11 @@
   --color-warning-900: rgb(120, 53, 15);
 
   /* ─── Semantic Aliases ─── */
-  --color-brand-primary: rgb(89, 0, 255);
   --color-default-font: rgb(23, 23, 23);
   --color-subtext-color: rgb(115, 115, 115);
   --color-neutral-border: rgb(229, 229, 229);
-  --color-white: rgb(255, 255, 255);
-  --color-default-background: rgb(255, 255, 255);
+  --color-page-background: rgb(250, 250, 250);
+  --color-card-background: rgb(255, 255, 255);
 
   /* ─── Typography ─── */
   --text-caption: 12px;
@@ -113,37 +125,49 @@
   --text-heading-1--letter-spacing: 0em;
   --text-heading-1--line-height: 36px;
 
+  /* ─── Mobile Typography Overrides ─── */
+  --text-mobile-heading-1: 24px;
+  --text-mobile-heading-1--font-weight: 500;
+  --text-mobile-heading-1--letter-spacing: 0em;
+  --text-mobile-heading-1--line-height: 30px;
+
+  --text-mobile-heading-2: 18px;
+  --text-mobile-heading-2--font-weight: 500;
+  --text-mobile-heading-2--letter-spacing: 0em;
+  --text-mobile-heading-2--line-height: 24px;
+
   --text-monospace-body: 14px;
   --text-monospace-body--font-weight: 400;
   --text-monospace-body--letter-spacing: 0em;
   --text-monospace-body--line-height: 20px;
 
   /* ─── Font Families ─── */
-  --font-caption: "Public Sans";
-  --font-caption-bold: "Public Sans";
-  --font-body: "Public Sans";
-  --font-body-bold: "Public Sans";
-  --font-heading-3: "Public Sans";
-  --font-heading-2: "Public Sans";
-  --font-heading-1: "Public Sans";
+  --font-caption: "DM Sans", sans-serif;
+  --font-caption-bold: "DM Sans", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-body-bold: "DM Sans", sans-serif;
+  --font-heading-3: "DM Sans", sans-serif;
+  --font-heading-2: "DM Sans", sans-serif;
+  --font-heading-1: "DM Sans", sans-serif;
   --font-monospace-body: monospace;
+
+  /* ─── Border Radius ───
+     Uses the shadcn/ui radius system. A single `--radius` base variable in
+     :root controls the entire scale via calc(). The @theme inline block
+     below maps these into Tailwind utility classes.
+     No Tailwind defaults are overridden — this is the shadcn pattern. */
 
   /* ─── Shadows ─── */
   --shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
   --shadow-default: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0px 4px 16px -2px rgba(0, 0, 0, 0.08),
-    0px 2px 4px -1px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0px 12px 32px -4px rgba(0, 0, 0, 0.08),
-    0px 4px 8px -2px rgba(0, 0, 0, 0.08);
-  --shadow-overlay: 0px 12px 32px -4px rgba(0, 0, 0, 0.08),
-    0px 4px 8px -2px rgba(0, 0, 0, 0.08);
-
-  /* ─── Border Radius ─── */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-DEFAULT: 16px;
-  --radius-lg: 24px;
-  --radius-full: 9999px;
+  --shadow-md:
+    0px 4px 16px -2px rgba(0, 0, 0, 0.08), 0px 2px 4px -1px rgba(0, 0, 0, 0.08);
+  --shadow-lg:
+    0px 12px 32px -4px rgba(0, 0, 0, 0.08), 0px 4px 8px -2px rgba(0, 0, 0, 0.08);
+  /* shadow-overlay is intentionally identical to shadow-lg — it's a semantic
+     alias so code reads "shadow-overlay" on modals/sheets for clarity. */
+  --shadow-overlay:
+    0px 12px 32px -4px rgba(0, 0, 0, 0.08), 0px 4px 8px -2px rgba(0, 0, 0, 0.08);
 
   /* ─── Extended Spacing ─── */
   --spacing-112: 28rem;
@@ -151,6 +175,61 @@
   --spacing-192: 48rem;
   --spacing-256: 64rem;
   --spacing-320: 80rem;
+}
+
+/* ─── Dark Mode Overrides ─── */
+/* Apply by adding class="dark" to <html> or a wrapper element.
+   The neutral scale inverts so existing utility classes (text-neutral-900,
+   bg-neutral-50, border-neutral-200, etc.) automatically adapt. Brand and
+   semantic colors shift to dark-friendly tints.
+
+   IMPORTANT: `white` and `black` are NOT overridden here. Tailwind's
+   built-in `bg-white`, `text-white`, `bg-black`, `text-black` always
+   resolve to literal white/black regardless of mode. This is intentional —
+   use `bg-white`/`text-white` when you mean actual white (e.g., button
+   text on a colored bg). Use semantic tokens like `bg-neutral-0` or
+   `bg-neutral-50` for surfaces that should invert in dark mode. */
+.dark {
+  /* Neutrals — inverted scale */
+  --color-neutral-0: rgb(10, 10, 10);
+  --color-neutral-50: rgb(23, 23, 23);
+  --color-neutral-100: rgb(38, 38, 38);
+  --color-neutral-200: rgb(64, 64, 64);
+  --color-neutral-300: rgb(82, 82, 82);
+  --color-neutral-400: rgb(163, 163, 163);
+  --color-neutral-500: rgb(115, 115, 115);
+  --color-neutral-600: rgb(212, 212, 212);
+  --color-neutral-700: rgb(229, 229, 229);
+  --color-neutral-800: rgb(245, 245, 245);
+  --color-neutral-900: rgb(250, 250, 250);
+  --color-neutral-950: rgb(255, 255, 255);
+
+  /* Brand — lighten accent, darken tint backgrounds */
+  --color-brand-50: rgb(18, 0, 51);
+  --color-brand-100: rgb(36, 0, 102);
+  --color-brand-500: rgb(122, 51, 255);
+
+  /* Semantic — darken pastel backgrounds, keep icon/badge colors */
+  --color-error-50: rgb(30, 8, 8);
+  --color-success-50: rgb(8, 30, 14);
+  --color-warning-50: rgb(30, 24, 8);
+
+  /* Aliases */
+  --color-page-background: rgb(10, 10, 10);
+  --color-card-background: rgb(23, 23, 23);
+  --color-default-font: rgb(250, 250, 250);
+  --color-subtext-color: rgb(163, 163, 163);
+  --color-neutral-border: rgb(64, 64, 64);
+
+  /* Shadows — increased opacity for visibility on dark backgrounds */
+  --shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
+  --shadow-default: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
+  --shadow-md:
+    0px 4px 16px -2px rgba(0, 0, 0, 0.3), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg:
+    0px 12px 32px -4px rgba(0, 0, 0, 0.4), 0px 4px 8px -2px rgba(0, 0, 0, 0.3);
+  --shadow-overlay:
+    0px 12px 32px -4px rgba(0, 0, 0, 0.4), 0px 4px 8px -2px rgba(0, 0, 0, 0.3);
 }
 
 /* ─── Container ─── */
@@ -185,3 +264,22 @@
 }
 
 @custom-variant mobile (@media (max-width: 767px));
+
+/* ─── shadcn/ui Radius System ───
+   A single --radius variable controls the entire border-radius scale.
+   Change this one value and all components adjust proportionally.
+   Default: 0.625rem (10px) — the shadcn default.               */
+:root {
+  --radius: 0.625rem;
+}
+
+@theme inline {
+  --radius-sm: calc(
+    var(--radius) - 4px
+  ); /* 6px  — inputs, small buttons, inner elements */
+  --radius-md: calc(var(--radius) - 2px); /* 8px  — popovers, tooltips */
+  --radius-lg: var(--radius); /* 10px — cards, panels, large containers */
+  --radius-xl: calc(
+    var(--radius) + 4px
+  ); /* 14px — modals, hero cards, dialogs */
+}

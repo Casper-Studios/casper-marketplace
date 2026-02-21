@@ -1,10 +1,27 @@
-# Layout Patterns
+# Web Layout Patterns
 
-Structural patterns for organizing pages and navigation. These define how content areas, sidebars, and page scaffolding are composed.
+Structural patterns, responsive rules, and code examples for web application interfaces. This file is self-contained — read it whenever the project is a **web application** (not a mobile app).
+
+> **Dark mode note:** The code examples below use `bg-white` for surfaces (sidebars, cards, top bars). This is correct for light mode (the default). If dark mode is requested, swap `bg-white` to `bg-neutral-0` on all surfaces so they invert correctly via the `.dark` class. See the Dark Mode section in SKILL.md for full guidance.
 
 ---
 
-## Table of Contents
+## Responsive Behavior
+
+- **Desktop** (≥1024px): Sidebar visible, content in multi-column grid
+- **Tablet** (768–1023px): Sidebar collapsed to icons or hidden, content adjusts to fewer columns
+- **Mobile** (<768px): Sidebar hidden (accessible via hamburger → Sheet), single-column layout, cards stack vertically
+
+Key rules:
+
+- Cards go full-width on mobile
+- Filter pills scroll horizontally on mobile
+- Tables become scrollable horizontally or switch to a card/list view
+- Reduce padding from `24px` to `16px` on mobile
+
+---
+
+## Table of Contents — Code Examples
 
 1. [App Shell](#app-shell)
 2. [Sidebar Navigation](#sidebar-navigation)
@@ -76,24 +93,24 @@ The vertical nav bar lives inside the App Shell sidebar.
 
 ```
 ┌────────────────────┐
-│ 🔲 Logo            │  ← 48px height, 16px horizontal padding
+│ [icon] Logo          │  ← 48px height, 16px horizontal padding
 ├────────────────────┤
-│ 🏠 Home       ◀──── │  Active (brand-50 bg, brand-500 text)
-│ 📥 Inbox            │  Default (neutral-600 text)
-│ 📊 Reports          │
+│ [icon] Home    ◀──── │  Active (brand-50 bg, brand-500 text)
+│ [icon] Inbox         │  Default (neutral-600 text)
+│ [icon] Reports       │
 │                      │
 │ Analytics            │  ← Group label (caption, neutral-400)
-│ 📈 Dashboard         │
-│ 📉 Trends            │
-│ 📣 Campaigns         │
+│ [icon] Dashboard     │
+│ [icon] Trends        │
+│ [icon] Campaigns     │
 │                      │
 │ Settings             │  ← Group label
-│ 🏢 Company           │
-│ 💰 Payments          │
-│ 🔌 Integrations      │
+│ [icon] Company       │
+│ [icon] Payments      │
+│ [icon] Integrations  │
 ├────────────────────┤
-│ 👤 User Name         │  ← Bottom-pinned user section
-│    Role              │
+│ [avatar] User Name   │  ← Bottom-pinned user section
+│          Role        │
 └────────────────────┘
 ```
 
@@ -101,7 +118,7 @@ The vertical nav bar lives inside the App Shell sidebar.
 
 ```jsx
 <button className={cn(
-  "flex items-center gap-3 w-full px-3 h-9 rounded-lg text-sm transition-colors",
+  "flex items-center gap-3 w-full px-3 h-9 rounded-sm text-sm transition-colors",
   isActive
     ? "bg-brand-50 text-brand-500 font-medium"
     : "text-neutral-600 hover:bg-neutral-100"
