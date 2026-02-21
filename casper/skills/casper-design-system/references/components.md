@@ -214,9 +214,9 @@ Used for freelancer profiles, team members, or user listings.
 │                    ┌──────┐       │
 │                    │Avatar│       │
 │                    └──────┘       │
-│ ⭐ 4.8 (20)   New York, NY       │
+│ [star] 4.8 (20)  New York, NY    │
 │ Laura Adams                       │
-│ [Available] ⚡                    │
+│ [Available] [bolt]                │
 │ UI/UX Design Expert               │
 │                                   │
 │ [$80-$120/hr]                     │
@@ -247,7 +247,7 @@ For e-commerce or marketplace item displays.
 ┌───────────────────────┬──────────────────────┐
 │                       │ Brand Name           │
 │ [Product image /      │ Product Title        │
-│  gradient placeholder]│ ⭐⭐⭐⭐⭐ (146)     │
+│  gradient placeholder]│ [stars] (146)        │
 │                       │ $18.00               │
 │                       │                      │
 │                       │ [Type: Whole ▾]      │

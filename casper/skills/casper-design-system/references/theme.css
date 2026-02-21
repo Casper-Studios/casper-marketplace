@@ -119,13 +119,13 @@
   --text-monospace-body--line-height: 20px;
 
   /* ─── Font Families ─── */
-  --font-caption: "Public Sans";
-  --font-caption-bold: "Public Sans";
-  --font-body: "Public Sans";
-  --font-body-bold: "Public Sans";
-  --font-heading-3: "Public Sans";
-  --font-heading-2: "Public Sans";
-  --font-heading-1: "Public Sans";
+  --font-caption: "Work Sans", "DM Sans", sans-serif;
+  --font-caption-bold: "Work Sans", "DM Sans", sans-serif;
+  --font-body: "Work Sans", "DM Sans", sans-serif;
+  --font-body-bold: "Work Sans", "DM Sans", sans-serif;
+  --font-heading-3: "Work Sans", "DM Sans", sans-serif;
+  --font-heading-2: "Work Sans", "DM Sans", sans-serif;
+  --font-heading-1: "Work Sans", "DM Sans", sans-serif;
   --font-monospace-body: monospace;
 
   /* ─── Shadows ─── */

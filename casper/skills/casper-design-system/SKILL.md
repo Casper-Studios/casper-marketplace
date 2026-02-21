@@ -14,11 +14,20 @@ description: >
 
 A clean, elevated SaaS design system built on **shadcn/ui**, **Tailwind CSS v4**, and **React (Vite)**. Every interface generated for Casper Studios — whether a client demo, internal tool, or quick prototype — must follow these rules to maintain a consistent, professional visual identity across the team.
 
-Before generating any UI code, read this file completely. Reference files are split by concern — load only what you need:
+Before generating any UI code, read this file completely **and** the reference files listed below. You **MUST** read the reference files — they contain rules and code examples that are required for correct output. Skipping them will produce incorrect, off-brand UI.
 
-- **`references/layouts.md`** — Page scaffolding: app shell, sidebar nav, dashboard grid, data table page, page header. Read when building a new page or restructuring layout.
-- **`references/components.md`** — Reusable pieces: stat cards, list items, filter bars, kanban boards, profile cards, product cards, activity feeds. Read when implementing specific UI elements inside a layout.
-- **`references/theme.css`** — Tailwind CSS v4 theme tokens. Copy this file into your project as-is.
+**Required for EVERY project:**
+
+- **`references/components.md`** — ALWAYS read. Reusable pieces: stat cards, list items, filter bars, kanban boards, profile cards, product cards, activity feeds. Required whenever building UI elements inside a layout.
+- **`references/theme.css`** — ALWAYS read. Tailwind CSS v4 theme tokens. Copy this file into your project as-is.
+- **`assets/`** — Contains Casper Studios logo SVGs in 4 variants (default, variant, mono-black, mono-white). Use the correct variant based on background color — see the Logo section below.
+
+**Required based on platform:**
+
+- **`references/web-layouts.md`** — MUST read when the project is a **web application**. Web-specific responsive rules + code examples: app shell, sidebar nav, dashboard grid, data table page, page header.
+- **`references/mobile.md`** — MUST read when the project is a **mobile application**. Mobile-specific rules + code examples: device frame, top bar, bottom tab navigation, form patterns, pinned-button layout, list views, card stacks, full screen compositions, contextual actions (menus + bottom sheets).
+
+> **Non-negotiable:** Do not generate UI without reading the platform reference file first. If you are unsure whether the project is web or mobile, ask the user before proceeding.
 
 ---
 
@@ -44,7 +53,7 @@ The Casper aesthetic is **clean authority** — a professional SaaS style that f
 - **Tailwind CSS v4** — Use the theme file at `references/theme.css` as-is
 - **shadcn/ui** — Use components from the library directly. Do NOT create custom base components that duplicate shadcn functionality
 - **Lucide React** — Icon library. Always use Lucide, never Heroicons or FontAwesome
-- **Fonts** — `Public Sans` for all UI text. Load via Google Fonts or bundle
+- **Fonts** — `Work Sans` with `DM Sans` as fallback for all UI text. Load via Google Fonts or bundle
 
 ---
 
@@ -85,7 +94,7 @@ Use these ONLY for status indicators, badges, and contextual feedback — never 
 
 ## Typography
 
-All text is set in **Public Sans**. No other font family. Monospace (`font-mono`) is acceptable for code blocks, data labels, and IDs only.
+All text is set in **Work Sans** with **DM Sans** as fallback (`font-family: 'Work Sans', 'DM Sans', sans-serif`). Monospace (`font-mono`) is acceptable for code blocks, data labels, and IDs only.
 
 ### Scale
 
@@ -172,27 +181,25 @@ Cards always use `radius-md` (16px). Nested elements inside cards should use `ra
 
 ---
 
-## Logo
+## Casper Studios Logo
 
-Logo SVG files are in `assets/logos/`. Always use the SVG versions — never rasterize or recreate the logo.
+The Casper Studios logo has four variants stored in `assets/`. Use the correct variant based on the background it sits on:
 
-### Variants
-
-| File | Use when |
-|---|---|
-| `logo-on-white-default.svg` | **Primary.** Light backgrounds. Dark gray text + purple eyes + gradient icon. |
-| `logo-on-white-variant.svg` | Light backgrounds where purple loses contrast (e.g., logo over a purple-tinted surface). Black text + purple eyes. |
-| `logo-mono-black.svg` | Single-color contexts on light backgrounds. All black text + gradient icon. |
-| `logo-mono-white.svg` | Dark backgrounds. White text + gray icon. |
+| Variant | File | When to use |
+|---|---|---|
+| **Default (full color)** | `assets/logo-on-white-default.svg` | Light/white backgrounds. Gradient icon + purple "CASPER" + dark "STUDIOS". This is the primary logo — use it whenever possible. |
+| **Variant (full color)** | `assets/logo-on-white-variant.svg` | Light/white backgrounds when you want all-black text instead of purple + dark gray. Same gradient icon. |
+| **Mono Black** | `assets/logo-mono-black.svg` | Light backgrounds where color is unavailable (e.g., print, grayscale contexts). Grayscale icon + near-black text. |
+| **Mono White** | `assets/logo-mono-white.svg` | **Dark backgrounds only.** Gray icon + white text. Use this whenever the logo sits on a dark surface (dark nav bars, dark hero sections, overlays, dark mode). |
 
 ### Rules
 
-- **Default choice is always `logo-on-white-default.svg`** unless background contrast requires a different variant.
-- If placing the logo on a dark surface (`neutral-800`+, dark images, or brand-500+ backgrounds), use `logo-mono-white.svg`.
-- If placing on a purple or brand-colored surface where the purple eyes would disappear, use `logo-on-white-variant.svg`.
-- Minimum width: `120px`. Do not scale below this.
-- Clear space: Maintain at least the width of the icon (the ghost character) as padding on all sides.
-- Do NOT modify colors, stretch, rotate, add effects, or place on busy backgrounds without sufficient contrast.
+- **Light mode** (default): Use `logo-on-white-default.svg` or `logo-on-white-variant.svg`
+- **Dark mode** or dark surfaces: Use `logo-mono-white.svg` — never place the default or black logo on a dark background
+- The logo should appear in the **sidebar header** (web) or **top bar** (mobile) at the sizes defined in those patterns
+- Do NOT resize the logo disproportionately — maintain the original aspect ratio
+- Do NOT place the logo on busy backgrounds or low-contrast surfaces. If contrast is insufficient, use the mono variant that provides the best visibility
+- Minimum clear space around the logo: `8px` on all sides
 
 ---
 
@@ -206,7 +213,7 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 - **Secondary**: White bg, `neutral-200` border, `neutral-900` text. Hover: `neutral-50` bg.
 - **Ghost**: No bg, no border. `neutral-600` text. Hover: `neutral-100` bg.
 - **Destructive**: `error-500` bg, white text.
-- All buttons: `radius-sm` (8px), height `36px` (default), `14px` font.
+- All buttons: `radius-sm` (8px), height `36px` (default, web), `48px` for mobile (`h-12`), `14px` font.
 
 ### Badge
 
@@ -235,8 +242,11 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 
 - `radius-sm` (8px). `1px` `neutral-200` border. `neutral-50` bg or white bg.
 - Focus: `2px` `brand-500` ring (use Tailwind `ring-2 ring-brand-500`).
-- Placeholder text: `neutral-400`.
-- Height: `36px` for default inputs.
+- **Labels MUST be visible and external** — render a `<label>` element above every input, never inside it. Labels use `14px`/400 in `neutral-900`. The gap between label and input is `6px` (`space-y-1.5`).
+- **Placeholder text MUST be de-emphasized** — `neutral-400` color, normal weight (400), short hint text (e.g., "e.g. john@email.com"). Placeholders are supplementary hints, not labels.
+- **Select inputs** follow the same pattern: visible label above, de-emphasized placeholder inside.
+- **Spacing between fields**: `16px` (`space-y-4` or `gap-4`).
+- Height: `36px` for default inputs (web). On mobile, use `48px` (`h-12`) — same as mobile buttons.
 
 ### Sidebar (App Shell)
 
@@ -266,24 +276,22 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 
 ## Composite Patterns
 
-For detailed code examples and composite definitions, read the appropriate reference file:
+For rules and code examples, read the appropriate reference file:
 
-- **`references/layouts.md`** — App Shell, Sidebar Navigation, Dashboard Grid, Data Table Page, Page Header
+- **`references/web-layouts.md`** — Responsive rules, App Shell, Sidebar Navigation, Dashboard Grid, Data Table Page, Page Header
 - **`references/components.md`** — Stat Card, List Item Row, Filter Bar, Kanban Board, Profile/Discovery Card, Product Card, Activity Feed Item
+- **`references/mobile.md`** — Mobile rules, Device Frame Shell, Mobile Top Bar, Bottom Tab Navigation, Mobile Form Layout, Pinned Bottom Button, Mobile List View, Mobile Card Stack, Full Screen Composition, Contextual Actions
 
 ---
 
-## Responsive Behavior
+## Web vs Mobile Context
 
-- **Desktop** (≥1024px): Sidebar visible, content in multi-column grid
-- **Tablet** (768–1023px): Sidebar collapsed to icons or hidden, content adjusts to fewer columns
-- **Mobile** (<768px): Sidebar hidden (accessible via hamburger → Sheet), single-column layout, cards stack vertically
+Every project is either a **web application** or a **mobile application** — the layout approach is fundamentally different. You MUST have already read the appropriate platform reference file (as instructed at the top of this document) before reaching this point. If you haven't, stop and read it now:
 
-Key rules:
-- Cards go full-width on mobile
-- Filter pills scroll horizontally on mobile
-- Tables become scrollable horizontally or switch to a card/list view
-- Reduce padding from `24px` to `16px` on mobile
+- **Web application** → `references/web-layouts.md` (responsive breakpoints, sidebar behavior, layout patterns)
+- **Mobile application** (native app, iOS, Android, phone-based experience) → `references/mobile.md` (device frame, touch targets, pinned buttons, navigation, mobile-specific rules)
+
+Do NOT treat a mobile app as a responsive web page. Mobile apps render inside a device frame and follow entirely different navigation, spacing, and interaction patterns.
 
 ---
 
@@ -302,18 +310,151 @@ Apply `radius-md` to image containers. These are placeholders — they should lo
 
 ---
 
+## Transitions & Animations
+
+Every state change should feel smooth and intentional — no hard cuts. This applies across both web and mobile:
+
+- **Interactive elements** (buttons, inputs, cards): Use `transition-colors` or `transition-all` with Tailwind's default duration (~150ms). State changes like hover, focus, and active should never feel instantaneous.
+- **Page transitions**: When navigating between views, apply a subtle slide or fade. A `150–300ms` ease-out transition keeps things feeling responsive without sluggish.
+- **Modals, Dialogs, Sheets**: Always animate in and out. Sheets slide from their edge (left, right, bottom), dialogs/modals fade + scale up slightly from ~95% to 100%. The overlay backdrop should fade in (`opacity 0→50%`), not appear instantly.
+- **Lists and content loading**: When new items appear (e.g., after a fetch), a subtle fade-in or stagger is preferred over a hard pop-in.
+
+Nothing on screen should ever just "appear" or "disappear" — every visual change gets a brief, smooth transition.
+
+---
+
+## Empty, Error & Loading States
+
+Every screen has at least three faces: populated, empty, and broken. AI-generated interfaces almost always show only the happy path with fake data. A polished interface acknowledges the other two.
+
+### Empty State
+
+When a list, table, or content area has no data yet (first-time use, zero results, cleared filters):
+
+- Center a Lucide icon (`48px`, `neutral-300`) + a short heading (`Heading 3`) + one line of body text (`neutral-500`) vertically in the content area
+- Optionally include a primary action button below the text (e.g., "Create your first project")
+- Do NOT show an empty table with headers and no rows — that looks like a bug, not a feature
+- Do NOT use illustrations or complex graphics. Keep it text + icon. Minimal.
+
+### Error State
+
+When something goes wrong (network failure, permission denied, server error):
+
+- Same centered layout as empty state, but use `error-500` for the icon color
+- Icon: contextual — `WifiOff` for network errors, `ShieldX` for permission, `AlertTriangle` as a generic fallback
+- Heading: brief, human-readable ("Something went wrong", "Couldn't load projects")
+- Body: one sentence explaining what to do ("Check your connection and try again")
+- Include a "Retry" button (`secondary` variant) when the action is retryable
+
+### Loading State
+
+When content is being fetched:
+
+- **For initial page loads**: Show a single centered spinner (`Loader2` icon with `animate-spin`, `24px`, `neutral-400`). No skeleton screens unless explicitly requested — they add complexity without clarifying the design
+- **For inline updates** (e.g., submitting a form, loading more items): Swap the trigger button's label to a spinner + "Loading…" and disable the button
+- **For pull-to-refresh or lazy loading**: A small spinner at the top or bottom of the list, `neutral-400`
+
+The anti-pattern rule "No animated skeletons or shimmer effects in static mockups" still stands — but a simple `animate-spin` on a loader icon is fine for interactive interfaces.
+
+---
+
+## Form Validation & Error Feedback
+
+Inputs need to clearly communicate when something is wrong. This applies to both web and mobile.
+
+### Error State on Inputs
+
+- **Border**: Swap `neutral-200` border to `error-500` (`border-error-500`)
+- **Focus ring**: Swap `brand-500` ring to `error-500` (`ring-error-500`)
+- **Error message**: Render a `<p>` below the input in `error-500`, `12px` (caption size). Use `space-y-1` between input and message so it's tight but readable
+- **Label**: The label itself stays `neutral-900` — don't color it red. The border and message are enough signal
+- **Icon** (optional): A small `AlertCircle` icon (`14px`, `error-500`) inline with the error message adds scannability but isn't required
+
+### Validation Rules
+
+- Validate on blur (when the user leaves the field), not on every keystroke — keystroke validation feels aggressive
+- Show errors inline, directly below the relevant field. Never collect errors at the top of the form — users shouldn't have to hunt
+- When the user corrects the input and the field is valid, remove the error state immediately (on change, not on blur)
+- If the form is submitted with errors, scroll to the first invalid field and focus it
+
+### Success Confirmation (Post-Submit)
+
+After a successful form submission, provide clear feedback. Don't just silently navigate away:
+
+- **Option A**: Toast notification (see below) confirming the action + navigate to the next logical screen
+- **Option B**: Inline success message replacing the form content (useful for single-purpose screens like "Reset password")
+
+---
+
+## Toast Notifications
+
+Transient feedback messages that confirm actions, surface errors, or provide information. Use shadcn's `Sonner` toast component.
+
+### Positioning & Behavior
+
+- **Web**: Bottom-right corner, `16px` from the edge
+- **Mobile**: Top-center, below the status bar / top bar area
+- **Duration**: `4000ms` default, `6000ms` for messages with an action link. Error toasts should persist until dismissed
+- **Stacking**: Max 3 visible at once. New toasts push older ones up (web) or down (mobile)
+- **Animation**: Slide in from the edge + fade. Slide out + fade on dismiss. Should feel like the Transitions & Animations section — smooth, never instant
+
+### Variants
+
+| Variant | Icon | Border | Use |
+|---|---|---|---|
+| **Success** | `CheckCircle` in `success-500` | `success-200` left border | Action completed ("Project created", "Changes saved") |
+| **Error** | `XCircle` in `error-500` | `error-200` left border | Action failed ("Couldn't save — try again") |
+| **Info** | `Info` in `brand-500` | `brand-200` left border | Neutral updates ("New version available") |
+| **Warning** | `AlertTriangle` in `warning-500` | `warning-200` left border | Non-blocking caution ("Storage almost full") |
+
+### Rules
+
+- Toast body text: `14px` Body, `neutral-900`. Keep it to one sentence
+- Optional action link: `brand-500`, inline with the text ("Undo", "View", "Retry")
+- Include a close button (`X`, `neutral-400`) on the right side
+- Never use toasts for critical errors that require user action — those should be inline or in a dialog
+
+---
+
+## Data Visualization Palette
+
+When rendering charts (Recharts, Chart.js, etc.), use this ordered color sequence so data visualizations feel native to the brand. The palette starts with the brand purple and fans out through distinguishable hues:
+
+| Order | Name | Hex | Use |
+|---|---|---|---|
+| 1 | Brand | `#5900FF` | Primary data series, single-metric charts |
+| 2 | Teal | `#14B8A6` | Secondary series |
+| 3 | Amber | `#F59E0B` | Tertiary series |
+| 4 | Rose | `#F43F5E` | Fourth series, or "negative" in comparisons |
+| 5 | Sky | `#0EA5E9` | Fifth series |
+| 6 | Lime | `#84CC16` | Sixth series |
+
+### Rules
+
+- For single-metric charts (one bar, one line, one donut), always use `Brand` (`#5900FF`)
+- For two-series comparisons, use `Brand` + `Teal`
+- Apply colors in order — don't skip or shuffle. Consistency across charts makes dashboards feel cohesive
+- Use `10%` opacity fills for area charts (e.g., `#5900FF1A` for brand area fill)
+- Gridlines: `neutral-200`. Axis labels: `neutral-500`, caption size (12px). Axis lines: `neutral-300`
+- Tooltips: White bg, `shadow-md`, `radius-sm`, `neutral-200` border — same treatment as popovers
+- Never use brand purple for "negative" or "declining" values — use Rose for that. Purple is always neutral-to-positive
+
+---
+
 ## Anti-Patterns (Do NOT)
 
 - **No gradients on buttons.** Flat solid colors only.
 - **No colored page backgrounds.** Background is always `neutral-50` or `white`.
 - **No heavy borders.** Max `1px` for structural borders. Never 2px+.
 - **No rounded-full on cards.** Cards are `radius-md` (16px), never circles.
-- **No custom fonts.** Public Sans only. Monospace for code.
-- **No icon-only navigation** on desktop. Always show icon + label in the sidebar.
+- **No custom fonts.** Work Sans / DM Sans only. Monospace for code.
+- **Prefer icon + label navigation** on desktop. Icon-only sidebars are acceptable if a tooltip with the label appears on hover or focus.
 - **No dark mode** unless explicitly requested. Default is always light.
 - **No animated skeletons or shimmer effects** in static mockups.
 - **No drop shadows on text.** Ever.
 - **No border-radius mixing.** Don't put `rounded-lg` next to `rounded-sm` at the same hierarchy level.
+- **No floating labels or placeholder-as-label.** Labels must always be visible above inputs. Placeholders are hints, not labels — they vanish on focus and users lose context.
+- **No emojis in the UI.** Icons only. The only exception is user-generated content — if a user typed an emoji, display it. But never add emojis to labels, headings, buttons, nav items, placeholders, or any system-generated text.
 
 ---
 
@@ -321,13 +462,32 @@ Apply `radius-md` to image containers. These are placeholders — they should lo
 
 Before delivering any UI code, verify:
 
-- [ ] Uses `Public Sans` font family
+- [ ] Uses `Work Sans` font family (with `DM Sans` fallback)
 - [ ] Brand purple only on interactive/active elements
 - [ ] Cards have white bg + `neutral-200` border + `radius-md` + `shadow-sm`
-- [ ] Sidebar follows the 240px / grouped nav / active state pattern
 - [ ] No unauthorized colors, fonts, or shadows
-- [ ] Responsive: works at 1280px, 768px, and 375px
 - [ ] All icons from Lucide React
 - [ ] shadcn components used where available (not custom recreations)
 - [ ] Spacing feels generous — nothing cramped
 - [ ] Page background is `neutral-50`, not white
+- [ ] Empty states are handled (not just the happy path with fake data)
+- [ ] Form inputs show error styling on validation failure (red border + message below)
+- [ ] Actions provide feedback via toast or inline confirmation
+- [ ] Charts (if present) use the data visualization palette in order
+- [ ] All form inputs have visible external labels (not inside the input)
+- [ ] Placeholder text is de-emphasized (`neutral-400`, normal weight)
+- [ ] Casper Studios logo uses the correct variant for the background (default on light, mono-white on dark)
+
+### Additional checks for Web Applications:
+
+- [ ] Sidebar follows the 240px / grouped nav / active state pattern
+- [ ] Responsive: works at 1280px, 768px, and 375px
+
+### Additional checks for Mobile Applications:
+
+- [ ] Rendered inside iPhone 16 device frame (393×852, 40px outer radius, 8px bezel)
+- [ ] Primary action button is pinned to bottom with safe area padding
+- [ ] Navigation uses bottom tab bar, not sidebar
+- [ ] Most tap targets are 44×44px or larger (smaller is OK in dense UI, but not the default)
+- [ ] Single-column layout only — no multi-column grids
+- [ ] Typography uses mobile scale (H1: 24px, H2: 18px)
