@@ -142,13 +142,13 @@
   --text-monospace-body--line-height: 20px;
 
   /* ─── Font Families ─── */
-  --font-caption: "Work Sans", "DM Sans", sans-serif;
-  --font-caption-bold: "Work Sans", "DM Sans", sans-serif;
-  --font-body: "Work Sans", "DM Sans", sans-serif;
-  --font-body-bold: "Work Sans", "DM Sans", sans-serif;
-  --font-heading-3: "Work Sans", "DM Sans", sans-serif;
-  --font-heading-2: "Work Sans", "DM Sans", sans-serif;
-  --font-heading-1: "Work Sans", "DM Sans", sans-serif;
+  --font-caption: "DM Sans", sans-serif;
+  --font-caption-bold: "DM Sans", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-body-bold: "DM Sans", sans-serif;
+  --font-heading-3: "DM Sans", sans-serif;
+  --font-heading-2: "DM Sans", sans-serif;
+  --font-heading-1: "DM Sans", sans-serif;
   --font-monospace-body: monospace;
 
   /* ─── Border Radius ───
@@ -274,8 +274,12 @@
 }
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);   /* 6px  — inputs, small buttons, inner elements */
-  --radius-md: calc(var(--radius) - 2px);   /* 8px  — popovers, tooltips */
-  --radius-lg: var(--radius);               /* 10px — cards, panels, large containers */
-  --radius-xl: calc(var(--radius) + 4px);   /* 14px — modals, hero cards, dialogs */
+  --radius-sm: calc(
+    var(--radius) - 4px
+  ); /* 6px  — inputs, small buttons, inner elements */
+  --radius-md: calc(var(--radius) - 2px); /* 8px  — popovers, tooltips */
+  --radius-lg: var(--radius); /* 10px — cards, panels, large containers */
+  --radius-xl: calc(
+    var(--radius) + 4px
+  ); /* 14px — modals, hero cards, dialogs */
 }

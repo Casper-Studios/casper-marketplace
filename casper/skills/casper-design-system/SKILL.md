@@ -64,7 +64,7 @@ The Casper aesthetic is **clean authority** — a professional SaaS style that f
 - **Tailwind CSS v4** — Use the theme file at `references/theme.css` as Casper brand overrides
 - **shadcn/ui** — Initialize a standard shadcn/ui project first (`shadcn init`), then layer Casper brand tokens from `references/theme.css` on top. The shadcn semantic layer (`bg-background`, `text-foreground`, `bg-primary`, `border-border`, etc.) is the base — Casper's theme.css adds brand colors, typography, shadows, and spacing on top of it, not as a replacement. Use shadcn components directly. Do NOT create custom base components that duplicate shadcn functionality
 - **Lucide React** — Icon library. Always use Lucide, never Heroicons or FontAwesome
-- **Fonts** — `Work Sans` with `DM Sans` as fallback for all UI text. Load via Google Fonts or bundle
+- **Fonts** — `DM Sans` with `sans-serif` as fallback for all UI text. Load via Google Fonts or bundle
 
 ---
 
@@ -105,7 +105,7 @@ Use these ONLY for status indicators, badges, and contextual feedback — never 
 
 ## Typography
 
-All text is set in **Work Sans** with **DM Sans** as fallback (`font-family: 'Work Sans', 'DM Sans', sans-serif`). Monospace (`font-mono`) is acceptable for code blocks, data labels, and IDs only.
+All text is set in **DM Sans** with **sans-serif** as fallback (`font-family: 'DM Sans', sans-serif`). Monospace (`font-mono`) is acceptable for code blocks, data labels, and IDs only.
 
 ### Scale
 
@@ -488,7 +488,7 @@ Use `assets/logo-mono-white.svg` — the only variant approved for dark surfaces
 - **No colored page backgrounds.** Background is always `neutral-50` or `neutral-0`.
 - **No heavy borders.** Max `1px` for structural borders. Never 2px+.
 - **No rounded-full on cards.** Cards are `rounded-lg` (10px), never circles.
-- **No custom fonts.** Work Sans / DM Sans only. Monospace for code.
+- **No custom fonts.** DM Sans / sans-serif only. Monospace for code.
 - **Prefer icon + label navigation** on desktop. Icon-only sidebars are acceptable if a tooltip with the label appears on hover or focus.
 - **No dark mode** unless explicitly requested. Default is always light.
 - **No animated skeletons or shimmer effects** in static mockups.
@@ -503,7 +503,7 @@ Use `assets/logo-mono-white.svg` — the only variant approved for dark surfaces
 
 Before delivering any UI code, verify:
 
-- [ ] Uses `Work Sans` font family (with `DM Sans` fallback)
+- [ ] Uses `DM Sans` font family (with `sans-serif` fallback)
 - [ ] Brand purple only on interactive/active elements
 - [ ] Cards have `bg-neutral-0` + `neutral-200` border + `rounded-lg` + `shadow-sm`
 - [ ] No unauthorized colors, fonts, or shadows
