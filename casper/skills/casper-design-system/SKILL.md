@@ -31,6 +31,17 @@ Before generating any UI code, read this file completely **and** the reference f
 
 ---
 
+## Before You Generate: Required Context
+
+Before producing any UI code, confirm the following with the user. If their prompt already answers these clearly, proceed without asking. If not, ask before generating anything.
+
+1. **Platform** — Is this a web application or a mobile application? (Determines which reference file to follow.)
+2. **Dark mode** — Should the interface support dark mode, or is it light mode only? (Determines whether to implement `.dark` class overrides, use `bg-neutral-0` for surfaces, and include the mono-white logo variant.)
+
+Do NOT assume defaults for these. If the user says "build me a dashboard," you don't know if it's web or mobile, or if it needs dark mode. Ask.
+
+---
+
 ## Summary
 
 The Casper aesthetic is **clean authority** — a professional SaaS style that feels premium without trying too hard. It uses generous whitespace, a restrained purple accent, and soft rounded surfaces to create interfaces that feel trustworthy and modern. Think Linear meets Notion: structured, breathable, quietly confident.
@@ -63,17 +74,17 @@ The palette is intentionally restrained. Most of the UI is neutral gray + white,
 
 ### Usage Rules
 
-| Role | Token | Hex | When to use |
-|---|---|---|---|
-| **Brand accent** | `brand-500` | `#5900FF` | Active nav items, primary buttons, links, focus rings |
-| **Brand subtle** | `brand-50` | `#EEE5FF` | Active nav background, selected row highlight, hover tints |
-| **Brand light** | `brand-100` | `#DECCFF` | Icon circle backgrounds, soft tag fills |
-| **Default text** | `neutral-950` | `#0A0A0A` | Page titles, headings |
-| **Body text** | `neutral-900` | `#171717` | Primary body text |
-| **Subtext** | `neutral-500` | `#737373` | Metadata, timestamps, secondary labels |
-| **Borders** | `neutral-200` | `#E5E5E5` | Card borders, dividers, table lines |
-| **Surface** | `neutral-50` | `#FAFAFA` | Page background behind cards |
-| **Card surface** | `neutral-0` | `#FFFFFF` | Card backgrounds, panels (use `bg-neutral-0` for dark mode compatibility — see Dark Mode section) |
+| Role             | Token         | Hex       | When to use                                                                                       |
+| ---------------- | ------------- | --------- | ------------------------------------------------------------------------------------------------- |
+| **Brand accent** | `brand-500`   | `#5900FF` | Active nav items, primary buttons, links, focus rings                                             |
+| **Brand subtle** | `brand-50`    | `#EEE5FF` | Active nav background, selected row highlight, hover tints                                        |
+| **Brand light**  | `brand-100`   | `#DECCFF` | Icon circle backgrounds, soft tag fills                                                           |
+| **Default text** | `neutral-950` | `#0A0A0A` | Page titles, headings                                                                             |
+| **Body text**    | `neutral-900` | `#171717` | Primary body text                                                                                 |
+| **Subtext**      | `neutral-500` | `#737373` | Metadata, timestamps, secondary labels                                                            |
+| **Borders**      | `neutral-200` | `#E5E5E5` | Card borders, dividers, table lines                                                               |
+| **Surface**      | `neutral-50`  | `#FAFAFA` | Page background behind cards                                                                      |
+| **Card surface** | `neutral-0`   | `#FFFFFF` | Card backgrounds, panels (use `bg-neutral-0` for dark mode compatibility — see Dark Mode section) |
 
 ### Semantic Colors
 
@@ -98,15 +109,15 @@ All text is set in **Work Sans** with **DM Sans** as fallback (`font-family: 'Wo
 
 ### Scale
 
-| Style | Size | Weight | Line Height | Use |
-|---|---|---|---|---|
-| **Heading 1** | 30px | 500 | 36px | Page titles only. One per view. |
-| **Heading 2** | 20px | 500 | 24px | Section titles within a page |
-| **Heading 3** | 16px | 500 | 20px | Card titles, subsection labels |
-| **Body** | 14px | 400 | 20px | Default paragraph and UI text |
-| **Body Bold** | 14px | 500 | 20px | Emphasis within body text, table headers |
-| **Caption** | 12px | 400 | 16px | Timestamps, helper text, metadata |
-| **Caption Bold** | 12px | 500 | 16px | Badge labels, small category tags |
+| Style            | Size | Weight | Line Height | Use                                      |
+| ---------------- | ---- | ------ | ----------- | ---------------------------------------- |
+| **Heading 1**    | 30px | 500    | 36px        | Page titles only. One per view.          |
+| **Heading 2**    | 20px | 500    | 24px        | Section titles within a page             |
+| **Heading 3**    | 16px | 500    | 20px        | Card titles, subsection labels           |
+| **Body**         | 14px | 400    | 20px        | Default paragraph and UI text            |
+| **Body Bold**    | 14px | 500    | 20px        | Emphasis within body text, table headers |
+| **Caption**      | 12px | 400    | 16px        | Timestamps, helper text, metadata        |
+| **Caption Bold** | 12px | 500    | 16px        | Badge labels, small category tags        |
 
 ### Rules
 
@@ -145,11 +156,11 @@ Use Tailwind's default spacing scale. Key values:
 
 The design is predominantly flat. Shadows are used to indicate layers, not to add decoration.
 
-| Token | Use |
-|---|---|
-| `shadow-sm` | Cards, inputs at rest |
-| `shadow-md` | Dropdown menus, popovers, tooltips |
-| `shadow-lg` | Modals, command palettes, overlays ONLY |
+| Token            | Use                                                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------- |
+| `shadow-sm`      | Cards, inputs at rest                                                                                      |
+| `shadow-md`      | Dropdown menus, popovers, tooltips                                                                         |
+| `shadow-lg`      | Modals, command palettes, overlays ONLY                                                                    |
 | `shadow-overlay` | Semantic alias for `shadow-lg` — identical value. Use on modals/sheets so the intent reads clearly in code |
 
 NEVER apply `shadow-lg` (or its alias `shadow-overlay`) to cards or in-page elements. These are reserved for floating layers only.
@@ -160,13 +171,13 @@ NEVER apply `shadow-lg` (or its alias `shadow-overlay`) to cards or in-page elem
 
 The theme file (`references/theme.css`) uses the **shadcn/ui radius system** — a single `--radius` base variable in `:root` that controls the entire scale via `calc()`. This is mapped into Tailwind classes via `@theme inline`. No Tailwind v4 defaults are overridden.
 
-| Token | Tailwind Class | Default Value | Use |
-|---|---|---|---|
-| `--radius-sm` | `rounded-sm` | 6px | Inputs, small buttons, inner elements |
-| `--radius-md` | `rounded-md` | 8px | Popovers, tooltips, chart tooltips |
-| `--radius-lg` | `rounded-lg` | 10px | Cards, panels, large containers |
-| `--radius-xl` | `rounded-xl` | 14px | Modal containers, dialogs, hero cards |
-| (Tailwind built-in) | `rounded-full` | 9999px | Badges, pills, avatars, icon circles |
+| Token               | Tailwind Class | Default Value | Use                                   |
+| ------------------- | -------------- | ------------- | ------------------------------------- |
+| `--radius-sm`       | `rounded-sm`   | 6px           | Inputs, small buttons, inner elements |
+| `--radius-md`       | `rounded-md`   | 8px           | Popovers, tooltips, chart tooltips    |
+| `--radius-lg`       | `rounded-lg`   | 10px          | Cards, panels, large containers       |
+| `--radius-xl`       | `rounded-xl`   | 14px          | Modal containers, dialogs, hero cards |
+| (Tailwind built-in) | `rounded-full` | 9999px        | Badges, pills, avatars, icon circles  |
 
 The base value `--radius: 0.625rem` (10px) is the shadcn default. To make the entire UI sharper or rounder, change this single value — all tokens recalculate automatically.
 
@@ -190,12 +201,12 @@ Cards always use `rounded-lg` (10px). Nested elements inside cards should use `r
 
 The Casper Studios logo has four variants stored in `assets/`. Use the correct variant based on the background it sits on:
 
-| Variant | File | When to use |
-|---|---|---|
-| **Default (full color)** | `assets/logo-on-white-default.svg` | Light/white backgrounds. Gradient icon + purple "CASPER" + dark "STUDIOS". This is the primary logo — use it whenever possible. |
-| **Variant (full color)** | `assets/logo-on-white-variant.svg` | Light/white backgrounds when you want all-black text instead of purple + dark gray. Same gradient icon. |
-| **Mono Black** | `assets/logo-mono-black.svg` | Light backgrounds where color is unavailable (e.g., print, grayscale contexts). Grayscale icon + near-black text. |
-| **Mono White** | `assets/logo-mono-white.svg` | **Dark backgrounds only.** Gray icon + white text. Use this whenever the logo sits on a dark surface (dark nav bars, dark hero sections, overlays, dark mode). |
+| Variant                  | File                               | When to use                                                                                                                                                    |
+| ------------------------ | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Default (full color)** | `assets/logo-on-white-default.svg` | Light/white backgrounds. Gradient icon + purple "CASPER" + dark "STUDIOS". This is the primary logo — use it whenever possible.                                |
+| **Variant (full color)** | `assets/logo-on-white-variant.svg` | Light/white backgrounds when you want all-black text instead of purple + dark gray. Same gradient icon.                                                        |
+| **Mono Black**           | `assets/logo-mono-black.svg`       | Light backgrounds where color is unavailable (e.g., print, grayscale contexts). Grayscale icon + near-black text.                                              |
+| **Mono White**           | `assets/logo-mono-white.svg`       | **Dark backgrounds only.** Gray icon + white text. Use this whenever the logo sits on a dark surface (dark nav bars, dark hero sections, overlays, dark mode). |
 
 ### Rules
 
@@ -399,14 +410,14 @@ Transient feedback messages that confirm actions, surface errors, or provide inf
 
 When rendering charts (Recharts, Chart.js, etc.), use this ordered color sequence so data visualizations feel native to the brand. The palette starts with the brand purple and fans out through distinguishable hues:
 
-| Order | Name | Hex | Use |
-|---|---|---|---|
-| 1 | Brand | `#5900FF` | Primary data series, single-metric charts |
-| 2 | Teal | `#14B8A6` | Secondary series |
-| 3 | Amber | `#F59E0B` | Tertiary series |
-| 4 | Rose | `#F43F5E` | Fourth series, or "negative" in comparisons |
-| 5 | Sky | `#0EA5E9` | Fifth series |
-| 6 | Lime | `#84CC16` | Sixth series |
+| Order | Name  | Hex       | Use                                         |
+| ----- | ----- | --------- | ------------------------------------------- |
+| 1     | Brand | `#5900FF` | Primary data series, single-metric charts   |
+| 2     | Teal  | `#14B8A6` | Secondary series                            |
+| 3     | Amber | `#F59E0B` | Tertiary series                             |
+| 4     | Rose  | `#F43F5E` | Fourth series, or "negative" in comparisons |
+| 5     | Sky   | `#0EA5E9` | Fifth series                                |
+| 6     | Lime  | `#84CC16` | Sixth series                                |
 
 ### Rules
 
@@ -432,17 +443,17 @@ The theme file (`references/theme.css`) includes a `.dark` class block that over
 
 You don't change token names in your code — the `.dark` override changes the values behind them. Here's what each token resolves to:
 
-| Token (unchanged in code) | Light Mode Value | Dark Mode Value | Notes |
-|---|---|---|---|
-| `bg-neutral-50` | `#FAFAFA` (light gray) | `#171717` (near-black) | Page background |
-| `bg-neutral-0` | `#FFFFFF` (white) | `#0A0A0A` (near-black) | Card surfaces |
-| `border-neutral-200` | `#E5E5E5` (light gray) | `#404040` (dark gray) | Borders / dividers |
-| `text-neutral-950` | `#0A0A0A` (near-black) | `#FFFFFF` (white) | Page titles |
-| `text-neutral-900` | `#171717` (near-black) | `#FAFAFA` (near-white) | Body text |
-| `text-neutral-500` | `#737373` (mid-gray) | `#737373` (mid-gray) | Stays the same — mid-range |
-| `text-neutral-400` | `#A3A3A3` (light gray) | `#A3A3A3` (stays same) | Subtext — readable on dark |
-| `bg-brand-500` | `#5900FF` | `#7A33FF` (lighter) | Brighter for contrast on dark bg |
-| `bg-brand-50` | `#EEE5FF` (light purple) | `#120033` (very dark purple) | Tinted backgrounds invert |
+| Token (unchanged in code) | Light Mode Value         | Dark Mode Value              | Notes                            |
+| ------------------------- | ------------------------ | ---------------------------- | -------------------------------- |
+| `bg-neutral-50`           | `#FAFAFA` (light gray)   | `#171717` (near-black)       | Page background                  |
+| `bg-neutral-0`            | `#FFFFFF` (white)        | `#0A0A0A` (near-black)       | Card surfaces                    |
+| `border-neutral-200`      | `#E5E5E5` (light gray)   | `#404040` (dark gray)        | Borders / dividers               |
+| `text-neutral-950`        | `#0A0A0A` (near-black)   | `#FFFFFF` (white)            | Page titles                      |
+| `text-neutral-900`        | `#171717` (near-black)   | `#FAFAFA` (near-white)       | Body text                        |
+| `text-neutral-500`        | `#737373` (mid-gray)     | `#737373` (mid-gray)         | Stays the same — mid-range       |
+| `text-neutral-400`        | `#A3A3A3` (light gray)   | `#A3A3A3` (stays same)       | Subtext — readable on dark       |
+| `bg-brand-500`            | `#5900FF`                | `#7A33FF` (lighter)          | Brighter for contrast on dark bg |
+| `bg-brand-50`             | `#EEE5FF` (light purple) | `#120033` (very dark purple) | Tinted backgrounds invert        |
 
 ### `bg-white` vs `bg-neutral-0` — Critical Distinction
 
