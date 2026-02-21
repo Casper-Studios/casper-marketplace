@@ -2,6 +2,8 @@
 
 Structural patterns, responsive rules, and code examples for web application interfaces. This file is self-contained — read it whenever the project is a **web application** (not a mobile app).
 
+> **Dark mode note:** The code examples below use `bg-white` for surfaces (sidebars, cards, top bars). This is correct for light mode (the default). If dark mode is requested, swap `bg-white` to `bg-neutral-0` on all surfaces so they invert correctly via the `.dark` class. See the Dark Mode section in SKILL.md for full guidance.
+
 ---
 
 ## Responsive Behavior
@@ -116,7 +118,7 @@ The vertical nav bar lives inside the App Shell sidebar.
 
 ```jsx
 <button className={cn(
-  "flex items-center gap-3 w-full px-3 h-9 rounded-lg text-sm transition-colors",
+  "flex items-center gap-3 w-full px-3 h-9 rounded-sm text-sm transition-colors",
   isActive
     ? "bg-brand-50 text-brand-500 font-medium"
     : "text-neutral-600 hover:bg-neutral-100"

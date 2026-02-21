@@ -4,6 +4,8 @@ Code examples, rules, and structural patterns for mobile app interfaces. This fi
 
 **Why this file exists:** Most AI code-generation tools default to web layouts. When someone says "mobile app," they don't want a responsive webpage — they want something that looks like it's running on a phone. The device frame, the touch-sized inputs, the pinned bottom button — these details are what separate "shrunk-down website" from "this actually feels like an app."
 
+> **Dark mode note:** The code examples below use `bg-white` for surfaces (top bars, tab bars, cards). This is correct for light mode (the default). If dark mode is requested, swap `bg-white` to `bg-neutral-0` on all surfaces so they invert correctly via the `.dark` class. See the Dark Mode section in SKILL.md for full guidance.
+
 ---
 
 ## Mobile Rules
@@ -77,7 +79,7 @@ When a button or trigger presents multiple options on mobile, use one of two pat
 - **Scrim**: `black/50` overlay behind the sheet, with `backdrop-blur-sm` to blur the content underneath
 - **Max height**: `85%` of the device frame height — the sheet should never cover the full screen
 - **Content hugging**: If the sheet content is shorter than 85%, the sheet should only be as tall as its content (plus padding). Don't force it to 85% when it doesn't need to be
-- **Border radius**: `24px` on the top-left and top-right corners (`rounded-t-3xl`), square on the bottom
+- **Border radius**: `24px` on the top-left and top-right corners (`rounded-t-[24px]`), square on the bottom
 - **Drag indicator**: A small `40px × 4px` rounded pill centered at the top of the sheet (`neutral-300`) so users know they can swipe to dismiss
 - **Animation**: Slides up from below with a `200–300ms` ease-out transition
 - **Dismissal**: Tap the scrim or swipe down to close
@@ -232,7 +234,7 @@ If the app has more than 5 top-level sections, use a slide-out navigation panel 
         <button
           key={item.id}
           className={cn(
-            "flex items-center gap-3 w-full px-3 h-11 rounded-lg text-sm",
+            "flex items-center gap-3 w-full px-3 h-11 rounded-sm text-sm",
             item.active
               ? "bg-brand-50 text-brand-500 font-medium"
               : "text-neutral-600 active:bg-neutral-100"
@@ -265,7 +267,7 @@ Forms on mobile need extra care. Every field must be self-describing without int
   <input
     type="email"
     placeholder="e.g. john@email.com"
-    className="w-full h-12 px-3 rounded-lg border border-neutral-200 bg-white text-sm text-neutral-900 placeholder:text-neutral-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-brand-500"
+    className="w-full h-12 px-3 rounded-sm border border-neutral-200 bg-white text-sm text-neutral-900 placeholder:text-neutral-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-brand-500"
   />
 </div>
 ```
@@ -277,7 +279,7 @@ Forms on mobile need extra care. Every field must be self-describing without int
   <label className="text-sm font-normal text-neutral-900">
     Country
   </label>
-  <select className="w-full h-12 px-3 rounded-lg border border-neutral-200 bg-white text-sm text-neutral-900 appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
+  <select className="w-full h-12 px-3 rounded-sm border border-neutral-200 bg-white text-sm text-neutral-900 appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
     <option value="" disabled selected className="text-neutral-400">Select a country</option>
     <option value="us">United States</option>
     <option value="co">Colombia</option>
@@ -296,7 +298,7 @@ Forms on mobile need extra care. Every field must be self-describing without int
       <input
         type="text"
         placeholder="e.g. Oscar Gonzalez"
-        className="w-full h-12 px-3 rounded-lg border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+        className="w-full h-12 px-3 rounded-sm border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none"
       />
     </div>
 
@@ -306,14 +308,14 @@ Forms on mobile need extra care. Every field must be self-describing without int
       <input
         type="email"
         placeholder="e.g. oscar@casper.studio"
-        className="w-full h-12 px-3 rounded-lg border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+        className="w-full h-12 px-3 rounded-sm border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none"
       />
     </div>
 
     {/* Field 3 - Select */}
     <div className="space-y-1.5">
       <label className="text-sm text-neutral-900">Role</label>
-      <select className="w-full h-12 px-3 rounded-lg border border-neutral-200 bg-white text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
+      <select className="w-full h-12 px-3 rounded-sm border border-neutral-200 bg-white text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none">
         <option value="" disabled selected>Select role</option>
         <option>Designer</option>
         <option>Developer</option>
@@ -331,7 +333,7 @@ Forms on mobile need extra care. Every field must be self-describing without int
 - Placeholders: `neutral-400`, `font-normal` — must feel like a faint hint, not a label
 - Input height: `48px` (h-12) minimum for comfortable touch targets
 - Between fields: `16px` gap (`space-y-4`)
-- Inputs use `rounded-lg` (8px, same as `radius-sm`)
+- Inputs use `rounded-sm` (6px / `radius-sm`)
 
 ---
 
@@ -344,7 +346,7 @@ The primary CTA that sticks to the bottom of the screen so the user's thumb can 
 ```jsx
 {/* This goes at the bottom of the flex column, after the scrollable content */}
 <div className="shrink-0 px-4 pt-3 pb-6 bg-white border-t border-neutral-200">
-  <button className="w-full h-12 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 active:bg-brand-700 transition-colors">
+  <button className="w-full h-12 bg-brand-500 text-white text-sm font-medium rounded-sm hover:bg-brand-600 active:bg-brand-700 transition-colors">
     Continue
   </button>
 </div>
@@ -354,10 +356,10 @@ The primary CTA that sticks to the bottom of the screen so the user's thumb can 
 
 ```jsx
 <div className="shrink-0 px-4 pt-3 pb-6 bg-white border-t border-neutral-200 space-y-2">
-  <button className="w-full h-12 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 active:bg-brand-700 transition-colors">
+  <button className="w-full h-12 bg-brand-500 text-white text-sm font-medium rounded-sm hover:bg-brand-600 active:bg-brand-700 transition-colors">
     Submit
   </button>
-  <button className="w-full h-12 bg-white border border-neutral-200 text-neutral-900 text-sm font-medium rounded-lg active:bg-neutral-50 transition-colors">
+  <button className="w-full h-12 bg-white border border-neutral-200 text-neutral-900 text-sm font-medium rounded-sm active:bg-neutral-50 transition-colors">
     Save as Draft
   </button>
 </div>
@@ -368,7 +370,7 @@ The primary CTA that sticks to the bottom of the screen so the user's thumb can 
 - Container: `shrink-0` so it never collapses, white background, top border for visual separation
 - `pb-6` (24px) accounts for the home indicator safe area
 - `pt-3` (12px) breathing room above the button
-- Button: `h-12` (48px), full width, `brand-500` background, `rounded-lg`
+- Button: `h-12` (48px), full width, `brand-500` background, `rounded-sm`
 - Use `active:` states for press feedback — darken the background slightly on press. `hover:` states also work (mice and styluses exist on mobile)
 - If there's a secondary button, stack vertically with `space-y-2`
 
@@ -401,7 +403,7 @@ Tables don't work on mobile — transform them into tappable list rows.
 ### List Container
 
 ```jsx
-<div className="bg-white rounded-2xl border border-neutral-200 divide-y divide-neutral-200 overflow-hidden">
+<div className="bg-white rounded-lg border border-neutral-200 divide-y divide-neutral-200 overflow-hidden">
   <ListRow />
   <ListRow />
   <ListRow />
@@ -414,7 +416,7 @@ Tables don't work on mobile — transform them into tappable list rows.
 - Minimum row height: `56px` (from `py-3` + content)
 - Use `active:bg-neutral-50` for press feedback
 - Trailing chevron (`ChevronRight`) signals the row is tappable
-- Wrap list in a Card-like container with `rounded-2xl` and `divide-y`
+- Wrap list in a Card-like container with `rounded-lg` and `divide-y`
 
 ---
 
@@ -426,22 +428,22 @@ The default layout for dashboards and content pages on mobile — vertically sta
 <div className="px-4 py-3 space-y-3">
   {/* Stat row — horizontal scroll */}
   <div className="flex gap-3 overflow-x-auto -mx-4 px-4 pb-1">
-    <div className="shrink-0 w-[140px] bg-white rounded-2xl border border-neutral-200 p-3">
+    <div className="shrink-0 w-[140px] bg-white rounded-lg border border-neutral-200 p-3">
       <p className="text-xs text-neutral-500">Active Users</p>
       <p className="text-xl font-medium text-neutral-950 mt-1">2,847</p>
     </div>
-    <div className="shrink-0 w-[140px] bg-white rounded-2xl border border-neutral-200 p-3">
+    <div className="shrink-0 w-[140px] bg-white rounded-lg border border-neutral-200 p-3">
       <p className="text-xs text-neutral-500">Revenue</p>
       <p className="text-xl font-medium text-neutral-950 mt-1">$12.4k</p>
     </div>
-    <div className="shrink-0 w-[140px] bg-white rounded-2xl border border-neutral-200 p-3">
+    <div className="shrink-0 w-[140px] bg-white rounded-lg border border-neutral-200 p-3">
       <p className="text-xs text-neutral-500">Conversion</p>
       <p className="text-xl font-medium text-neutral-950 mt-1">3.2%</p>
     </div>
   </div>
 
   {/* Full-width content card */}
-  <div className="bg-white rounded-2xl border border-neutral-200 p-4">
+  <div className="bg-white rounded-lg border border-neutral-200 p-4">
     <h3 className="text-base font-medium text-neutral-950 mb-3">Recent Activity</h3>
     {/* Card content */}
   </div>
@@ -452,7 +454,7 @@ The default layout for dashboards and content pages on mobile — vertically sta
 
 - Cards stack vertically with `space-y-3` (12px gaps)
 - Stat cards in a horizontal scroll row: fixed width, `overflow-x-auto`, negative margin trick for edge-to-edge scroll
-- Full-width cards: `rounded-2xl` (16px, same as `radius-md`)
+- Full-width cards: `rounded-lg` (10px / `radius-lg`)
 - No multi-column layouts — everything is single column
 
 ---
@@ -488,22 +490,22 @@ How all the pieces come together in a complete mobile app screen.
         <div className="space-y-4">
           <div className="space-y-1.5">
             <label className="text-sm text-neutral-900">Full name</label>
-            <input type="text" placeholder="e.g. Oscar Gonzalez" className="w-full h-12 px-3 rounded-lg border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
+            <input type="text" placeholder="e.g. Oscar Gonzalez" className="w-full h-12 px-3 rounded-sm border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
           </div>
           <div className="space-y-1.5">
             <label className="text-sm text-neutral-900">Email</label>
-            <input type="email" placeholder="e.g. oscar@casper.studio" className="w-full h-12 px-3 rounded-lg border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
+            <input type="email" placeholder="e.g. oscar@casper.studio" className="w-full h-12 px-3 rounded-sm border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
           </div>
           <div className="space-y-1.5">
             <label className="text-sm text-neutral-900">Password</label>
-            <input type="password" placeholder="At least 8 characters" className="w-full h-12 px-3 rounded-lg border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
+            <input type="password" placeholder="At least 8 characters" className="w-full h-12 px-3 rounded-sm border border-neutral-200 bg-white text-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
           </div>
         </div>
       </div>
 
       {/* Pinned bottom button */}
       <div className="shrink-0 px-4 pt-3 pb-6 bg-white border-t border-neutral-200">
-        <button className="w-full h-12 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 active:bg-brand-700 transition-colors">
+        <button className="w-full h-12 bg-brand-500 text-white text-sm font-medium rounded-sm hover:bg-brand-600 active:bg-brand-700 transition-colors">
           Create Account
         </button>
       </div>
@@ -537,7 +539,7 @@ How all the pieces come together in a complete mobile app screen.
 
       {/* Scrollable list */}
       <div className="flex-1 overflow-y-auto px-4 py-3">
-        <div className="bg-white rounded-2xl border border-neutral-200 divide-y divide-neutral-200 overflow-hidden">
+        <div className="bg-white rounded-lg border border-neutral-200 divide-y divide-neutral-200 overflow-hidden">
           {/* List rows */}
           <button className="w-full flex items-center gap-3 px-4 py-3 active:bg-neutral-50">
             <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
@@ -602,7 +604,7 @@ For short option lists (3–6 simple actions). Uses shadcn's `DropdownMenu`:
 ```jsx
 <DropdownMenu>
   <DropdownMenuTrigger asChild>
-    <button className="w-10 h-10 flex items-center justify-center rounded-lg active:bg-neutral-100">
+    <button className="w-10 h-10 flex items-center justify-center rounded-sm active:bg-neutral-100">
       <MoreVertical className="w-5 h-5 text-neutral-600" />
     </button>
   </DropdownMenuTrigger>
@@ -639,7 +641,7 @@ For richer content, longer option lists, or anything needing more space. Slides 
 
 {/* Bottom sheet */}
 <div className={cn(
-  "absolute bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl transition-transform duration-300 ease-out",
+  "absolute bottom-0 left-0 right-0 z-50 bg-white rounded-t-[24px] transition-transform duration-300 ease-out",
   isOpen ? "translate-y-0" : "translate-y-full"
 )}
   style={{ maxHeight: '85%' }}
@@ -678,6 +680,6 @@ For richer content, longer option lists, or anything needing more space. Slides 
 - **Scrim**: `bg-black/50` with `backdrop-blur-sm` — both darkens and blurs the background.
 - **Max height**: `85%` of the device frame. The sheet hugs its content if shorter — never force it taller than it needs to be.
 - **Drag indicator**: `40px × 4px` pill in `neutral-300`, centered at the top.
-- **Corner radius**: `rounded-t-3xl` (24px) on top corners only.
+- **Corner radius**: `rounded-t-[24px]` (24px) on top corners only.
 - **Animation**: `translate-y` transition, `200–300ms`, `ease-out`.
 - **Dismissal**: Tap scrim or swipe down.

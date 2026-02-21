@@ -13,6 +13,8 @@ Reusable composite components built from shadcn/ui primitives. These are the bui
 5. [Profile / Discovery Card](#profile--discovery-card)
 6. [Product Card](#product-card)
 7. [Activity Feed Item](#activity-feed-item)
+8. [Toast Notification](#toast-notification)
+9. [Form Validation States](#form-validation-states)
 
 ---
 
@@ -288,3 +290,88 @@ A compact row for event feeds, notification lists, or changelog entries.
   <span className="text-xs text-neutral-400 shrink-0">All-day</span>
 </div>
 ```
+
+---
+
+## Toast Notification
+
+Transient feedback using shadcn's `Sonner` toast. Confirms actions, surfaces errors, or provides info.
+
+### Success Toast
+
+```jsx
+<div className="flex items-center gap-3 p-4 bg-white border border-neutral-200 border-l-4 border-l-success-200 rounded-sm shadow-md">
+  <CheckCircle className="w-5 h-5 text-success-500 shrink-0" />
+  <div className="flex-1 min-w-0">
+    <p className="text-sm text-neutral-900">Project created successfully</p>
+  </div>
+  <a href="#" className="text-sm text-brand-500 shrink-0">View</a>
+  <button className="text-neutral-400 hover:text-neutral-600 shrink-0">
+    <X className="w-4 h-4" />
+  </button>
+</div>
+```
+
+### Error Toast
+
+```jsx
+<div className="flex items-center gap-3 p-4 bg-white border border-neutral-200 border-l-4 border-l-error-200 rounded-sm shadow-md">
+  <XCircle className="w-5 h-5 text-error-500 shrink-0" />
+  <div className="flex-1 min-w-0">
+    <p className="text-sm text-neutral-900">Couldn't save changes — try again</p>
+  </div>
+  <button className="text-sm text-brand-500 shrink-0">Retry</button>
+  <button className="text-neutral-400 hover:text-neutral-600 shrink-0">
+    <X className="w-4 h-4" />
+  </button>
+</div>
+```
+
+### Variants
+
+| Variant | Icon | Left Border | Use |
+|---|---|---|---|
+| **Success** | `CheckCircle` / `success-500` | `success-200` | Action completed |
+| **Error** | `XCircle` / `error-500` | `error-200` | Action failed |
+| **Info** | `Info` / `brand-500` | `brand-200` | Neutral updates |
+| **Warning** | `AlertTriangle` / `warning-500` | `warning-200` | Non-blocking caution |
+
+### Rules
+
+- Body text: `14px`, `neutral-900`. One sentence max
+- Optional action link: `brand-500`, inline ("Undo", "View", "Retry")
+- Close button: `X` icon, `neutral-400`
+- Positioning: bottom-right on web, top-center on mobile
+- Duration: `4000ms` default, `6000ms` with action link. Error toasts persist until dismissed
+
+---
+
+## Form Validation States
+
+Inline error and success feedback for form inputs.
+
+### Input with Error
+
+```jsx
+<div className="space-y-1.5">
+  <label className="text-sm text-neutral-900">Email address</label>
+  <input
+    type="email"
+    value="not-an-email"
+    className="w-full h-9 px-3 rounded-sm border border-error-500 bg-white text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-error-500"
+  />
+  <div className="flex items-center gap-1">
+    <AlertCircle className="w-3.5 h-3.5 text-error-500 shrink-0" />
+    <p className="text-xs text-error-500">Please enter a valid email address</p>
+  </div>
+</div>
+```
+
+### Rules
+
+- **Error border**: Swap `neutral-200` → `error-500`
+- **Error ring**: Swap `brand-500` → `error-500`
+- **Error message**: Caption size (12px), `error-500`, below the input with `space-y-1`
+- **Label stays neutral**: Don't color the label red — the border and message are enough signal
+- **Validate on blur**, not on keystroke. Remove error on change when corrected
+- **On submit with errors**: Scroll to and focus the first invalid field

@@ -18,7 +18,7 @@ Before generating any UI code, read this file completely **and** the reference f
 
 **Required for EVERY project:**
 
-- **`references/components.md`** — ALWAYS read. Reusable pieces: stat cards, list items, filter bars, kanban boards, profile cards, product cards, activity feeds. Required whenever building UI elements inside a layout.
+- **`references/components.md`** — ALWAYS read. Reusable pieces: stat cards, list items, filter bars, kanban boards, profile cards, product cards, activity feeds, toast notifications, form validation states. Required whenever building UI elements inside a layout.
 - **`references/theme.css`** — ALWAYS read. Tailwind CSS v4 theme tokens. Copy this file into your project as-is.
 - **`assets/`** — Contains Casper Studios logo SVGs in 4 variants (default, variant, mono-black, mono-white). Use the correct variant based on background color — see the Logo section below.
 
@@ -41,7 +41,7 @@ The Casper aesthetic is **clean authority** — a professional SaaS style that f
 
 1. **Whitespace is a feature.** Generous padding, breathing room between sections. Never cram.
 2. **One accent, used sparingly.** Brand purple (`#5900FF`) appears on active states, primary buttons, and key CTAs — nowhere else. If everything is purple, nothing is.
-3. **Rounded but not bubbly.** 16px default radius. Feels modern without feeling like a toy.
+3. **Rounded but not bubbly.** 10px default radius (shadcn default). Feels modern without feeling like a toy.
 4. **Flat with depth hints.** No heavy shadows. Use `shadow-sm` for cards, `shadow-md` for popovers. Never use `shadow-lg` on in-page elements.
 5. **Content over chrome.** The UI should disappear. Users notice the data, not the design.
 
@@ -50,8 +50,8 @@ The Casper aesthetic is **clean authority** — a professional SaaS style that f
 ## Tech Stack
 
 - **React** (Vite) with TypeScript
-- **Tailwind CSS v4** — Use the theme file at `references/theme.css` as-is
-- **shadcn/ui** — Use components from the library directly. Do NOT create custom base components that duplicate shadcn functionality
+- **Tailwind CSS v4** — Use the theme file at `references/theme.css` as Casper brand overrides
+- **shadcn/ui** — Initialize a standard shadcn/ui project first (`shadcn init`), then layer Casper brand tokens from `references/theme.css` on top. The shadcn semantic layer (`bg-background`, `text-foreground`, `bg-primary`, `border-border`, etc.) is the base — Casper's theme.css adds brand colors, typography, shadows, and spacing on top of it, not as a replacement. Use shadcn components directly. Do NOT create custom base components that duplicate shadcn functionality
 - **Lucide React** — Icon library. Always use Lucide, never Heroicons or FontAwesome
 - **Fonts** — `Work Sans` with `DM Sans` as fallback for all UI text. Load via Google Fonts or bundle
 
@@ -73,7 +73,7 @@ The palette is intentionally restrained. Most of the UI is neutral gray + white,
 | **Subtext** | `neutral-500` | `#737373` | Metadata, timestamps, secondary labels |
 | **Borders** | `neutral-200` | `#E5E5E5` | Card borders, dividers, table lines |
 | **Surface** | `neutral-50` | `#FAFAFA` | Page background behind cards |
-| **Card surface** | `white` | `#FFFFFF` | Card backgrounds, panels |
+| **Card surface** | `neutral-0` | `#FFFFFF` | Card backgrounds, panels (use `bg-neutral-0` for dark mode compatibility — see Dark Mode section) |
 
 ### Semantic Colors
 
@@ -148,24 +148,29 @@ The design is predominantly flat. Shadows are used to indicate layers, not to ad
 | Token | Use |
 |---|---|
 | `shadow-sm` | Cards, inputs at rest |
-| `shadow-default` | Same as sm — default for most elements |
 | `shadow-md` | Dropdown menus, popovers, tooltips |
 | `shadow-lg` | Modals, command palettes, overlays ONLY |
+| `shadow-overlay` | Semantic alias for `shadow-lg` — identical value. Use on modals/sheets so the intent reads clearly in code |
 
-NEVER apply `shadow-lg` or `shadow-overlay` to cards or in-page elements.
+NEVER apply `shadow-lg` (or its alias `shadow-overlay`) to cards or in-page elements. These are reserved for floating layers only.
 
 ---
 
 ## Border Radius
 
-| Token | Value | Use |
-|---|---|---|
-| `radius-sm` | 8px | Inputs, small buttons, inner elements |
-| `radius-md` / `radius-DEFAULT` | 16px | Cards, panels, large containers |
-| `radius-lg` | 24px | Modal containers, hero cards |
-| `radius-full` | 9999px | Badges, pills, avatars, icon circles |
+The theme file (`references/theme.css`) uses the **shadcn/ui radius system** — a single `--radius` base variable in `:root` that controls the entire scale via `calc()`. This is mapped into Tailwind classes via `@theme inline`. No Tailwind v4 defaults are overridden.
 
-Cards always use `radius-md` (16px). Nested elements inside cards should use `radius-sm` (8px) to maintain visual hierarchy — the inner radius should always be smaller than the outer.
+| Token | Tailwind Class | Default Value | Use |
+|---|---|---|---|
+| `--radius-sm` | `rounded-sm` | 6px | Inputs, small buttons, inner elements |
+| `--radius-md` | `rounded-md` | 8px | Popovers, tooltips, chart tooltips |
+| `--radius-lg` | `rounded-lg` | 10px | Cards, panels, large containers |
+| `--radius-xl` | `rounded-xl` | 14px | Modal containers, dialogs, hero cards |
+| (Tailwind built-in) | `rounded-full` | 9999px | Badges, pills, avatars, icon circles |
+
+The base value `--radius: 0.625rem` (10px) is the shadcn default. To make the entire UI sharper or rounder, change this single value — all tokens recalculate automatically.
+
+Cards always use `rounded-lg` (10px). Nested elements inside cards should use `rounded-sm` (6px) to maintain visual hierarchy — the inner radius should always be smaller than the outer.
 
 ---
 
@@ -209,15 +214,15 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 
 ### Button
 
-- **Primary**: `brand-500` bg, white text, `radius-sm`. Hover: `brand-600`.
+- **Primary**: `brand-500` bg, `text-white` (literal white, not a token), `rounded-sm`. Hover: `brand-600`.
 - **Secondary**: White bg, `neutral-200` border, `neutral-900` text. Hover: `neutral-50` bg.
 - **Ghost**: No bg, no border. `neutral-600` text. Hover: `neutral-100` bg.
-- **Destructive**: `error-500` bg, white text.
-- All buttons: `radius-sm` (8px), height `36px` (default, web), `48px` for mobile (`h-12`), `14px` font.
+- **Destructive**: `error-500` bg, `text-white`.
+- All buttons: `rounded-sm` (6px), height `36px` (default, web), `48px` for mobile (`h-12`), `14px` font.
 
 ### Badge
 
-- `radius-full` (pill shape). Height `22px`. Caption-bold text (12px, 500 weight).
+- `rounded-full` (pill shape). Height `22px`. Caption-bold text (12px, 500 weight).
 - **Semantic badges**: Use pastel bg + darker text. E.g., success badge = `success-50` bg, `success-700` text.
 - **Neutral badge**: `neutral-100` bg, `neutral-700` text.
 - **Brand badge**: `brand-50` bg, `brand-700` text.
@@ -225,7 +230,7 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 
 ### Card
 
-- White background. `1px` `neutral-200` border. `radius-md` (16px). `shadow-sm`.
+- White background (`bg-neutral-0`). `1px` `neutral-200` border. `rounded-lg` (10px). `shadow-sm`.
 - Internal padding: `16px` minimum, `24px` for spacious cards.
 - Card headers: `Heading 3` (16px/500) with optional "View all" link aligned right.
 - Separate header from content with a `1px` `neutral-200` divider.
@@ -240,7 +245,7 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 
 ### Input / Textarea
 
-- `radius-sm` (8px). `1px` `neutral-200` border. `neutral-50` bg or white bg.
+- `rounded-sm` (6px). `1px` `neutral-200` border. `neutral-50` bg or white bg.
 - Focus: `2px` `brand-500` ring (use Tailwind `ring-2 ring-brand-500`).
 - **Labels MUST be visible and external** — render a `<label>` element above every input, never inside it. Labels use `14px`/400 in `neutral-900`. The gap between label and input is `6px` (`space-y-1.5`).
 - **Placeholder text MUST be de-emphasized** — `neutral-400` color, normal weight (400), short hint text (e.g., "e.g. john@email.com"). Placeholders are supplementary hints, not labels.
@@ -250,14 +255,12 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 
 ### Sidebar (App Shell)
 
+See `references/web-layouts.md` for the full sidebar code pattern. Key specs:
+
 - Width: `240px`. White background. Right border: `1px` `neutral-200`.
-- Logo/icon area at top: `48px` height, `16px` horizontal padding.
-- Nav items: `36px` height, `8px` radius (radius-sm), `12px` left padding.
-  - Default: `neutral-600` text, Lucide icon + label.
-  - Active: `brand-50` bg, `brand-500` text, `font-weight: 500`.
-  - Hover: `neutral-100` bg.
-- Group labels: Caption (12px/400), `neutral-400` color, `24px` top margin between groups.
-- Groups: Main navigation, Analytics, Settings (or contextual groupings).
+- Nav items: `36px` height, `rounded-sm` (6px), `12px` left padding.
+  - Default: `neutral-600` text. Active: `brand-50` bg, `brand-500` text, `font-weight: 500`. Hover: `neutral-100` bg.
+- Group labels: Caption (12px/400), `neutral-400`, `24px` top margin between groups.
 - On mobile: Sidebar collapses to a `Sheet` (slide-in from left).
 
 ### Tabs
@@ -269,7 +272,7 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 ### Dialog / Sheet
 
 - Overlay: `black/50` opacity.
-- Container: white bg, `radius-lg` (24px), `shadow-overlay`.
+- Container: white bg, `rounded-xl` (14px), `shadow-overlay`.
 - Always include a close button (X icon) top-right.
 
 ---
@@ -279,7 +282,7 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 For rules and code examples, read the appropriate reference file:
 
 - **`references/web-layouts.md`** — Responsive rules, App Shell, Sidebar Navigation, Dashboard Grid, Data Table Page, Page Header
-- **`references/components.md`** — Stat Card, List Item Row, Filter Bar, Kanban Board, Profile/Discovery Card, Product Card, Activity Feed Item
+- **`references/components.md`** — Stat Card, List Item Row, Filter Bar, Kanban Board, Profile/Discovery Card, Product Card, Activity Feed Item, Toast Notifications, Form Validation States
 - **`references/mobile.md`** — Mobile rules, Device Frame Shell, Mobile Top Bar, Bottom Tab Navigation, Mobile Form Layout, Pinned Bottom Button, Mobile List View, Mobile Card Stack, Full Screen Composition, Contextual Actions
 
 ---
@@ -306,7 +309,7 @@ Gradient recipes (CSS `linear-gradient` or `radial-gradient` combos):
 - **Purple/Pink**: `linear-gradient(135deg, #c3b1e1 0%, #f0c4d0 50%, #e0aed0 100%)`
 - **Teal/Emerald**: `linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)`
 
-Apply `radius-md` to image containers. These are placeholders — they should look intentional and beautiful.
+Apply `rounded-lg` to image containers. These are placeholders — they should look intentional and beautiful.
 
 ---
 
@@ -360,17 +363,9 @@ The anti-pattern rule "No animated skeletons or shimmer effects in static mockup
 
 ## Form Validation & Error Feedback
 
-Inputs need to clearly communicate when something is wrong. This applies to both web and mobile.
+Inputs need to clearly communicate when something is wrong. This applies to both web and mobile. For code examples, see the Form Validation States section in `references/components.md`.
 
-### Error State on Inputs
-
-- **Border**: Swap `neutral-200` border to `error-500` (`border-error-500`)
-- **Focus ring**: Swap `brand-500` ring to `error-500` (`ring-error-500`)
-- **Error message**: Render a `<p>` below the input in `error-500`, `12px` (caption size). Use `space-y-1` between input and message so it's tight but readable
-- **Label**: The label itself stays `neutral-900` — don't color it red. The border and message are enough signal
-- **Icon** (optional): A small `AlertCircle` icon (`14px`, `error-500`) inline with the error message adds scannability but isn't required
-
-### Validation Rules
+### Behavioral Rules
 
 - Validate on blur (when the user leaves the field), not on every keystroke — keystroke validation feels aggressive
 - Show errors inline, directly below the relevant field. Never collect errors at the top of the form — users shouldn't have to hunt
@@ -381,14 +376,14 @@ Inputs need to clearly communicate when something is wrong. This applies to both
 
 After a successful form submission, provide clear feedback. Don't just silently navigate away:
 
-- **Option A**: Toast notification (see below) confirming the action + navigate to the next logical screen
+- **Option A**: Toast notification confirming the action + navigate to the next logical screen
 - **Option B**: Inline success message replacing the form content (useful for single-purpose screens like "Reset password")
 
 ---
 
 ## Toast Notifications
 
-Transient feedback messages that confirm actions, surface errors, or provide information. Use shadcn's `Sonner` toast component.
+Transient feedback messages that confirm actions, surface errors, or provide information. Use shadcn's `Sonner` toast component. For code examples and the full variant table, see the Toast Notification section in `references/components.md`.
 
 ### Positioning & Behavior
 
@@ -397,22 +392,6 @@ Transient feedback messages that confirm actions, surface errors, or provide inf
 - **Duration**: `4000ms` default, `6000ms` for messages with an action link. Error toasts should persist until dismissed
 - **Stacking**: Max 3 visible at once. New toasts push older ones up (web) or down (mobile)
 - **Animation**: Slide in from the edge + fade. Slide out + fade on dismiss. Should feel like the Transitions & Animations section — smooth, never instant
-
-### Variants
-
-| Variant | Icon | Border | Use |
-|---|---|---|---|
-| **Success** | `CheckCircle` in `success-500` | `success-200` left border | Action completed ("Project created", "Changes saved") |
-| **Error** | `XCircle` in `error-500` | `error-200` left border | Action failed ("Couldn't save — try again") |
-| **Info** | `Info` in `brand-500` | `brand-200` left border | Neutral updates ("New version available") |
-| **Warning** | `AlertTriangle` in `warning-500` | `warning-200` left border | Non-blocking caution ("Storage almost full") |
-
-### Rules
-
-- Toast body text: `14px` Body, `neutral-900`. Keep it to one sentence
-- Optional action link: `brand-500`, inline with the text ("Undo", "View", "Retry")
-- Include a close button (`X`, `neutral-400`) on the right side
-- Never use toasts for critical errors that require user action — those should be inline or in a dialog
 
 ---
 
@@ -436,23 +415,74 @@ When rendering charts (Recharts, Chart.js, etc.), use this ordered color sequenc
 - Apply colors in order — don't skip or shuffle. Consistency across charts makes dashboards feel cohesive
 - Use `10%` opacity fills for area charts (e.g., `#5900FF1A` for brand area fill)
 - Gridlines: `neutral-200`. Axis labels: `neutral-500`, caption size (12px). Axis lines: `neutral-300`
-- Tooltips: White bg, `shadow-md`, `radius-sm`, `neutral-200` border — same treatment as popovers
+- Tooltips: White bg, `shadow-md`, `rounded-md`, `neutral-200` border — same treatment as popovers
 - Never use brand purple for "negative" or "declining" values — use Rose for that. Purple is always neutral-to-positive
+
+---
+
+## Dark Mode
+
+Dark mode is **off by default**. Only implement it when explicitly requested by the user or client. When dark mode is requested, follow these rules — do NOT improvise an inverted palette.
+
+### How It Works
+
+The theme file (`references/theme.css`) includes a `.dark` class block that overrides CSS custom properties. Adding `class="dark"` to `<html>` or a wrapper element flips the entire color system without changing any component code. The neutral scale inverts so existing utilities (`text-neutral-900`, `bg-neutral-50`, `border-neutral-200`) automatically produce the correct dark-mode values.
+
+### Token Behavior in Dark Mode
+
+You don't change token names in your code — the `.dark` override changes the values behind them. Here's what each token resolves to:
+
+| Token (unchanged in code) | Light Mode Value | Dark Mode Value | Notes |
+|---|---|---|---|
+| `bg-neutral-50` | `#FAFAFA` (light gray) | `#171717` (near-black) | Page background |
+| `bg-neutral-0` | `#FFFFFF` (white) | `#0A0A0A` (near-black) | Card surfaces |
+| `border-neutral-200` | `#E5E5E5` (light gray) | `#404040` (dark gray) | Borders / dividers |
+| `text-neutral-950` | `#0A0A0A` (near-black) | `#FFFFFF` (white) | Page titles |
+| `text-neutral-900` | `#171717` (near-black) | `#FAFAFA` (near-white) | Body text |
+| `text-neutral-500` | `#737373` (mid-gray) | `#737373` (mid-gray) | Stays the same — mid-range |
+| `text-neutral-400` | `#A3A3A3` (light gray) | `#A3A3A3` (stays same) | Subtext — readable on dark |
+| `bg-brand-500` | `#5900FF` | `#7A33FF` (lighter) | Brighter for contrast on dark bg |
+| `bg-brand-50` | `#EEE5FF` (light purple) | `#120033` (very dark purple) | Tinted backgrounds invert |
+
+### `bg-white` vs `bg-neutral-0` — Critical Distinction
+
+Tailwind's built-in `white` and `black` are **NOT overridden** in dark mode. They always resolve to literal `#FFFFFF` and `#000000`.
+
+- Use **`text-white`** when you mean actual white — e.g., button text on a `brand-500` background. This stays white in both modes. ✅
+- Use **`bg-neutral-0`** (not `bg-white`) for surfaces that should invert in dark mode — e.g., card backgrounds, sidebars, top bars. `bg-neutral-0` maps to `#FFFFFF` in light and `#0A0A0A` in dark. ✅
+- Use **`bg-neutral-50`** for page backgrounds. Maps to `#FAFAFA` in light, `#171717` in dark. ✅
+
+If you use `bg-white` on a card, it will stay bright white in dark mode — blinding. Use `bg-neutral-0` instead.
+
+### Shadows in Dark Mode
+
+Shadows are nearly invisible on dark surfaces. The `.dark` block increases shadow opacity so elevation is still perceptible, but cards should primarily rely on their `neutral-200` border (which maps to a subtle dark gray divider in dark mode) for definition.
+
+### Logo
+
+Use `assets/logo-mono-white.svg` — the only variant approved for dark surfaces.
+
+### What NOT to Do in Dark Mode
+
+- Do NOT manually set dark colors in component code — rely on the `.dark` class override
+- Do NOT use `bg-white` for surfaces — use `bg-neutral-0` so they invert properly
+- Do NOT use `brand-500` for large tinted surfaces — use `brand-50` (which maps to a dark purple in dark mode)
+- Do NOT change spacing, radius, or typography — the spatial system is mode-independent
 
 ---
 
 ## Anti-Patterns (Do NOT)
 
 - **No gradients on buttons.** Flat solid colors only.
-- **No colored page backgrounds.** Background is always `neutral-50` or `white`.
+- **No colored page backgrounds.** Background is always `neutral-50` or `neutral-0`.
 - **No heavy borders.** Max `1px` for structural borders. Never 2px+.
-- **No rounded-full on cards.** Cards are `radius-md` (16px), never circles.
+- **No rounded-full on cards.** Cards are `rounded-lg` (10px), never circles.
 - **No custom fonts.** Work Sans / DM Sans only. Monospace for code.
 - **Prefer icon + label navigation** on desktop. Icon-only sidebars are acceptable if a tooltip with the label appears on hover or focus.
 - **No dark mode** unless explicitly requested. Default is always light.
 - **No animated skeletons or shimmer effects** in static mockups.
 - **No drop shadows on text.** Ever.
-- **No border-radius mixing.** Don't put `rounded-lg` next to `rounded-sm` at the same hierarchy level.
+- **No border-radius mixing.** Don't use the same radius token at different hierarchy levels — e.g., `rounded-lg` cards should contain `rounded-sm` children, not `rounded-lg` children. The inner radius should always be smaller than the outer.
 - **No floating labels or placeholder-as-label.** Labels must always be visible above inputs. Placeholders are hints, not labels — they vanish on focus and users lose context.
 - **No emojis in the UI.** Icons only. The only exception is user-generated content — if a user typed an emoji, display it. But never add emojis to labels, headings, buttons, nav items, placeholders, or any system-generated text.
 
@@ -464,7 +494,7 @@ Before delivering any UI code, verify:
 
 - [ ] Uses `Work Sans` font family (with `DM Sans` fallback)
 - [ ] Brand purple only on interactive/active elements
-- [ ] Cards have white bg + `neutral-200` border + `radius-md` + `shadow-sm`
+- [ ] Cards have `bg-neutral-0` + `neutral-200` border + `rounded-lg` + `shadow-sm`
 - [ ] No unauthorized colors, fonts, or shadows
 - [ ] All icons from Lucide React
 - [ ] shadcn components used where available (not custom recreations)
@@ -477,6 +507,8 @@ Before delivering any UI code, verify:
 - [ ] All form inputs have visible external labels (not inside the input)
 - [ ] Placeholder text is de-emphasized (`neutral-400`, normal weight)
 - [ ] Casper Studios logo uses the correct variant for the background (default on light, mono-white on dark)
+- [ ] If dark mode was requested: `.dark` class applied, logo uses mono-white variant, surfaces use `bg-neutral-0` (not `bg-white`)
+- [ ] Border-radius uses the shadcn radius scale (`rounded-sm` = 6px, `rounded-lg` = 10px, `rounded-xl` = 14px)
 
 ### Additional checks for Web Applications:
 
