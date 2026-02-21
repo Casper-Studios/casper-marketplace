@@ -12,31 +12,43 @@ Extract action items from a Fireflies transcript using parallel subagents. Catch
 - **All attendees (default):** No target specified — extract action items for every participant
 - **Single person:** Target specified — extract action items for that person only
 
-## Phase 1: Find and Fetch
+## Phase 1: Determine Mode
 
-1. Search with `mcp__fireflies__fireflies_get_transcripts` (date, or keyword)
-2. Determine mode:
-   - If a target person is specified in the invocation → **single-person mode**
-   - Otherwise → **all-attendees mode**
-3. Fetch `mcp__fireflies__fireflies_get_summary` and `mcp__fireflies__fireflies_get_transcript` in parallel
+Parse the user's invocation:
+- If a target person is specified → **single-person mode**
+- Otherwise → **all-attendees mode**
 
-## Phase 2: Preprocess Transcript
+Extract the search criteria (date, keyword, or transcript ID) from the invocation.
 
-The transcript API returns a JSON array. Extract to plain text before chunking:
+## Phase 2: Fetch & Preprocess (Subagent)
 
-```bash
-jq -r '.[].text' < raw_transcript.json > .claude/scratchpad/transcript.txt
+**CRITICAL: The orchestrator MUST NOT call any Fireflies MCP tools directly. ALL Fireflies interaction happens inside this subagent.**
+
+Launch a single `general-purpose` subagent with this prompt:
+
+```
+Search Fireflies for a transcript matching: [SEARCH_CRITERIA]
+
+1. Call `mcp__fireflies__fireflies_get_transcripts` to find the transcript (by date, keyword, or ID).
+2. Call `mcp__fireflies__fireflies_get_summary` and `mcp__fireflies__fireflies_get_transcript` in parallel for the matched transcript.
+3. The transcript API returns a JSON array. Extract to plain text:
+   - With jq: jq -r '.[].text' < raw_transcript.json > .claude/scratchpad/transcript.txt
+   - Fallback: python3 -c "import json,sys; print('\n'.join(e['text'] for e in json.load(sys.stdin)))" < raw_transcript.json > .claude/scratchpad/transcript.txt
+4. Count lines: wc -l < .claude/scratchpad/transcript.txt
+5. Extract the distinct speaker list from the transcript JSON:
+   python3 -c "import json,sys; data=json.load(sys.stdin); print('\n'.join(sorted(set(e.get('speaker_name','') for e in data if e.get('speaker_name')))))" < raw_transcript.json
+
+Return EXACTLY this (no other text):
+- meeting_title: <title>
+- meeting_date: <date>
+- transcript_id: <id>
+- transcript_path: .claude/scratchpad/transcript.txt
+- line_count: <number>
+- speakers: <comma-separated list>
+- summary: <the Fireflies summary text>
 ```
 
-If `jq` is unavailable, use Python: `json.load` then join `[e["text"] for e in data]` with newlines.
-
-Count lines: `wc -l < .claude/scratchpad/transcript.txt`
-
-**All-attendees mode:** Also extract the distinct speaker list from the transcript JSON:
-
-```python
-speakers = sorted(set(e["speaker_name"] for e in data if e.get("speaker_name")))
-```
+Wait for the subagent to finish. Parse its returned values — these are the inputs for the remaining phases.
 
 ## Phase 3: Parallel Subagent Extraction
 
