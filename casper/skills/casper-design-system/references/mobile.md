@@ -24,13 +24,11 @@ Every mobile app output MUST be rendered inside a device frame that simulates an
 
 ### Mobile Form Inputs
 
-All global form input rules from SKILL.md apply (visible external labels, de-emphasized placeholders, label-above pattern). The only mobile-specific override is height:
-
-- **Input height**: `48px` (`h-12`) minimum for comfortable touch targets — larger than the web default (`36px`)
+All global form input rules from SKILL.md apply (visible external labels, de-emphasized placeholders, label-above pattern, `rounded-md` border-radius). On mobile, inputs use the global default height of `48px` (`h-12`) — no override needed. When inputs appear inside cards or compact containers, use `36px` (`h-9`) per the compact sizing rule.
 
 ### Mobile Button Height
 
-All buttons in mobile contexts use `48px` (`h-12`) — matching the input height. This is larger than the web default (`36px`) because fingers need bigger targets than cursors. This applies to all button variants: primary, secondary, ghost, and destructive.
+All buttons in mobile contexts use the global default height of `48px` (`h-12`) with `rounded-md` (8px) border-radius. When buttons appear inside cards, panels, or compact containers, use `36px` (`h-9`) per the compact sizing rule. This applies to all button variants: primary, secondary, ghost, and destructive.
 
 ### Primary Action Button (Pinned to Bottom)
 
