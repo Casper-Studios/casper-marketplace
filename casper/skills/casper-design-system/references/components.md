@@ -358,7 +358,7 @@ Inline error and success feedback for form inputs.
   <input
     type="email"
     value="not-an-email"
-    className="w-full h-9 px-3 rounded-sm border border-error-500 bg-white text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-error-500"
+    className="w-full h-9 px-3 rounded-md border border-error-500 bg-white text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-error-500"
   />
   <div className="flex items-center gap-1">
     <AlertCircle className="w-3.5 h-3.5 text-error-500 shrink-0" />
@@ -373,5 +373,6 @@ Inline error and success feedback for form inputs.
 - **Error ring**: Swap `brand-500` → `error-500`
 - **Error message**: Caption size (12px), `error-500`, below the input with `space-y-1`
 - **Label stays neutral**: Don't color the label red — the border and message are enough signal
+- **Border radius**: Inputs always use `rounded-md` (8px), even in error state
 - **Validate on blur**, not on keystroke. Remove error on change when corrected
 - **On submit with errors**: Scroll to and focus the first invalid field
