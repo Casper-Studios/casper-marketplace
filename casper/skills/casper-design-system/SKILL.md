@@ -52,7 +52,7 @@ The Casper aesthetic is **clean authority** — a professional SaaS style that f
 
 1. **Whitespace is a feature.** Generous padding, breathing room between sections. Never cram.
 2. **One accent, used sparingly.** Brand purple (`#5900FF`) appears on active states, primary buttons, and key CTAs — nowhere else. If everything is purple, nothing is.
-3. **Rounded but not bubbly.** 10px default radius (shadcn default). Feels modern without feeling like a toy.
+3. **Rounded but not bubbly.** 10px default radius for cards (shadcn default). Buttons and inputs use 8px. Feels modern without feeling like a toy.
 4. **Flat with depth hints.** No heavy shadows. Use `shadow-sm` for cards, `shadow-md` for popovers. Never use `shadow-lg` on in-page elements.
 5. **Content over chrome.** The UI should disappear. Users notice the data, not the design.
 
@@ -171,17 +171,17 @@ NEVER apply `shadow-lg` (or its alias `shadow-overlay`) to cards or in-page elem
 
 The theme file (`references/theme.css`) uses the **shadcn/ui radius system** — a single `--radius` base variable in `:root` that controls the entire scale via `calc()`. This is mapped into Tailwind classes via `@theme inline`. No Tailwind v4 defaults are overridden.
 
-| Token               | Tailwind Class | Default Value | Use                                   |
-| ------------------- | -------------- | ------------- | ------------------------------------- |
-| `--radius-sm`       | `rounded-sm`   | 6px           | Inputs, small buttons, inner elements |
-| `--radius-md`       | `rounded-md`   | 8px           | Popovers, tooltips, chart tooltips    |
-| `--radius-lg`       | `rounded-lg`   | 10px          | Cards, panels, large containers       |
-| `--radius-xl`       | `rounded-xl`   | 14px          | Modal containers, dialogs, hero cards |
-| (Tailwind built-in) | `rounded-full` | 9999px        | Badges, pills, avatars, icon circles  |
+| Token               | Tailwind Class | Default Value | Use                                                        |
+| ------------------- | -------------- | ------------- | ---------------------------------------------------------- |
+| `--radius-sm`       | `rounded-sm`   | 6px           | Inner elements, nav items, small nested controls           |
+| `--radius-md`       | `rounded-md`   | 8px           | **Buttons, inputs**, popovers, tooltips, chart tooltips    |
+| `--radius-lg`       | `rounded-lg`   | 10px          | Cards, panels, large containers                            |
+| `--radius-xl`       | `rounded-xl`   | 14px          | Modal containers, dialogs, hero cards                      |
+| (Tailwind built-in) | `rounded-full` | 9999px        | Badges, pills, avatars, icon circles                       |
 
 The base value `--radius: 0.625rem` (10px) is the shadcn default. To make the entire UI sharper or rounder, change this single value — all tokens recalculate automatically.
 
-Cards always use `rounded-lg` (10px). Nested elements inside cards should use `rounded-sm` (6px) to maintain visual hierarchy — the inner radius should always be smaller than the outer.
+Cards always use `rounded-lg` (10px). Buttons and inputs always use `rounded-md` (8px). Nested elements inside cards should use `rounded-sm` (6px) for non-interactive elements to maintain visual hierarchy — the inner radius should always be smaller than the outer.
 
 ---
 
@@ -225,11 +225,13 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 
 ### Button
 
-- **Primary**: `brand-500` bg, `text-white` (literal white, not a token), `rounded-sm`. Hover: `brand-600`.
-- **Secondary**: White bg, `neutral-200` border, `neutral-900` text. Hover: `neutral-50` bg.
-- **Ghost**: No bg, no border. `neutral-600` text. Hover: `neutral-100` bg.
-- **Destructive**: `error-500` bg, `text-white`.
-- All buttons: `rounded-sm` (6px), height `36px` (default, web), `48px` for mobile (`h-12`), `14px` font.
+- **Primary**: `brand-500` bg, `text-white` (literal white, not a token), `rounded-md`. Hover: `brand-600`.
+- **Secondary**: White bg, `neutral-200` border, `neutral-900` text, `rounded-md`. Hover: `neutral-50` bg.
+- **Ghost**: No bg, no border. `neutral-600` text, `rounded-md`. Hover: `neutral-100` bg.
+- **Destructive**: `error-500` bg, `text-white`, `rounded-md`.
+- All buttons: `rounded-md` (8px), `14px` font.
+- **Default height**: `48px` (`h-12`). Use this on standalone pages, forms, modals, and any top-level content area.
+- **Compact height**: `36px` (`h-9`). Use when the button lives inside a smaller container — cards, panels, table rows, sidebar nav, filter bars, inline actions. The tighter context calls for a tighter control.
 
 ### Badge
 
@@ -256,20 +258,21 @@ Use shadcn/ui components as your base layer. Theme them using the CSS variables 
 
 ### Input / Textarea
 
-- `rounded-sm` (6px). `1px` `neutral-200` border. `neutral-50` bg or white bg.
+- `rounded-md` (8px). `1px` `neutral-200` border. `neutral-50` bg or white bg.
 - Focus: `2px` `brand-500` ring (use Tailwind `ring-2 ring-brand-500`).
 - **Labels MUST be visible and external** — render a `<label>` element above every input, never inside it. Labels use `14px`/400 in `neutral-900`. The gap between label and input is `6px` (`space-y-1.5`).
 - **Placeholder text MUST be de-emphasized** — `neutral-400` color, normal weight (400), short hint text (e.g., "e.g. john@email.com"). Placeholders are supplementary hints, not labels.
 - **Select inputs** follow the same pattern: visible label above, de-emphasized placeholder inside.
 - **Spacing between fields**: `16px` (`space-y-4` or `gap-4`).
-- Height: `36px` for default inputs (web). On mobile, use `48px` (`h-12`) — same as mobile buttons.
+- **Default height**: `48px` (`h-12`). Use for inputs on standalone pages, forms, modals, and any top-level content area.
+- **Compact height**: `36px` (`h-9`). Use when the input lives inside a smaller container — cards, panels, table rows, filter bars, inline search fields. Same logic as compact buttons.
 
 ### Sidebar (App Shell)
 
 See `references/web-layouts.md` for the full sidebar code pattern. Key specs:
 
 - Width: `240px`. White background. Right border: `1px` `neutral-200`.
-- Nav items: `36px` height, `rounded-sm` (6px), `12px` left padding.
+- Nav items: `36px` height (compact — inside sidebar panel), `rounded-sm` (6px), `12px` left padding.
   - Default: `neutral-600` text. Active: `brand-50` bg, `brand-500` text, `font-weight: 500`. Hover: `neutral-100` bg.
 - Group labels: Caption (12px/400), `neutral-400`, `24px` top margin between groups.
 - On mobile: Sidebar collapses to a `Sheet` (slide-in from left).
@@ -519,7 +522,8 @@ Before delivering any UI code, verify:
 - [ ] Placeholder text is de-emphasized (`neutral-400`, normal weight)
 - [ ] Casper Studios logo uses the correct variant for the background (default on light, mono-white on dark)
 - [ ] If dark mode was requested: `.dark` class applied, logo uses mono-white variant, surfaces use `bg-neutral-0` (not `bg-white`)
-- [ ] Border-radius uses the shadcn radius scale (`rounded-sm` = 6px, `rounded-lg` = 10px, `rounded-xl` = 14px)
+- [ ] Border-radius: buttons/inputs use `rounded-md` (8px), cards use `rounded-lg` (10px), nav items/inner elements use `rounded-sm` (6px)
+- [ ] Button/input heights: `48px` (`h-12`) by default, `36px` (`h-9`) when inside cards, panels, tables, or other compact containers
 
 ### Additional checks for Web Applications:
 
@@ -531,6 +535,7 @@ Before delivering any UI code, verify:
 - [ ] Rendered inside iPhone 16 device frame (393×852, 40px outer radius, 8px bezel)
 - [ ] Primary action button is pinned to bottom with safe area padding
 - [ ] Navigation uses bottom tab bar, not sidebar
+- [ ] Buttons and inputs are `48px` height (same as global default — no mobile override needed)
 - [ ] Most tap targets are 44×44px or larger (smaller is OK in dense UI, but not the default)
 - [ ] Single-column layout only — no multi-column grids
 - [ ] Typography uses mobile scale (H1: 24px, H2: 18px)
