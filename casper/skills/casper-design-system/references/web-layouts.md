@@ -128,6 +128,8 @@ The vertical nav bar lives inside the App Shell sidebar.
 </button>
 ```
 
+> **Note:** Sidebar nav items use `h-9` (36px) and `rounded-sm` (6px) because they're inside a panel — the compact sizing rule applies. Standalone buttons on pages use `h-12` (48px) and `rounded-md` (8px).
+
 ### Group Label
 
 ```jsx
