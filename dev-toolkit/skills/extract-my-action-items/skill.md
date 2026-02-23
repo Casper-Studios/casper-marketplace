@@ -22,7 +22,38 @@ Extract action items from a Fireflies transcript using parallel subagents. Catch
 
 ## Phase 2: Preprocess Transcript
 
-The transcript API returns a JSON array. Extract to plain text before chunking:
+The transcript API returns a JSON array (or an MCP wrapper containing one). Extract to plain text before chunking.
+
+You should inspect the user's local hooks config and avoid running commands that are blocked by the hooks.
+
+### MCP based extraction
+```bash
+mkdir -p .claude/scratchpad
+node -e "
+  const fs = require('fs');
+  let data = JSON.parse(fs.readFileSync(process.argv[1], 'utf8'));
+  // Handle MCP wrapper: if top-level array has a .text field containing the real transcript, parse that
+  if (data.length === 1 && typeof data[0]?.text === 'string') {
+    // Extract speaker lines from the text content
+    const lines = data[0].text.split('\n').filter(l => l.match(/^[A-Za-z].*?:/));
+    fs.writeFileSync('.claude/scratchpad/transcript.txt', lines.join('\n'));
+    const speakers = [...new Set(lines.map(l => l.split(':')[0].trim()))].sort();
+    console.log('Speakers:', JSON.stringify(speakers));
+    console.log('Total lines:', lines.length);
+  } else {
+    // Standard array of {speaker_name, text} objects
+    const lines = data.map(e => (e.speaker_name || 'Unknown') + ': ' + (e.text || ''));
+    fs.writeFileSync('.claude/scratchpad/transcript.txt', lines.join('\n'));
+    const speakers = [...new Set(data.map(e => e.speaker_name).filter(Boolean))].sort();
+    console.log('Speakers:', JSON.stringify(speakers));
+    console.log('Total lines:', lines.length);
+  }
+" [TRANSCRIPT_JSON_FILE]
+```
+
+If the transcript JSON was saved to a tool-results file by the MCP client, pass that file path as the argument.
+
+### API based extraction
 
 ```bash
 jq -r '.[].text' < raw_transcript.json > .claude/scratchpad/transcript.txt
@@ -37,6 +68,7 @@ Count lines: `wc -l < .claude/scratchpad/transcript.txt`
 ```python
 speakers = sorted(set(e["speaker_name"] for e in data if e.get("speaker_name")))
 ```
+
 
 ## Phase 3: Parallel Subagent Extraction
 
