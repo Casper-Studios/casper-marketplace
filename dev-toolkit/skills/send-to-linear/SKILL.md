@@ -16,8 +16,35 @@ Turn unstructured input into well-structured Linear tickets.
 
 ## Setup
 
-1. Read `references/config.json` for team defaults (team, project, assignee, cycle, labels, conventions). Use these as defaults — the user can override any value per invocation.
-2. Read `references/ticket-template.md` for the scratchpad file format and Linear description format.
+### Config resolution
+
+Look for team configuration in this order (first match wins):
+
+1. `~/.claude/skills/send-to-linear/references/config.local.json`
+2. `~/.agents/skills/send-to-linear/references/config.local.json`
+3. `references/config.json` (bundled defaults, relative to this skill file)
+
+Use the first `.local` config found. Otherwise fall back to the bundled `config.json`.
+
+If no `.local` file exists anywhere AND the bundled config has empty required fields (`team`, `default_assignee`), **stop and prompt the user**:
+
+> No local config found. The bundled `references/config.json` has empty defaults and will be overwritten whenever this skill updates.
+>
+> Create a local override at one of these paths:
+> - `~/.claude/skills/send-to-linear/references/config.local.json`
+> - `~/.agents/skills/send-to-linear/references/config.local.json`
+>
+> Copy the bundled `references/config.json` as a starting point and fill in your team, project, assignee, labels, and conventions.
+
+### Template resolution
+
+Same pattern for the ticket template:
+
+1. `~/.claude/skills/send-to-linear/references/ticket-template.local.md`
+2. `~/.agents/skills/send-to-linear/references/ticket-template.local.md`
+3. `references/ticket-template.md` (bundled default)
+
+The template rarely needs customization, so no prompt if only the bundled version exists.
 
 ## Phase 1: Ingest Input
 
@@ -75,7 +102,7 @@ The user may restructure, merge, split, rename, add notes, or tell you to skip i
 
 ## Phase 6: Create in Linear (only on explicit approval)
 
-Read `references/config.json` for defaults, then:
+Read config using the resolution order from Setup, then:
 
 1. `mcp__linear__list_teams` — resolve team ID
 2. `mcp__linear__list_issue_labels` — resolve label IDs

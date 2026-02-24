@@ -1,14 +1,9 @@
 {
-  "team": "Ardmore Road",
-  "project": "Ardmore Road",
-  "default_assignee": "Leo Kim",
+  "team": "",
+  "project": "",
+  "default_assignee": "",
   "cycle": "current",
   "default_status": "Todo",
-  "labels": [
-    "ArdmoreIQ",
-    "Research Matrix",
-    "Notion",
-    "SWEAt"
-  ],
-  "conventions": "Always assign tickets to the current cycle. Separate exploratory/visionary ideas into their own section — don't mix them with actionable tickets. Always link back to the source material (Fireflies URL, Slack permalink, etc). Tickets must include concrete examples from the source — abstract descriptions without real scenarios are not acceptable."
+  "labels": [],
+  "conventions": "Always assign tickets to the current cycle. Separate exploratory ideas from actionable tickets. Link back to source material. Include concrete examples — abstract descriptions without real scenarios are not acceptable."
 }
