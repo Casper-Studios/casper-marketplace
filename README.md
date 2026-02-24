@@ -15,11 +15,27 @@ A collection of Claude Code plugins for business automation, data analysis, and 
 
 ## Installation
 
-### Install from Marketplace
+### Install all skills globally (recommended)
+
+```bash
+# Install the skills CLI, then add everything from the marketplace
+npx skills add https://github.com/Casper-Studios/casper-marketplace --all -g
+```
+
+The `--all` flag is idempotent — it installs new skills and overwrites existing ones. The CLI handles cloning, diffing, and symlinking internally.
+
+### Install a specific skill
+
+```bash
+npx skills add https://github.com/Casper-Studios/casper-marketplace --skill commit
+npx skills add https://github.com/Casper-Studios/casper-marketplace --skill pr-comments
+```
+
+### Install via /plugin command
 
 ```bash
 # Add the Casper Studios marketplace
-/plugin marketplace add Casper-Studios/plugin-marketplace
+/plugin marketplace add Casper-Studios/casper-marketplace
 
 # Install a specific plugin
 /plugin install casper
@@ -28,21 +44,24 @@ A collection of Claude Code plugins for business automation, data analysis, and 
 /plugin install stack-patterns
 ```
 
-### Install via npx
+### Auto-sync on session start
 
-```bash
-npx skills add https://github.com/Casper-Studios/casper-marketplace --skill commit
-npx skills add https://github.com/Casper-Studios/casper-marketplace --skill pr-summary
-```
+Add `dev-toolkit/sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/claude-code/hooks) to keep skills up-to-date automatically:
 
-### Install via Git Clone
-
-```bash
-# Clone the repository
-git clone git@github.com:Casper-Studios/plugin-marketplace.git
-
-# Run Claude Code with the plugin directory
-claude --plugin-dir ./plugin-marketplace
+```jsonc
+// ~/.claude/settings.json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          { "type": "command", "command": "bash /path/to/sync-skills.sh" }
+        ]
+      }
+    ]
+  }
+}
 ```
 
 ## Plugin Structure
