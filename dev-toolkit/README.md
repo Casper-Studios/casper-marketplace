@@ -107,6 +107,10 @@ Get up to speed on the current branch by analyzing commit history, uncommitted c
 
 Create structured handoff documentation with YAML frontmatter for transitioning work-in-progress to another agent. Includes task status, critical references, learnings, and next steps.
 
+### `/send-to-linear` - Send to Linear
+
+Extract actionable Linear tickets from unstructured input — Slack conversations, call transcripts, screenshots, meeting notes. Drafts tickets to a scratchpad for review, then creates them in Linear on approval. Supports `config.local.json` overrides for team, project, assignee, and labels.
+
 ### `/extract-my-action-items` - Extract Action Items
 
 Extract action items from Fireflies transcripts.
