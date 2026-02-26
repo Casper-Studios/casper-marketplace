@@ -11,11 +11,11 @@ MARKETPLACE="https://github.com/Casper-Studios/casper-marketplace"
 # ---------------------------------------------------------------------------
 if ! command -v skills &>/dev/null; then
   if command -v bun &>/dev/null; then
-    bun add -g skills 2>/dev/null
+    bun add -g skills 2>/dev/null || true
   elif command -v pnpm &>/dev/null; then
-    pnpm add -g skills 2>/dev/null
+    pnpm add -g skills 2>/dev/null || true
   elif command -v npm &>/dev/null; then
-    npm i -g skills 2>/dev/null
+    npm i -g skills 2>/dev/null || true
   else
     exit 0
   fi

@@ -46,17 +46,22 @@ npx skills add https://github.com/Casper-Studios/casper-marketplace --skill pr-c
 
 ### Auto-sync on session start
 
-Add `dev-toolkit/sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/claude-code/hooks) to keep skills up-to-date automatically:
+Add `sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/claude-code/hooks) to keep all marketplace plugins up-to-date automatically:
 
 ```jsonc
 // ~/.claude/settings.json
 {
   "hooks": {
-    "PreToolUse": [
+    "SessionStart": [
       {
-        "matcher": "",
+        "matcher": "startup",
         "hooks": [
-          { "type": "command", "command": "bash /path/to/sync-skills.sh" }
+          {
+            "type": "command",
+            "command": "bash /path/to/sync-skills.sh",
+            "timeout": 60,
+            "async": true
+          }
         ]
       }
     ]
