@@ -30,6 +30,12 @@
       "description": "A collection of skills that teach idiomatic patterns and conventions for popular libraries and frameworks.",
       "source": "./stack-patterns",
       "version": "1.0.0"
+    },
+    {
+      "name": "cf-saas-stack",
+      "description": "Cloudflare Workers + React Router v7 + tRPC + D1/Drizzle + Better Auth conventions and commands for building SaaS applications on the edge",
+      "source": "./cf-saas-stack",
+      "version": "1.0.0"
     }
   ]
 }
