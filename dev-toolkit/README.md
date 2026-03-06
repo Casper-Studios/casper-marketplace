@@ -113,7 +113,7 @@ Extract actionable Linear tickets from unstructured input — Slack conversation
 
 ### `/extract-my-action-items` - Extract Action Items
 
-Extract action items from Fireflies transcripts.
+Extract action items from Fireflies transcripts using parallel subagents. Supports single-person and all-attendees modes, with an optional Linear ticket proposal workflow that matches action items to existing cycle tickets and drafts new tickets for review before creation.
 
 ### `/planner` - Interactive Planning
 
@@ -140,7 +140,8 @@ dev-toolkit/
 │   ├── create-handoff/
 │   │   └── SKILL.md
 │   ├── extract-my-action-items/
-│   │   ├── skill.md
+│   │   ├── SKILL.md
+│   │   ├── references/
 │   │   └── scripts/
 │   ├── implement-plan/
 │   │   └── SKILL.md
@@ -153,6 +154,9 @@ dev-toolkit/
 │   │   └── assets/
 │   ├── recover-branch-context/
 │   │   └── SKILL.md
+│   └── send-to-linear/
+│       ├── SKILL.md
+│       └── references/
 └── README.md                    # This file
 ```
 
