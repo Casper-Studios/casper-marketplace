@@ -187,7 +187,91 @@ Merge subagent results, deduplicate, and categorize. **Only include categories t
 1. [Person] — [Item with deadline or scheduled time]
 ```
 
-## Phase 5: Review & DM to Slack
+## Phase 5: Linear Ticket Proposals
+
+Propose Linear ticket creates and updates based on the extracted action items. Uses a config file for team defaults and queries active cycle tickets for update candidates.
+
+### 5a: Config Resolution
+
+Look for team configuration in this order (first match wins):
+
+1. `~/.claude/skills/extract-my-action-items/references/config.local.json`
+2. `~/.agents/skills/extract-my-action-items/references/config.local.json`
+3. `references/config.json` (bundled defaults, relative to this skill file)
+
+Use the first `.local` config found. Otherwise fall back to the bundled `config.json`.
+
+If no `.local` file exists anywhere AND the bundled config has an empty `team` field, **stop and prompt the user**:
+
+> No Linear config found. Create a local config at one of these paths:
+> - `~/.agents/skills/extract-my-action-items/references/config.local.json`
+> - `~/.claude/skills/extract-my-action-items/references/config.local.json`
+>
+> Copy the bundled `references/config.json` as a starting point and fill in your team, project, assignee, and labels.
+
+If config resolves successfully, proceed.
+
+### 5b: Pull Active Tickets for Reconciliation
+
+If `pull_active_tickets.enabled` is true:
+
+1. **Resolve teams:** Use `pull_active_tickets.teams` if non-empty, else fall back to `[team]` (the top-level team field as a single-element list).
+2. **For each team:**
+   - `mcp__linear__list_cycles` with `type: "current"` → get current cycle ID
+   - `mcp__linear__list_issues` filtered by that cycle + states from `pull_active_tickets.states`
+3. **Also** `mcp__linear__list_issues` for each meeting attendee (assignee filter) across those teams, filtered to active states only.
+4. Deduplicate and build a ticket lookup table: `{identifier, title, assignee, status, description (first 200 chars)}`
+
+### 5c: Semantic Matching via Subagent
+
+Launch a `general-purpose` subagent with this prompt:
+
+```
+You have two inputs:
+
+1. ACTION ITEMS (from the meeting):
+[paste the full action-items-YYYY-MM-DD.md content]
+
+2. ACTIVE LINEAR TICKETS:
+[paste the ticket lookup as a markdown table: identifier | title | assignee | status]
+
+For each action item, classify it as one of:
+- **UPDATE [TICKET-ID]** — this action item maps to an existing ticket. Explain what new info to append.
+- **NEW TICKET** — this is a distinct deliverable not covered by any existing ticket. Suggest a title and assignee.
+- **IDEA** — this is a process improvement, behavioral commitment, or exploratory thought. Not a concrete deliverable.
+
+Group your output by classification. For UPDATE items, include the ticket ID. For NEW TICKET items, include suggested title, assignee, and priority.
+```
+
+### 5d: Draft Proposals to Scratchpad
+
+Write to `.claude/scratchpad/linear-proposals-YYYY-MM-DD.md` using the template from `references/ticket-template.md`.
+
+- **Proposed Updates:** For each UPDATE match, read the full ticket description via `mcp__linear__get_issue`, then draft the appended content (preserving existing description, adding a dated section with the new feedback).
+- **Proposed New Tickets:** Use send-to-linear description format (User Story, Requirements, Acceptance Criteria) with concrete examples and exact quotes from the transcript.
+- **Ideas / Needs More Thought:** List with person, context, and exact quote. These are not skipped — they appear in the proposals file but do not become full tickets.
+
+### 5e: User Review Gate
+
+**STOP.** Tell the user the proposals file is ready at `.claude/scratchpad/linear-proposals-YYYY-MM-DD.md` and wait for explicit instruction.
+
+Use `AskUserQuestion`: **"Linear ticket proposals are ready. Review the file, then choose:"**
+- "Create/update tickets in Linear" — proceed to execute
+- "Skip — just do Slack DMs" — skip to Phase 6
+
+The user may edit the scratchpad file before approving. On approval:
+
+1. Resolve team ID, label IDs, project ID, and current cycle via Linear MCP (same pattern as send-to-linear Phase 6):
+   - `mcp__linear__list_teams` → team ID
+   - `mcp__linear__list_issue_labels` → label IDs
+   - `mcp__linear__list_projects` → project ID (if configured)
+   - `mcp__linear__list_cycles` with `type: "current"` → current cycle
+2. **For updates:** `mcp__linear__save_issue` with `id` and updated `description` (existing description + new dated section)
+3. **For new tickets:** `mcp__linear__save_issue` with all fields from config + proposal (team, project, assignee, cycle, state, labels, title, description)
+4. **Ideas** — no Linear action (they stay in the proposals file for reference only)
+5. Report created/updated ticket identifiers to the user
+
+## Phase 6: Review & DM to Slack
 
 1. Use `AskUserQuestion`: **"DM action items to each person on Slack?"** — options: "Send DMs", "Skip — just keep the file"
 2. If approved, ensure `.claude/slack-users.local.json` exists in the project root:
@@ -207,7 +291,7 @@ The script sends Block Kit–formatted DMs to each person via `conversations.ope
 
 Name resolution supports exact match and fuzzy first-name match (e.g., "Jelvin" resolves to "Jelvin Base"). After the script runs, report any skipped names to the user.
 
-4. After posting (or skipping), delete all artifacts created during the run: `transcript.txt`, the action items markdown file, and any other temp files written to `.claude/scratchpad/` during this workflow.
+4. After posting (or skipping), delete all artifacts created during the run: `transcript.txt`, the action items markdown file, `linear-proposals-YYYY-MM-DD.md`, and any other temp files written to `.claude/scratchpad/` during this workflow.
 
 ## Example Invocations
 
