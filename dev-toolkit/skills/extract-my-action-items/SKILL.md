@@ -134,9 +134,11 @@ Beyond obvious commitments ("I'll do X"), catch these non-obvious patterns:
 - Delegations: "[Person], can you handle X?", "I'll leave that to [person]"
 ```
 
-## Phase 4: Consolidate
+## Phase 4: Synthesize Notes
 
-Merge subagent results, deduplicate, and categorize. **Only include categories that have items.**
+Merge subagent results, deduplicate, and categorize into a **rich synthesized notes file**. This is the master working document — all detail lives here. Linear proposals and the final action items checklist are derived from it.
+
+Write to `.claude/scratchpad/synthesized-notes-YYYY-MM-DD.md`. **Only include categories that have items.**
 
 ### Synthesis Depth
 
@@ -147,6 +149,7 @@ Preserve the full `Discussion depth` returned by subagents. Never flatten discus
 - Never collapse N distinct decisions into 1 bullet. List each.
 - Cross-link items that depend on each other (e.g., "dependency for Emerson's fiscal period table work").
 - Simple items (credential sharing, quick investigations) stay as one-liners.
+- Include exact quotes from the transcript for each item.
 
 ### Categories
 
@@ -157,31 +160,27 @@ Preserve the full `Discussion depth` returned by subagents. Never flatten discus
 5. **Exploration / Tooling** — Tool evaluations, setup, environment tasks
 6. **Catch-up** — Things explicitly acknowledged as dropped or missed
 
-### Output
+### Output Format
 
-**Single-person mode** — Write to `.claude/scratchpad/[name]-action-items-YYYY-MM-DD.md`:
+**Single-person mode:**
 
 ```markdown
-# [Name] Action Items — [Meeting Title]
+# [Name] Synthesized Notes — [Meeting Title]
 
 **Date:** [Date]
 **Fireflies Link:** https://app.fireflies.ai/view/[TRANSCRIPT_ID]
 
 ## [Category Name]
 
-- [ ] **Item title**
-  - Context and details
+- **Item title**
+  - Context, decisions, and full detail
   - > "Exact quote"
-
-## Quick Reference — Time-Sensitive
-
-1. [Item with deadline or scheduled time]
 ```
 
-**All-attendees mode** — Write to `.claude/scratchpad/action-items-YYYY-MM-DD.md`:
+**All-attendees mode:**
 
 ```markdown
-# Action Items — [Meeting Title]
+# Synthesized Notes — [Meeting Title]
 
 **Date:** [Date]
 **Fireflies Link:** https://app.fireflies.ai/view/[TRANSCRIPT_ID]
@@ -190,18 +189,14 @@ Preserve the full `Discussion depth` returned by subagents. Never flatten discus
 
 ### [Category Name]
 
-- [ ] **Item title**
-  - Context and details
+- **Item title**
+  - Context, decisions, and full detail
   - > "Exact quote"
-
-## Quick Reference — Time-Sensitive
-
-1. [Person] — [Item with deadline or scheduled time]
 ```
 
 ## Phase 5: Linear Ticket Proposals
 
-Propose Linear ticket creates and updates based on the extracted action items. Uses a config file for team defaults and queries active cycle tickets for update candidates.
+Derive Linear ticket creates and updates from the synthesized notes. The rich context and quotes from Phase 4 flow into Linear (as comments or ticket descriptions) so it becomes the source of truth. Uses a config file for team defaults and queries active cycle tickets for update candidates.
 
 ### 5a: Config Resolution
 
@@ -227,7 +222,7 @@ If config resolves successfully, proceed.
 Launch a subagent with this prompt:
 
 ```
-## Task: Pull active Linear tickets and match against meeting action items
+## Task: Pull active Linear tickets and match against synthesized meeting notes
 
 ### Step 1: Pull active tickets
 
@@ -242,9 +237,9 @@ Config: team=[TEAM], states=[STATES_LIST], attendees=[SPEAKER_LIST]
 
 ### Step 2: Semantic matching
 
-Read the action items file at [ACTION_ITEMS_PATH].
+Read the synthesized notes at [SYNTHESIZED_NOTES_PATH].
 
-For each action item, classify as:
+For each item, classify as:
 - **UPDATE [TICKET-ID]** — maps to an existing ticket. Explain what new info to append.
 - **NEW TICKET** — distinct deliverable not covered. Suggest title, assignee, priority.
 - **IDEA** — process improvement, behavioral commitment, or exploratory thought.
@@ -256,8 +251,8 @@ Group output by classification. For UPDATE items include ticket ID. For NEW TICK
 
 Write to `.claude/scratchpad/linear-proposals-YYYY-MM-DD.md` using the template from `references/ticket-template.md`.
 
-- **Proposed Updates:** For each UPDATE match, read the full ticket description via `mcp__linear__get_issue`, then draft the appended content (preserving existing description, adding a dated section with the new feedback).
-- **Proposed New Tickets:** Use send-to-linear description format (User Story, Requirements, Acceptance Criteria) with concrete examples and exact quotes from the transcript.
+- **Proposed Updates:** For each UPDATE match, draft a comment body with the new feedback (dated section with context and quotes from the synthesized notes). Do NOT modify the issue description — updates are posted as comments.
+- **Proposed New Tickets:** Use send-to-linear description format (User Story, Requirements, Acceptance Criteria) with concrete examples and exact quotes from the synthesized notes.
 - **Ideas / Needs More Thought:** List with person, context, and exact quote. These are not skipped — they appear in the proposals file but do not become full tickets.
 
 ### 5e: User Review Gate
@@ -266,7 +261,7 @@ Write to `.claude/scratchpad/linear-proposals-YYYY-MM-DD.md` using the template 
 
 Use `AskUserQuestion`: **"Linear ticket proposals are ready. Review the file, then choose:"**
 - "Create/update tickets in Linear" — proceed to execute
-- "Skip — just do Slack DMs" — skip to Phase 6
+- "Skip — just do Slack DMs" — skip to Phase 7
 
 The user may edit the scratchpad file before approving. On approval:
 
@@ -275,12 +270,57 @@ The user may edit the scratchpad file before approving. On approval:
    - `mcp__linear__list_issue_labels` → label IDs
    - `mcp__linear__list_projects` → project ID (if configured)
    - `mcp__linear__list_cycles` with `type: "current"` → current cycle
-2. **For updates:** `mcp__linear__save_issue` with `id` and updated `description` (existing description + new dated section)
+2. **For updates:** `mcp__linear__create_comment` with `issueId` and the drafted comment body. Do NOT use `mcp__linear__save_issue` to modify the description.
 3. **For new tickets:** `mcp__linear__save_issue` with all fields from config + proposal (team, project, assignee, cycle, state, labels, title, description)
 4. **Ideas** — no Linear action (they stay in the proposals file for reference only)
-5. Report created/updated ticket identifiers to the user
+5. Report results with clickable links so the user can verify:
+   - **Updated tickets:** `https://linear.app/[WORKSPACE]/issue/[TICKET-ID]` for each commented ticket
+   - **Created tickets:** `https://linear.app/[WORKSPACE]/issue/[TICKET-ID]` for each new ticket (use the identifier returned by `save_issue`)
+   - Derive `[WORKSPACE]` from the team's organization key, or from the config if available
 
-## Phase 6: Review & DM to Slack
+## Phase 6: Action Items Checklist
+
+Generate a **terse action items checklist** derived from the synthesized notes. Linear is the source of truth for detail — the checklist is just a scannable index with links.
+
+Where an item maps to a Linear ticket (updated or created in Phase 5), include the Linear link inline. Items not sent to Linear get a one-line description only.
+
+### Output
+
+**Single-person mode** — Write to `.claude/scratchpad/[name]-action-items-YYYY-MM-DD.md`:
+
+```markdown
+# [Name] Action Items — [Meeting Title]
+
+**Date:** [Date]
+**Fireflies Link:** https://app.fireflies.ai/view/[TRANSCRIPT_ID]
+
+## [Category Name]
+
+- [ ] **Item title** — [TICKET-ID](https://linear.app/[WORKSPACE]/issue/[TICKET-ID])
+- [ ] **Item without ticket** — brief context
+```
+
+**All-attendees mode** — Write to `.claude/scratchpad/action-items-YYYY-MM-DD.md`:
+
+```markdown
+# Action Items — [Meeting Title]
+
+**Date:** [Date]
+**Fireflies Link:** https://app.fireflies.ai/view/[TRANSCRIPT_ID]
+
+## [Person Name]
+
+- [ ] **Item title** — [TICKET-ID](https://linear.app/[WORKSPACE]/issue/[TICKET-ID])
+- [ ] **Item without ticket** — brief context
+
+## Quick Reference — Time-Sensitive
+
+1. [Person] — [Item with deadline]
+```
+
+No categories in the checklist — flat list per person. Keep each item to one line.
+
+## Phase 7: Review & DM to Slack
 
 1. Use `AskUserQuestion`: **"DM action items to each person on Slack?"** — options: "Send DMs", "Skip — just keep the file"
 2. If approved, ensure `.claude/slack-users.local.json` exists in the project root:
@@ -300,7 +340,7 @@ The script sends Block Kit–formatted DMs to each person via `conversations.ope
 
 Name resolution supports exact match and fuzzy first-name match (e.g., "Jelvin" resolves to "Jelvin Base"). After the script runs, report any skipped names to the user.
 
-4. After posting (or skipping), delete all artifacts created during the run: `transcript.txt`, the action items markdown file, `linear-proposals-YYYY-MM-DD.md`, and any other temp files written to `.claude/scratchpad/` during this workflow.
+4. After posting (or skipping), delete all artifacts created during the run: `transcript.txt`, `synthesized-notes-YYYY-MM-DD.md`, the action items markdown file, `linear-proposals-YYYY-MM-DD.md`, and any other temp files written to `.claude/scratchpad/` during this workflow.
 
 ## Example Invocations
 
