@@ -99,6 +99,7 @@ Find ALL action items for [TARGET_PERSON]. Return each as:
 - **Item**: what they committed to
 - **Quote**: exact words from transcript
 - **Context**: who else involved, any deadline
+- **Discussion depth**: If this item emerged from extended back-and-forth (design decisions, technical debates, multi-speaker deliberation), include: what was proposed, what alternatives were considered, what was decided and WHY, specific technical details (field names, schema choices, API behaviors), open questions or deferred items, and connections to other people's work
 
 Beyond obvious commitments ("I'll do X"), catch these non-obvious patterns:
 - Self-notes: "I'll make a note to...", "let me jot down..."
@@ -121,6 +122,7 @@ Find ALL action items for EVERY attendee. Group by person. For each item return:
 - **Item**: what they committed to
 - **Quote**: exact words from transcript
 - **Context**: who else involved, any deadline
+- **Discussion depth**: If this item emerged from extended back-and-forth (design decisions, technical debates, multi-speaker deliberation), include: what was proposed, what alternatives were considered, what was decided and WHY, specific technical details (field names, schema choices, API behaviors), open questions or deferred items, and connections to other people's work
 
 Beyond obvious commitments ("I'll do X"), catch these non-obvious patterns:
 - Self-notes: "I'll make a note to...", "let me jot down..."
@@ -135,6 +137,16 @@ Beyond obvious commitments ("I'll do X"), catch these non-obvious patterns:
 ## Phase 4: Consolidate
 
 Merge subagent results, deduplicate, and categorize. **Only include categories that have items.**
+
+### Synthesis Depth
+
+Preserve the full `Discussion depth` returned by subagents. Never flatten discussion-rich items into one-liners.
+
+- Checkbox title = the deliverable. Body = full context needed to execute it.
+- If a subagent returned multi-paragraph context for an item, keep it. Use **bold sub-headers** to organize (e.g., "**Root cause:**", "**Agreed approach:**", "**Open items:**").
+- Never collapse N distinct decisions into 1 bullet. List each.
+- Cross-link items that depend on each other (e.g., "dependency for Emerson's fiscal period table work").
+- Simple items (credential sharing, quick investigations) stay as one-liners.
 
 ### Categories
 
@@ -195,52 +207,49 @@ Propose Linear ticket creates and updates based on the extracted action items. U
 
 Look for team configuration in this order (first match wins):
 
-1. `~/.claude/skills/extract-my-action-items/references/config.local.json`
-2. `~/.agents/skills/extract-my-action-items/references/config.local.json`
-3. `references/config.json` (bundled defaults, relative to this skill file)
+1. `~/.agents/configs/extract-my-action-items/config.json` (user overrides)
+2. `references/config.json` (bundled defaults, relative to this skill file)
 
-Use the first `.local` config found. Otherwise fall back to the bundled `config.json`.
+Use the user config if found. Otherwise fall back to the bundled `config.json`.
 
-If no `.local` file exists anywhere AND the bundled config has an empty `team` field, **stop and prompt the user**:
+If no user config exists AND the bundled config has an empty `team` field, **stop and prompt the user**:
 
-> No Linear config found. Create a local config at one of these paths:
-> - `~/.agents/skills/extract-my-action-items/references/config.local.json`
-> - `~/.claude/skills/extract-my-action-items/references/config.local.json`
+> No Linear config found. Create a user config at: `~/.agents/configs/extract-my-action-items/config.json`
 >
 > Copy the bundled `references/config.json` as a starting point and fill in your team, project, assignee, and labels.
 
 If config resolves successfully, proceed.
 
-### 5b: Pull Active Tickets for Reconciliation
+### 5b–5c: Pull Active Tickets and Semantic Match (Single Subagent)
 
-If `pull_active_tickets.enabled` is true:
+**CRITICAL: Run 5b and 5c together inside a single `general-purpose` subagent.** The cycle ticket data is large and should NOT flow through the main context window.
 
-1. **Resolve teams:** Use `pull_active_tickets.teams` if non-empty, else fall back to `[team]` (the top-level team field as a single-element list).
-2. **For each team:**
-   - `mcp__linear__list_cycles` with `type: "current"` → get current cycle ID
-   - `mcp__linear__list_issues` filtered by that cycle + states from `pull_active_tickets.states`
-3. **Also** `mcp__linear__list_issues` for each meeting attendee (assignee filter) across those teams, filtered to active states only.
-4. Deduplicate and build a ticket lookup table: `{identifier, title, assignee, status, description (first 200 chars)}`
-
-### 5c: Semantic Matching via Subagent
-
-Launch a `general-purpose` subagent with this prompt:
+Launch a subagent with this prompt:
 
 ```
-You have two inputs:
+## Task: Pull active Linear tickets and match against meeting action items
 
-1. ACTION ITEMS (from the meeting):
-[paste the full action-items-YYYY-MM-DD.md content]
+### Step 1: Pull active tickets
 
-2. ACTIVE LINEAR TICKETS:
-[paste the ticket lookup as a markdown table: identifier | title | assignee | status]
+Config: team=[TEAM], states=[STATES_LIST], attendees=[SPEAKER_LIST]
 
-For each action item, classify it as one of:
-- **UPDATE [TICKET-ID]** — this action item maps to an existing ticket. Explain what new info to append.
-- **NEW TICKET** — this is a distinct deliverable not covered by any existing ticket. Suggest a title and assignee.
-- **IDEA** — this is a process improvement, behavioral commitment, or exploratory thought. Not a concrete deliverable.
+1. `mcp__linear__list_teams` with query=[TEAM] → get team ID
+2. `mcp__linear__list_cycles` with type="current" → get current cycle ID
+3. In parallel:
+   - `mcp__linear__list_issues` filtered by cycle + team (limit 250)
+   - `mcp__linear__list_issues` for each attendee (assignee filter, state="In Progress")
+4. Deduplicate and build a lookup table: {identifier, title, assignee, status}
 
-Group your output by classification. For UPDATE items, include the ticket ID. For NEW TICKET items, include suggested title, assignee, and priority.
+### Step 2: Semantic matching
+
+Read the action items file at [ACTION_ITEMS_PATH].
+
+For each action item, classify as:
+- **UPDATE [TICKET-ID]** — maps to an existing ticket. Explain what new info to append.
+- **NEW TICKET** — distinct deliverable not covered. Suggest title, assignee, priority.
+- **IDEA** — process improvement, behavioral commitment, or exploratory thought.
+
+Group output by classification. For UPDATE items include ticket ID. For NEW TICKET items include suggested title, assignee, and priority.
 ```
 
 ### 5d: Draft Proposals to Scratchpad
