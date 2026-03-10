@@ -1,6 +1,6 @@
 {
   "name": "casper-studios",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A collection of Claude Code plugins for business automation, data analysis, and productivity",
   "owner": {
     "name": "Casper Studios",
@@ -21,9 +21,9 @@
     },
     {
       "name": "dev-toolkit",
-      "description": "A collection of skills for automating common development workflows like planning, committing, and code review.",
+      "description": "Workflow automation skills for planning, commits, PR management, code polishing, action item extraction, and session handoffs.",
       "source": "./dev-toolkit",
-      "version": "1.0.1"
+      "version": "1.0.2"
     },
     {
       "name": "stack-patterns",
