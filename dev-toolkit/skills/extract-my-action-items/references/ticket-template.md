@@ -11,8 +11,8 @@ Source: [Meeting Title] — [Fireflies Link]
 
 ### [TICKET-ID]: [Existing Title]
 **Assignee:** [existing assignee]
-**Action:** Append standup feedback to description
-**New content:**
+**Action:** Post comment with meeting feedback
+**Comment body:**
 > [requirements/feedback from action items, formatted per send-to-linear conventions]
 
 ---

@@ -1,6 +1,6 @@
 {
   "name": "dev-toolkit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Planning, committing, PR management, code polishing, action item extraction, and session handoffs.",
   "author": {
     "name": "Casper Studios"
