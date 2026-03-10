@@ -310,6 +310,8 @@ Where an item maps to a Linear ticket (updated or created in Phase 5), include t
 
 ## [Person Name]
 
+### [Category Name]
+
 - [ ] **Item title** — [TICKET-ID](https://linear.app/[WORKSPACE]/issue/[TICKET-ID])
 - [ ] **Item without ticket** — brief context
 
@@ -318,7 +320,7 @@ Where an item maps to a Linear ticket (updated or created in Phase 5), include t
 1. [Person] — [Item with deadline]
 ```
 
-No categories in the checklist — flat list per person. Keep each item to one line.
+Keep each item to one line.
 
 ## Phase 7: Review & DM to Slack
 
