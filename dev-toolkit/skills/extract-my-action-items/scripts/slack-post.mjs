@@ -91,12 +91,13 @@ function parseItems(body) {
   let current = null;
 
   for (const line of lines) {
-    const itemMatch = line.match(/^- \[ \] \*\*(.+?)\*\*/);
+    const itemMatch = line.match(/^- \[ \] \*\*(.+?)\*\*(.*)/);
     const numberedMatch = line.match(/^\d+\.\s+\*?\*?(.+?)\*?\*?\s*[—–-]\s*(.+)/);
 
     if (itemMatch) {
       if (current) items.push(current);
-      current = { title: itemMatch[1], details: [], quote: null };
+      const trailing = itemMatch[2]?.replace(/^\s*[—–-]\s*/, "").trim();
+      current = { title: itemMatch[1], details: trailing ? [trailing] : [], quote: null };
     } else if (numberedMatch && !current) {
       if (current) items.push(current);
       current = { title: line.trim(), details: [], quote: null };
@@ -126,6 +127,13 @@ function parseQuickReference(sectionMd) {
 }
 
 /**
+ * Convert markdown links [text](url) to Slack mrkdwn <url|text>.
+ */
+function mdLinksToSlack(text) {
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "<$2|$1>");
+}
+
+/**
  * Build Block Kit blocks for one person's action items.
  */
 function buildBlocks(personName, categories, quickRef) {
@@ -146,8 +154,6 @@ function buildBlocks(personName, categories, quickRef) {
     });
   }
 
-  blocks.push({ type: "divider" });
-
   for (const { category, items } of categories) {
     blocks.push({
       type: "section",
@@ -155,9 +161,9 @@ function buildBlocks(personName, categories, quickRef) {
     });
 
     for (const item of items) {
-      let itemText = `• *${item.title}*`;
+      let itemText = `• ${item.title}`;
       if (item.details.length > 0) {
-        itemText += "\n   " + item.details.join("\n   ");
+        itemText += " — " + mdLinksToSlack(item.details.join("; "));
       }
       if (item.quote) {
         itemText += `\n   > _"${item.quote}"_`;
@@ -167,8 +173,6 @@ function buildBlocks(personName, categories, quickRef) {
         text: { type: "mrkdwn", text: itemText },
       });
     }
-
-    blocks.push({ type: "divider" });
   }
 
   if (quickRef) {
@@ -176,13 +180,7 @@ function buildBlocks(personName, categories, quickRef) {
       type: "section",
       text: { type: "mrkdwn", text: `*Quick Reference — Time-Sensitive*\n${quickRef}` },
     });
-    blocks.push({ type: "divider" });
   }
-
-  blocks.push({
-    type: "context",
-    elements: [{ type: "mrkdwn", text: "Extracted by ArdmoreIQ" }],
-  });
 
   return blocks;
 }
