@@ -134,7 +134,37 @@ function mdLinksToSlack(text) {
 }
 
 /**
- * Build Block Kit blocks for one person's action items.
+ * Parse a text string (possibly containing markdown links) into rich_text elements.
+ */
+function textToRichElements(text, style) {
+  const elements = [];
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = linkRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      const el = { type: "text", text: text.slice(lastIndex, match.index) };
+      if (style) el.style = style;
+      elements.push(el);
+    }
+    const linkEl = { type: "link", url: match[2], text: match[1] };
+    if (style) linkEl.style = style;
+    elements.push(linkEl);
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    const el = { type: "text", text: text.slice(lastIndex) };
+    if (style) el.style = style;
+    elements.push(el);
+  }
+
+  return elements.length > 0 ? elements : [{ type: "text", text, ...(style ? { style } : {}) }];
+}
+
+/**
+ * Build Block Kit blocks for one person's action items using rich_text for copy-paste fidelity.
  */
 function buildBlocks(personName, categories, quickRef) {
   const blocks = [];
@@ -144,42 +174,60 @@ function buildBlocks(personName, categories, quickRef) {
     text: { type: "plain_text", text: `Action Items — ${title}`, emoji: true },
   });
 
-  const metaParts = [];
-  if (date) metaParts.push(`*Date:* ${date}`);
-  if (link) metaParts.push(`<${link}|View in Fireflies>`);
-  if (metaParts.length > 0) {
+  // Metadata line
+  const metaElements = [];
+  if (date) metaElements.push({ type: "text", text: `Date: ${date}`, style: { bold: true } });
+  if (date && link) metaElements.push({ type: "text", text: "  |  " });
+  if (link) metaElements.push({ type: "link", url: link, text: "View in Fireflies" });
+  if (metaElements.length > 0) {
     blocks.push({
-      type: "section",
-      text: { type: "mrkdwn", text: metaParts.join("  |  ") },
+      type: "rich_text",
+      elements: [{ type: "rich_text_section", elements: metaElements }],
     });
   }
 
   for (const { category, items } of categories) {
-    blocks.push({
-      type: "section",
-      text: { type: "mrkdwn", text: `*${category}*` },
+    // Category header + bullet list in one rich_text block
+    const rtElements = [];
+
+    // Category name as bold text section
+    rtElements.push({
+      type: "rich_text_section",
+      elements: [{ type: "text", text: category, style: { bold: true } }],
     });
 
+    // Items as a bullet list
+    const listItems = [];
     for (const item of items) {
-      let itemText = `• ${item.title}`;
+      const itemElements = [];
+      itemElements.push({ type: "text", text: item.title });
       if (item.details.length > 0) {
-        itemText += " — " + mdLinksToSlack(item.details.join("; "));
+        itemElements.push({ type: "text", text: " — " });
+        itemElements.push(...textToRichElements(item.details.join("; ")));
       }
-      if (item.quote) {
-        itemText += `\n   > _"${item.quote}"_`;
-      }
-      blocks.push({
-        type: "section",
-        text: { type: "mrkdwn", text: itemText },
-      });
+      listItems.push({ type: "rich_text_section", elements: itemElements });
     }
+
+    rtElements.push({
+      type: "rich_text_list",
+      style: "bullet",
+      elements: listItems,
+    });
+
+    blocks.push({ type: "rich_text", elements: rtElements });
   }
 
   if (quickRef) {
-    blocks.push({
-      type: "section",
-      text: { type: "mrkdwn", text: `*Quick Reference — Time-Sensitive*\n${quickRef}` },
-    });
+    const qrElements = [
+      {
+        type: "rich_text_section",
+        elements: [
+          { type: "text", text: "Quick Reference — Time-Sensitive\n", style: { bold: true } },
+          { type: "text", text: quickRef },
+        ],
+      },
+    ];
+    blocks.push({ type: "rich_text", elements: qrElements });
   }
 
   return blocks;
