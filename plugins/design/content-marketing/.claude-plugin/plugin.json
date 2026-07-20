@@ -1,0 +1,7 @@
+{
+  "name": "content-marketing",
+  "version": "1.0.0",
+  "description": "LinkedIn post generation, video production, and YouTube tooling for marketing content",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["design", "marketing", "content", "linkedin", "video"]
+}

@@ -1,6 +1,6 @@
 # Source Integrations
 
-How to auto-pull source material from Fireflies.ai, Slack, and Google Drive using existing Casper skill scripts. No new scripts — orchestrate the ones that already exist.
+How to auto-pull source material from Fireflies.ai, Slack, and Google Drive using skill scripts from sibling plugins in this marketplace (`brain`, `comms`, `integrations`, `research`). No new scripts — orchestrate the ones that already exist. Each integration is optional: if the sibling plugin isn't installed, skip that source gracefully (see Error Handling below).
 
 ## Source Config File
 
@@ -42,14 +42,14 @@ The `user_email` field is used to filter Fireflies transcripts to only meetings 
 2. Check which integrations are available by verifying env vars:
    - Fireflies: check if `FIREFLIES_API_KEY` is set
    - Slack: check if `SLACK_BOT_TOKEN` is set
-   - Google Drive: check if OAuth creds exist — check for `mycreds.txt` in the google-workspace skill scripts directory
+   - Google Drive: check if the `integrations` plugin is installed and OAuth creds exist — check for `mycreds.txt` in `${CLAUDE_PLUGIN_ROOT}/../../engineering/integrations/skills/google-workspace/scripts/`
 3. For **unavailable** integrations, provide setup instructions:
-   - **Fireflies**: "Get your API key from https://app.fireflies.ai/api and set `FIREFLIES_API_KEY` in your environment."
-   - **Slack**: "Create a Slack app at https://api.slack.com/apps and set `SLACK_BOT_TOKEN` in your environment."
-   - **Google Drive**: "Run the google-workspace skill setup first to configure OAuth."
+   - **Fireflies**: "Get your API key from https://app.fireflies.ai/api and set `FIREFLIES_API_KEY` in your environment. Also install the `brain` plugin (`/plugin install brain`)."
+   - **Slack**: "Create a Slack app at https://api.slack.com/apps and set `SLACK_BOT_TOKEN` in your environment. Also install the `comms` plugin (`/plugin install comms`)."
+   - **Google Drive**: "Install the `integrations` plugin (`/plugin install integrations`) and run the google-workspace skill setup to configure OAuth."
 4. For available integrations, ask the user for configuration:
    - **Fireflies**: "Any specific search terms for transcripts, or pull all recent ones?"
-   - **Slack**: "Which channels should I pull from?" — run `python ${CLAUDE_PLUGIN_ROOT}/skills/slack-automation/scripts/slack_search.py search "" --limit 20` to list available channels for the user to choose from
+   - **Slack**: "Which channels should I pull from?" — run `python ${CLAUDE_PLUGIN_ROOT}/../../project-management/comms/skills/slack-automation/scripts/slack_search.py search "" --limit 20` to list available channels for the user to choose from (needs the `comms` plugin installed)
    - **Google Drive**: "Any specific search terms or folders?"
 5. Ask: "How many days back should I search? (default: 14 for Fireflies, 7 for Slack, 30 for Drive)"
 6. Ask: "Want auto-refresh on every run? (If yes, source material refreshes automatically when you generate posts)"
@@ -65,12 +65,12 @@ Read `~/.config/casper/linkedin-sources.md`. If missing, run `--setup-sources` f
 
 ### Step 2: Pull from Fireflies
 
-**Script:** `${CLAUDE_PLUGIN_ROOT}/skills/transcript-search/scripts/fireflies_transcript_search.py`
+**Script (needs the `brain` plugin installed):** `${CLAUDE_PLUGIN_ROOT}/../../project-management/brain/skills/transcript-search/scripts/fireflies_transcript_search.py`
 
 **For each search term in config:**
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/skills/transcript-search/scripts/fireflies_transcript_search.py "{search_term}" --days-back {days_back} --content --json --limit 5
+python ${CLAUDE_PLUGIN_ROOT}/../../project-management/brain/skills/transcript-search/scripts/fireflies_transcript_search.py "{search_term}" --days-back {days_back} --content --json --limit 5
 ```
 
 **Requires:** `FIREFLIES_API_KEY` environment variable
@@ -104,12 +104,12 @@ Speakers: {comma-separated speaker names}
 
 ### Step 3: Pull from Slack
 
-**Script:** `${CLAUDE_PLUGIN_ROOT}/skills/slack-automation/scripts/slack_search.py`
+**Script (needs the `comms` plugin installed):** `${CLAUDE_PLUGIN_ROOT}/../../project-management/comms/skills/slack-automation/scripts/slack_search.py`
 
 **For each channel in config:**
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/skills/slack-automation/scripts/slack_search.py read "{channel_name}" --days {days_back} --limit 100
+python ${CLAUDE_PLUGIN_ROOT}/../../project-management/comms/skills/slack-automation/scripts/slack_search.py read "{channel_name}" --days {days_back} --limit 100
 ```
 
 **Requires:** `SLACK_BOT_TOKEN` environment variable
@@ -135,15 +135,15 @@ Messages: {message_count}
 
 ### Step 4: Pull from Google Drive
 
-**Script:** `${CLAUDE_PLUGIN_ROOT}/skills/google-workspace/scripts/gdrive_search.py`
+**Script (needs the `integrations` plugin installed):** `${CLAUDE_PLUGIN_ROOT}/../../engineering/integrations/skills/google-workspace/scripts/gdrive_search.py`
 
 **For each search term in config:**
 
 ```bash
-python ${CLAUDE_PLUGIN_ROOT}/skills/google-workspace/scripts/gdrive_search.py files "{search_term}" --modified-days {days_back} --limit 10 --json
+python ${CLAUDE_PLUGIN_ROOT}/../../engineering/integrations/skills/google-workspace/scripts/gdrive_search.py files "{search_term}" --modified-days {days_back} --limit 10 --json
 ```
 
-**Requires:** OAuth credentials (`client_secrets.json`, `mycreds.txt`) in the google-workspace skill scripts directory
+**Requires:** OAuth credentials (`client_secrets.json`, `mycreds.txt`) in the google-workspace skill's scripts directory
 
 **For each result**, if the file is a Google Doc or text file, read its content. For Google Docs, use the Docs API or download as text.
 
@@ -189,9 +189,9 @@ This avoids pulling on every single run while keeping content reasonably fresh.
 | Error | What to Do |
 |-------|-----------|
 | Missing env var (`FIREFLIES_API_KEY`, `SLACK_BOT_TOKEN`) | Skip that source, inform user: "Skipping {source} — {ENV_VAR} not found. Set it in your `.env` file." |
-| Script not found | Skip that source, inform user: "Skipping {source} — script not found at expected path. Is the {skill-name} skill installed?" |
+| Script not found (sibling plugin not installed) | Skip that source, inform user which plugin to install: "Skipping Fireflies — install the `brain` plugin (`/plugin install brain`)." / "Skipping Slack — install the `comms` plugin (`/plugin install comms`)." / "Skipping Google Drive — install the `integrations` plugin (`/plugin install integrations`)." |
 | API error (rate limit, auth failure) | Skip that source, inform user with the error message. Continue with other sources. |
 | No results returned | Skip that source silently — no error, just no new source material from it. |
-| OAuth credentials missing (Google Drive) | Skip Drive, inform user: "Skipping Google Drive — OAuth not configured. Run the google-workspace skill setup first." |
+| OAuth credentials missing (Google Drive) | Skip Drive, inform user: "Skipping Google Drive — OAuth not configured. Run the google-workspace skill setup first (requires the `integrations` plugin)." |
 
 **Never let a single source failure block the entire flow.** Pull what you can, skip what you can't, and generate from whatever source material is available.

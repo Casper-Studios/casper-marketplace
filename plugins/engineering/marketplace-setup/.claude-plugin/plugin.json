@@ -1,0 +1,7 @@
+{
+  "name": "marketplace-setup",
+  "version": "1.0.0",
+  "description": "Security hooks, safe .env loading, and privacy settings for Claude Code",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["engineering", "security", "setup"]
+}

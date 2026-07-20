@@ -1,0 +1,7 @@
+{
+  "name": "design-system",
+  "version": "1.0.0",
+  "description": "Casper Studios design system and Apple Liquid Glass UI guidance",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["design", "design-system", "ui"]
+}

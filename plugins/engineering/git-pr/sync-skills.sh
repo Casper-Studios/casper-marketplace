@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sync dev-toolkit skills from Casper marketplace on session start.
+# Sync all Casper marketplace skills on session start.
 # Runs optimistically — failures are silent and never block the session.
 
 set -euo pipefail

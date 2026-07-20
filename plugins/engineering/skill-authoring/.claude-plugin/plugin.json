@@ -1,0 +1,7 @@
+{
+  "name": "skill-authoring",
+  "version": "1.0.0",
+  "description": "Guidance and tooling for creating and updating Claude Code skills",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["engineering", "skills", "meta"]
+}

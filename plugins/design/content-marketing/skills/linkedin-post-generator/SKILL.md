@@ -29,11 +29,11 @@ Check if `~/.config/casper/linkedin-style.md` exists.
 1. Say: "Welcome to the LinkedIn Post Generator! Before we start, I need to understand your writing style."
 2. Say: "Share 3 LinkedIn posts that match the style you want. You can either paste the post links (e.g. `https://linkedin.com/posts/...`) or paste the text directly."
 3. Wait for the user to provide 3 posts
-4. **If the user provides LinkedIn URLs**, fetch the post content using the apify-scrapers skill:
+4. **If the user provides LinkedIn URLs**, fetch the post content using the `apify-scrapers` skill from the `research` plugin:
    ```bash
-   python ${CLAUDE_PLUGIN_ROOT}/skills/apify-scrapers/scripts/scrape_linkedin_posts.py search "{url}" --max-posts 1
+   python ${CLAUDE_PLUGIN_ROOT}/../../bizdev/research/skills/apify-scrapers/scripts/scrape_linkedin_posts.py search "{url}" --max-posts 1
    ```
-   Extract the post text from the JSON output. If a URL fails to fetch, ask the user to paste that post's text instead.
+   If the script isn't found (the `research` plugin isn't installed) or the call fails, tell the user: "LinkedIn URL fetching needs the `research` plugin (`/plugin install research`) — paste the post text instead for now." Then continue with pasted text.
 5. Analyze the posts for: tone, sentence length, vocabulary, formatting habits, hook style, CTA style, use of questions, paragraph length, overall energy
 6. Create `~/.config/casper/` directory if it doesn't exist
 7. Save the analysis to `~/.config/casper/linkedin-style.md` using this format:
@@ -108,13 +108,13 @@ Interactive setup for automatic source pulling. Read `references/source-integrat
 1. Ask: "What's your work email address? This is used to filter transcripts to only meetings you attended."
    - Save as `user_email` in the config
 2. Ask: "Which sources do you want to connect?" Present options:
-   - **Fireflies.ai** — pulls meeting transcripts (needs `FIREFLIES_API_KEY` env var)
-   - **Slack** — pulls messages from channels (needs `SLACK_BOT_TOKEN` env var)
-   - **Google Drive** — pulls docs and transcripts (needs OAuth setup via google-workspace skill)
-3. For each selected source, check if the required env var / credentials exist. If missing, provide setup instructions:
-   - **Fireflies**: "Set `FIREFLIES_API_KEY` in your environment. Get your API key from https://app.fireflies.ai/api"
-   - **Slack**: "Set `SLACK_BOT_TOKEN` in your environment. Create a Slack app at https://api.slack.com/apps"
-   - **Google Drive**: "Run the google-workspace skill setup to configure OAuth."
+   - **Fireflies.ai** — pulls meeting transcripts (needs the `brain` plugin + `FIREFLIES_API_KEY` env var)
+   - **Slack** — pulls messages from channels (needs the `comms` plugin + `SLACK_BOT_TOKEN` env var)
+   - **Google Drive** — pulls docs and transcripts (needs the `integrations` plugin + OAuth setup via its google-workspace skill)
+3. For each selected source, check if the sibling plugin is installed and the required env var / credentials exist. If missing, provide setup instructions:
+   - **Fireflies**: "Install the `brain` plugin (`/plugin install brain`) and set `FIREFLIES_API_KEY` in your environment. Get your API key from https://app.fireflies.ai/api"
+   - **Slack**: "Install the `comms` plugin (`/plugin install comms`) and set `SLACK_BOT_TOKEN` in your environment. Create a Slack app at https://api.slack.com/apps"
+   - **Google Drive**: "Install the `integrations` plugin (`/plugin install integrations`) and run the google-workspace skill setup to configure OAuth."
 4. For each enabled source, gather configuration:
    - **Fireflies**: search terms (or leave empty for all recent) and days_back
    - **Slack**: which channels to pull from — list available channels if possible, otherwise ask the user
@@ -129,11 +129,11 @@ Pull fresh source material from all configured integrations before generating po
 **Summary of the flow:**
 
 1. Read `~/.config/casper/linkedin-sources.md` — if missing, run `--setup-sources` first
-2. For each enabled source, call the existing Casper skill scripts:
-   - **Fireflies**: `python ${CLAUDE_PLUGIN_ROOT}/skills/transcript-search/scripts/fireflies_transcript_search.py "{term}" --days-back {N} --content --json`
+2. For each enabled source, call the sibling plugin's skill script. Each is optional — if the script isn't found (sibling plugin not installed) or the call fails, skip that source and tell the user which plugin to install (see `references/source-integrations.md` for the full error-handling table):
+   - **Fireflies** (needs the `brain` plugin): `python ${CLAUDE_PLUGIN_ROOT}/../../project-management/brain/skills/transcript-search/scripts/fireflies_transcript_search.py "{term}" --days-back {N} --content --json`
      - After fetching, filter results to only transcripts where `user_email` (from source config) appears in the transcript's `participants` array
-   - **Slack**: `python ${CLAUDE_PLUGIN_ROOT}/skills/slack-automation/scripts/slack_search.py read "{channel}" --days {N}`
-   - **Google Drive**: `python ${CLAUDE_PLUGIN_ROOT}/skills/google-workspace/scripts/gdrive_search.py files "{term}" --modified-days {N} --json`
+   - **Slack** (needs the `comms` plugin): `python ${CLAUDE_PLUGIN_ROOT}/../../project-management/comms/skills/slack-automation/scripts/slack_search.py read "{channel}" --days {N}`
+   - **Google Drive** (needs the `integrations` plugin): `python ${CLAUDE_PLUGIN_ROOT}/../../engineering/integrations/skills/google-workspace/scripts/gdrive_search.py files "{term}" --modified-days {N} --json`
 3. Convert JSON output to clean markdown and save to `source-material/`:
    - Fireflies: `fireflies-{YYYY-MM-DD}-{title-slug}.md`
    - Slack: `slack-{channel}-{YYYY-MM-DD}.md`
