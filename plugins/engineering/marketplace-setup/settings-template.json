@@ -10,10 +10,10 @@
       "Read(**/*credentials*)"
     ],
     "allow": [
-      "Skill(casper:setup)",
-      "Skill(casper:company)",
-      "Skill(casper:projects)",
-      "Skill(casper:transcripts)",
+      "Skill(marketplace-setup:apply-security-settings)",
+      "Skill(brain:company)",
+      "Skill(brain:projects)",
+      "Skill(brain:transcripts)",
       "Bash(npm run:*)",
       "Bash(npm test:*)",
       "Bash(npm install:*)",

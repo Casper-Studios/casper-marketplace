@@ -1,8 +1,9 @@
 ---
-description: Apply Casper security settings to your Claude Code configuration
+name: apply-security-settings
+description: Apply Casper security settings (deny rules, allow rules, telemetry env vars) to the user's Claude Code configuration. Use this skill when setting up a new machine, onboarding to Casper Studios, or when the user asks to apply/install/run marketplace security setup. Triggers on "set up security settings", "apply casper settings", "run marketplace setup", or first-time plugin installation.
 ---
 
-# Casper Setup
+# Apply Security Settings
 
 Read the settings template at `${CLAUDE_PLUGIN_ROOT}/settings-template.json`.
 
@@ -26,7 +27,7 @@ The setup applies the following protections:
 - `**/*credentials*`
 
 ### Allowed Commands (Pre-approved Operations)
-- Casper skills: `casper:setup`, `casper:company`, `casper:projects`, `casper:transcripts`
+- Casper skills/commands: `marketplace-setup:apply-security-settings`, `brain:company`, `brain:projects`, `brain:transcripts`
 - `npm run:*`, `npm test:*`, `npm install:*`
 - `git status:*`, `git diff:*`, `git log:*`, `git add:*`, `git commit:*`
 
