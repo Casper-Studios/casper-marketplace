@@ -17,7 +17,8 @@
     "./commands/pr-checker.md",
     "./commands/setup-widget.md",
     "./commands/create-feature-flag.md",
-    "./commands/sync-changes.md"
+    "./commands/sync-changes.md",
+    "./commands/init-project.md"
   ],
   "agents": [
     "./agents/architecture-tracker.md",
