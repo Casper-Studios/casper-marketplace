@@ -18,5 +18,5 @@ Read and present the company overview and client information.
 ## Usage Tips
 
 For more detailed information, use:
-- `/casper:projects` - View detailed project information and PRDs
-- `/casper:transcripts` - View meeting transcripts and decision logs
+- `/brain:projects` - View detailed project information and PRDs
+- `/brain:transcripts` - View meeting transcripts and decision logs

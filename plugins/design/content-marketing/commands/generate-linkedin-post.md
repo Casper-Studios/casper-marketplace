@@ -14,13 +14,13 @@ Generate LinkedIn posts from shared source material, written in your personal st
 
 ## Flags
 
-- `/casper:generate-linkedin-post` — Generate posts (runs style setup on first use)
-- `/casper:generate-linkedin-post --setup` — Create or re-create your personal style profile
-- `/casper:generate-linkedin-post --setup-sources` — Configure Fireflies, Slack, and Drive integrations
-- `/casper:generate-linkedin-post --refresh` — Pull fresh source material from integrations, then generate
-- `/casper:generate-linkedin-post --view-style` — View your current style profile
-- `/casper:generate-linkedin-post --view-sources` — List loaded source material
-- `/casper:generate-linkedin-post --add-source` — Add new source material manually
+- `/content-marketing:generate-linkedin-post` — Generate posts (runs style setup on first use)
+- `/content-marketing:generate-linkedin-post --setup` — Create or re-create your personal style profile
+- `/content-marketing:generate-linkedin-post --setup-sources` — Configure Fireflies, Slack, and Drive integrations
+- `/content-marketing:generate-linkedin-post --refresh` — Pull fresh source material from integrations, then generate
+- `/content-marketing:generate-linkedin-post --view-style` — View your current style profile
+- `/content-marketing:generate-linkedin-post --view-sources` — List loaded source material
+- `/content-marketing:generate-linkedin-post --add-source` — Add new source material manually
 
 ## Quick Reference
 

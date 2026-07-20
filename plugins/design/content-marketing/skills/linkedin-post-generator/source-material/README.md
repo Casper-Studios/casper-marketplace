@@ -11,7 +11,7 @@ Shared content that ships with the plugin. The LinkedIn Post Generator reads all
 
 ## Adding source material
 
-**Via command:** Run `/casper:generate-linkedin-post --add-source` and paste content interactively.
+**Via command:** Run `/content-marketing:generate-linkedin-post --add-source` and paste content interactively.
 
 **Manually:** Drop `.md` files into this directory. Use descriptive kebab-case filenames (e.g., `team-retro-jan-2025.md`, `client-kickoff-notes.md`).
 

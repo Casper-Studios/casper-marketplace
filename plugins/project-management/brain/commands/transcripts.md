@@ -20,13 +20,13 @@ Read and present meeting transcripts for deep historical context.
 ## Arguments
 
 If the user specifies a client name, only show transcripts for that client:
-- `/casper:transcripts client-a` - Show only Client A transcripts
+- `/brain:transcripts client-a` - Show only Client A transcripts
 
 If the user specifies a date or meeting name, filter accordingly:
-- `/casper:transcripts kickoff` - Show only kickoff meeting transcripts
+- `/brain:transcripts kickoff` - Show only kickoff meeting transcripts
 
 ## Usage Tips
 
 For higher-level context, use:
-- `/casper:company` - View company overview and client list
-- `/casper:projects` - View detailed project information and PRDs
+- `/brain:company` - View company overview and client list
+- `/brain:projects` - View detailed project information and PRDs

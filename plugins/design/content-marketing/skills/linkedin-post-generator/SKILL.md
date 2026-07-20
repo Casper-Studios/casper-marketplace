@@ -61,7 +61,7 @@ Generated: [date]
 [the 3 original posts, for reference]
 ```
 
-8. Confirm: "Got it! Your style profile is saved. You can update it anytime with `/casper:generate-linkedin-post --setup`"
+8. Confirm: "Got it! Your style profile is saved. You can update it anytime with `/content-marketing:generate-linkedin-post --setup`"
 
 ## First Run: Source Material Check
 
@@ -120,7 +120,7 @@ Interactive setup for automatic source pulling. Read `references/source-integrat
    - **Slack**: which channels to pull from — list available channels if possible, otherwise ask the user
    - **Google Drive**: search terms, days_back
 5. Save to `~/.config/casper/linkedin-sources.md`
-6. Confirm: "Source config saved. Run `/casper:generate-linkedin-post --refresh` to pull fresh content."
+6. Confirm: "Source config saved. Run `/content-marketing:generate-linkedin-post --refresh` to pull fresh content."
 
 ### `--refresh`
 
@@ -142,7 +142,7 @@ Pull fresh source material from all configured integrations before generating po
 
 ### `--view-style`
 
-Read `~/.config/casper/linkedin-style.md` and display it. If it doesn't exist, say "No style profile found. Run `/casper:generate-linkedin-post --setup` to create one."
+Read `~/.config/casper/linkedin-style.md` and display it. If it doesn't exist, say "No style profile found. Run `/content-marketing:generate-linkedin-post --setup` to create one."
 
 ### `--view-sources`
 

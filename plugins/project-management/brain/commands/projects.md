@@ -20,10 +20,10 @@ Read and present detailed project information for all clients.
 ## Arguments
 
 If the user specifies a client name, only show projects for that client:
-- `/casper:projects client-a` - Show only Client A projects
+- `/brain:projects client-a` - Show only Client A projects
 
 ## Usage Tips
 
 For additional context, use:
-- `/casper:company` - View company overview and client list
-- `/casper:transcripts` - View meeting transcripts and decision logs
+- `/brain:company` - View company overview and client list
+- `/brain:transcripts` - View meeting transcripts and decision logs

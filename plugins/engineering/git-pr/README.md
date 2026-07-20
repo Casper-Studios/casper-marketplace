@@ -1,4 +1,4 @@
-# Dev Toolkit - Development Workflow Plugin for Claude Code
+# git-pr - Development Workflow Plugin for Claude Code
 
 A collection of skills for automating common development workflows like planning, committing, PR management, code polishing, and session handoffs.
 
@@ -20,7 +20,7 @@ The bundled `sync-skills.sh` clones the marketplace, discovers every skill direc
 
 ```bash
 mkdir -p ~/.claude/hooks
-curl -sf https://raw.githubusercontent.com/Casper-Studios/casper-marketplace/main/dev-toolkit/sync-skills.sh \
+curl -sf https://raw.githubusercontent.com/Casper-Studios/casper-marketplace/main/plugins/engineering/git-pr/sync-skills.sh \
   -o ~/.claude/hooks/sync-skills.sh
 chmod +x ~/.claude/hooks/sync-skills.sh
 ```
@@ -54,7 +54,7 @@ Open `~/.claude/settings.json` and add the `hooks` key:
             "type": "command",
             "command": "~/.claude/hooks/sync-skills.sh",
             "timeout": 60,
-            "statusMessage": "Syncing dev-toolkit skills…",
+            "statusMessage": "Syncing git-pr skills…",
             "async": true
           }
         ]
@@ -126,7 +126,7 @@ Deep codebase research with parallel sub-agents.
 ## Directory Structure
 
 ```
-dev-toolkit/
+git-pr/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin manifest
 ├── sync-skills.sh               # Dynamic skill sync script
