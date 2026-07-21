@@ -1,0 +1,7 @@
+{
+  "name": "comms",
+  "version": "1.0.0",
+  "description": "Email triage and Slack channel automation for team communications",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["project-management", "email", "slack"]
+}

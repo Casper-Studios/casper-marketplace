@@ -1,0 +1,7 @@
+{
+  "name": "brain",
+  "version": "1.0.0",
+  "description": "Client project brain - company info, project PRDs, client onboarding, and meeting transcripts",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["project-management", "context", "clients"]
+}

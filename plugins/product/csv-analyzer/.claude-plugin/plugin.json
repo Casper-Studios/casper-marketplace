@@ -1,0 +1,7 @@
+{
+  "name": "csv-analyzer",
+  "version": "1.0.0",
+  "description": "CSV data analysis, profiling, and visualization",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["product", "data", "csv"]
+}

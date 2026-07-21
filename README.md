@@ -6,13 +6,28 @@ A collection of Claude Code plugins for business automation, data analysis, and 
 
 ## Available Plugins
 
-| Plugin | Description |
-|--------|-------------|
-| [casper](./casper/) | Context management for consulting projects - company info, project PRDs, meeting transcripts |
-| [data-analysis](./data-analysis/) | Data analysis and storytelling for financial and RevOps contexts |
-| [dev-toolkit](./dev-toolkit/) | Workflow automation skills for planning, commits, PR management, and code polishing |
-| [stack-patterns](./stack-patterns/) | Idiomatic usage patterns for React, TanStack Table, and better-all |
-| [cf-saas-stack](./cf-saas-stack/) | Cloudflare SaaS stack patterns - auth, database, workflows, emails, Stripe, and more |
+Plugins are organized by workstream under `plugins/`.
+
+| Workstream | Plugin | Description |
+|------------|--------|-------------|
+| bizdev | [crm](./plugins/bizdev/crm/) | CRM operations for companies, contacts, and notes via Attio |
+| bizdev | [research](./plugins/bizdev/research/) | Social media, web, and market research scraping |
+| design | [doc-format](./plugins/design/doc-format/) | AI-powered document, image, and flowchart generation |
+| design | [design-system](./plugins/design/design-system/) | Casper Studios design system and Liquid Glass UI guidance |
+| design | [content-marketing](./plugins/design/content-marketing/) | LinkedIn posts, video production, and YouTube tooling |
+| engineering | [code-review](./plugins/engineering/code-review/) | Codebase audits for AI-agent readiness and code review |
+| engineering | [skill-authoring](./plugins/engineering/skill-authoring/) | Tooling for creating and updating Claude Code skills |
+| engineering | [marketplace-setup](./plugins/engineering/marketplace-setup/) | Security hooks, safe .env loading, and privacy settings |
+| engineering | [git-pr](./plugins/engineering/git-pr/) | Planning, commits, PR management, code polishing, session handoffs |
+| engineering | [testing](./plugins/engineering/testing/) | Browser automation and testing |
+| engineering | [integrations](./plugins/engineering/integrations/) | Google Workspace and universal third-party app integrations |
+| engineering | [cf-saas-stack](./plugins/engineering/cf-saas-stack/) | Cloudflare SaaS stack patterns - auth, database, workflows, emails, Stripe, and more |
+| engineering | [stack-patterns](./plugins/engineering/stack-patterns/) | Idiomatic usage patterns for React, TanStack Table, and better-all |
+| product | [data-analysis](./plugins/product/data-analysis/) | Data analysis and storytelling for financial and RevOps contexts |
+| product | [csv-analyzer](./plugins/product/csv-analyzer/) | CSV data analysis, profiling, and visualization |
+| product | [discovery](./plugins/product/discovery/) | AI voice agent creation for client discovery and feedback calls |
+| project-management | [brain](./plugins/project-management/brain/) | Context management for consulting projects - company info, project PRDs, meeting transcripts |
+| project-management | [comms](./plugins/project-management/comms/) | Email triage and Slack channel automation |
 
 ## Installation
 
@@ -38,10 +53,10 @@ npx skills add https://github.com/Casper-Studios/casper-marketplace --skill pr-c
 # Add the Casper Studios marketplace
 /plugin marketplace add Casper-Studios/casper-marketplace
 
-# Install a specific plugin
-/plugin install casper
+# Install a specific plugin (see table above for the full list)
+/plugin install brain
 /plugin install data-analysis
-/plugin install dev-toolkit
+/plugin install git-pr
 /plugin install stack-patterns
 /plugin install cf-saas-stack
 ```
@@ -73,10 +88,10 @@ Add `sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/
 
 ## Plugin Structure
 
-Each plugin follows the standard Claude Code plugin structure:
+Plugins are grouped by workstream under `plugins/<workstream>/<plugin-name>/`. Each plugin follows the standard Claude Code plugin structure:
 
 ```
-plugin-name/
+plugins/<workstream>/<plugin-name>/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest
 ├── skills/                  # Skills with SKILL.md and references/
@@ -90,7 +105,7 @@ plugin-name/
 
 To add a new plugin:
 
-1. Create a new directory at the root level
+1. Create a new directory under `plugins/<workstream>/` (add a new workstream folder if none fits)
 2. Add the required `.claude-plugin/plugin.json` manifest
 3. Add commands, scripts, and documentation
 4. Submit a PR

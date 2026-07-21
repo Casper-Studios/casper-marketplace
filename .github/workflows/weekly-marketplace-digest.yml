@@ -44,22 +44,44 @@ jobs:
             fi
           }
 
-          # Detect new or modified plugins (top-level dirs with .claude-plugin)
+          # Helper: walk up from a changed file to the nearest ancestor dir containing
+          # .claude-plugin/ — that's the plugin root, regardless of nesting depth
+          # (plugins now live at plugins/<workstream>/<name>/, not just top-level).
+          find_plugin_dir() {
+            local dir
+            dir=$(dirname "$1")
+            while [ "$dir" != "." ] && [ "$dir" != "/" ]; do
+              if [ -d "$dir/.claude-plugin" ]; then
+                echo "$dir"
+                return
+              fi
+              dir=$(dirname "$dir")
+            done
+          }
+
+          # Helper: drop the leading "plugins/" so labels read as "bizdev/crm" not
+          # "plugins/bizdev/crm"
+          display_plugin() {
+            echo "${1#plugins/}"
+          }
+
+          # Detect new or modified plugins (any dir with .claude-plugin/, at any depth)
           NEW_PLUGINS=""
           UPDATED_PLUGINS=""
-          for dir in $(echo "$CHANGED_FILES" | cut -d'/' -f1 | sort -u); do
-            if [ -d "$dir/.claude-plugin" ] || [ -f "$dir/.claude-plugin" ]; then
-              FIRST_COMMIT=$(git log --diff-filter=A --since="$SINCE" --name-only --pretty=format:"" -- "$dir/" 2>/dev/null | head -1 || true)
-              if [ -n "$FIRST_COMMIT" ]; then
-                EXISTS_BEFORE=$(git log --until="$SINCE" --oneline -- "$dir/" 2>/dev/null | head -1 || true)
-                if [ -z "$EXISTS_BEFORE" ]; then
-                  NEW_PLUGINS="$NEW_PLUGINS$dir\n"
-                else
-                  UPDATED_PLUGINS="$UPDATED_PLUGINS$dir\n"
-                fi
+          PLUGIN_DIRS=$(echo "$CHANGED_FILES" | while read -r f; do find_plugin_dir "$f"; done | sort -u)
+          for dir in $PLUGIN_DIRS; do
+            [ -z "$dir" ] && continue
+            label=$(display_plugin "$dir")
+            FIRST_COMMIT=$(git log --diff-filter=A --since="$SINCE" --name-only --pretty=format:"" -- "$dir/" 2>/dev/null | head -1 || true)
+            if [ -n "$FIRST_COMMIT" ]; then
+              EXISTS_BEFORE=$(git log --until="$SINCE" --oneline -- "$dir/" 2>/dev/null | head -1 || true)
+              if [ -z "$EXISTS_BEFORE" ]; then
+                NEW_PLUGINS="$NEW_PLUGINS$label\n"
               else
-                UPDATED_PLUGINS="$UPDATED_PLUGINS$dir\n"
+                UPDATED_PLUGINS="$UPDATED_PLUGINS$label\n"
               fi
+            else
+              UPDATED_PLUGINS="$UPDATED_PLUGINS$label\n"
             fi
           done
 
@@ -68,9 +90,9 @@ jobs:
           UPDATED_SKILLS=""
           SKILL_CHANGES=$(echo "$CHANGED_FILES" | grep '/skills/' || true)
           if [ -n "$SKILL_CHANGES" ]; then
-            for skill_path in $(echo "$SKILL_CHANGES" | sed 's|/skills/|/skills/|' | awk -F'/skills/' '{print $1 "/skills/" $2}' | cut -d'/' -f1-3 | sort -u); do
-              skill_name=$(echo "$skill_path" | awk -F'/skills/' '{print $2}' | cut -d'/' -f1)
-              plugin_name=$(echo "$skill_path" | cut -d'/' -f1)
+            for skill_path in $(echo "$SKILL_CHANGES" | awk -F'/skills/' 'NF>=2 {n=split($2,a,"/"); print $1 "/skills/" a[1]}' | sort -u); do
+              skill_name=$(basename "$skill_path")
+              plugin_name=$(display_plugin "$(echo "$skill_path" | awk -F'/skills/' '{print $1}')")
               if [ -n "$skill_name" ]; then
                 skill_desc=$(get_skill_description "$skill_path/SKILL.md")
                 if [ -n "$skill_desc" ]; then
@@ -92,9 +114,9 @@ jobs:
           COMMAND_CHANGES=$(echo "$CHANGED_FILES" | grep '/commands/' || true)
           NEW_COMMANDS=""
           if [ -n "$COMMAND_CHANGES" ]; then
-            for cmd_path in $(echo "$COMMAND_CHANGES" | cut -d'/' -f1-3 | sort -u); do
-              cmd_name=$(echo "$cmd_path" | awk -F'/commands/' '{print $2}' | cut -d'/' -f1)
-              plugin_name=$(echo "$cmd_path" | cut -d'/' -f1)
+            for cmd_file in $(echo "$COMMAND_CHANGES" | sort -u); do
+              cmd_name=$(basename "$cmd_file" .md)
+              plugin_name=$(display_plugin "$(find_plugin_dir "$cmd_file")")
               if [ -n "$cmd_name" ]; then
                 NEW_COMMANDS="$NEW_COMMANDS/$cmd_name (in $plugin_name)\n"
               fi

@@ -1,0 +1,7 @@
+{
+  "name": "doc-format",
+  "version": "1.0.0",
+  "description": "AI-powered document, image, and flowchart generation and formatting",
+  "author": { "name": "Casper Studios" },
+  "keywords": ["design", "documents", "content-generation"]
+}
