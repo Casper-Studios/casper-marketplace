@@ -1,0 +1,32 @@
+name: Sync private marketplace
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    if: github.repository == 'Casper-Studios/casper-marketplace'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone public marketplace
+        run: |
+          git clone --bare \
+            https://github.com/Casper-Studios/casper-marketplace.git \
+            upstream
+
+      - name: Sync branches and tags
+        env:
+          SYNC_TOKEN: ${{ secrets.PRIVATE_MARKETPLACE_TOKEN }}
+        run: |
+          cd upstream
+
+          git push --force --prune \
+            "https://x-access-token:${SYNC_TOKEN}@github.com/Casper-Studios/private-casper-marketplace.git" \
+            "refs/heads/*:refs/heads/*" \
+            "refs/tags/*:refs/tags/*"
