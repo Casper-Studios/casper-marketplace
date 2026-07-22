@@ -44,7 +44,7 @@ restructure the user's content, which is the opposite of what Format mode is for
 First print a short "what happens next" card so a first-time user knows the shape of the run:
 
 > **slides-cs** — I'll turn this into an editable `.pptx` + PDF.
-> 1. Draft an outline (talking headers + a layout per slide) for your OK — Create mode only.
+> 1. Draft an outline you approve as a visual storyboard (a card per slide) — Create mode only.
 > 2. Write it to a `content.js` data file.
 > 3. Render the `.pptx`, export a PDF, and review the pages.
 > 4. Deliver both, with speaker notes on every slide.
@@ -62,6 +62,13 @@ If a slot is left after theme + scope, you may ask about speaker notes; otherwis
 (hook, 2–4 points, transition on every slide, both purposes). **Never ask about output format** — it is always
 `.pptx`; Google-Slides editability is guaranteed by the shape-based charts, and the deck gets dropped into
 Drive after review (a manual step — this skill does not upload).
+
+**Thin brief? Co-develop the outline before drafting.** In Create mode, if the input is a one-liner or vague,
+do not invent a whole deck from a guess. First walk the user through what to cover: propose the 4–6 beats you
+would build the deck around, in a sentence each, and ask them to confirm, add, or redirect. Only then draft the
+full outline. **Skip this when the brief is already specific enough to outline directly** (a detailed doc, a
+clear list of points), and always in Format mode — there the user's own structure is the outline, so co-developing
+it would be overriding them.
 
 ## First run (once per machine) — YOU run this, the user never should
 
@@ -90,13 +97,18 @@ Output folder: `slides/YYMMDD-slug/` (or the caller's folder). One deck = one fo
 deck (for example, a weekly programme readout), keep ONE living deck and append/hide slides in its `content.js` rather
 than spawning a new folder each time.
 
-1. **Outline** (`outline.md`) — one line per slide: the talking header (a full-sentence finding), the evidence
-   it rests on, and the layout name. Declare the theme once at the top.
-2. **Outline gate** (Create mode only) — show the outline in chat and get an OK before building. In Format
-   mode, skip this. **Run the fit test here, per slide, before any code exists:** does the layout's designed
-   job match this slide's job? Two checks catch most of it — are the items genuinely parallel (say each slot
-   aloud as one sentence stem), and can every slot be filled with real content rather than a paraphrase of
-   the header? A slide failing either is on rung 2 or 3 below. Name that in the outline so the gate covers it.
+1. **Outline** (`outline.js`) — author the plan as `{ theme, title, slides: [{ header, layout, evidence }] }`,
+   one entry per slide: the talking header (a full-sentence finding), the layout name, and the evidence it
+   rests on. This is the plan, NOT `content.js` — no slot data yet.
+2. **Outline gate** (Create mode only) — render the plan for a visual OK before building:
+   `node scripts/render_outline.js outline.js` produces `outline.html` (a brand-coloured storyboard, one card
+   per slide showing its layout and header) and `outline.md` (the same plan as a list) from that one file.
+   **Share the storyboard and get an OK before writing any `content.js`.** In Format mode, skip the gate.
+   **Run the fit test here, per slide, before any code exists:** does the layout's designed job match this
+   slide's job? Two checks catch most of it — are the items genuinely parallel (say each slot aloud as one
+   sentence stem), and can every slot be filled with real content rather than a paraphrase of the header? A
+   slide failing either is on rung 2 or 3 below. The storyboard flags a layout used more than once (an amber
+   "repeated" tag) — a cue to vary the deck before it reads template-stamped.
 3. **`content.js`** — author the data: `{ theme, title, slides: [ { layout, ...slots, notes } ] }`. Each slide
    names a layout from `layouts.js` and fills that layout's documented slots. Add `notes` to every slide.
    This is the only file you write. See `example-content.js` for the exact shape.
