@@ -1,0 +1,10 @@
+{
+  "name": "slides-cs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Runtime dependency manifest for the portable slides-cs skill.",
+  "type": "commonjs",
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}
