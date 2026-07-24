@@ -18,7 +18,7 @@ Plugins are organized by workstream under `plugins/`.
 | engineering | [code-review](./plugins/engineering/code-review/) | Codebase audits for AI-agent readiness and code review |
 | engineering | [skill-authoring](./plugins/engineering/skill-authoring/) | Tooling for creating and updating Claude Code skills |
 | engineering | [marketplace-setup](./plugins/engineering/marketplace-setup/) | Security hooks, safe .env loading, and privacy settings |
-| engineering | [git-pr](./plugins/engineering/git-pr/) | Planning, commits, PR management, code polishing, session handoffs |
+| engineering | [git-pr](./plugins/engineering/git-pr/) | Committing, PR creation and review triage, dependency upgrades, and Linear ticket extraction |
 | engineering | [testing](./plugins/engineering/testing/) | Browser automation and testing |
 | engineering | [integrations](./plugins/engineering/integrations/) | Google Workspace and universal third-party app integrations |
 | engineering | [cf-saas-stack](./plugins/engineering/cf-saas-stack/) | Cloudflare SaaS stack patterns - auth, database, workflows, emails, Stripe, and more |
@@ -109,6 +109,8 @@ To add a new plugin:
 2. Add the required `.claude-plugin/plugin.json` manifest
 3. Add commands, scripts, and documentation
 4. Submit a PR
+
+When changing an existing plugin, bump its `.claude-plugin/plugin.json` `version` (and the matching `marketplace.json` entry) following semver — MAJOR for breaking changes like renaming a skill, MINOR for new features, PATCH for fixes. Without a bump, users won't receive the update.
 
 ## License
 
