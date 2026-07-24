@@ -57,9 +57,9 @@
     },
     {
       "name": "git-pr",
-      "description": "Planning, committing, PR management, code polishing, action item extraction, and session handoffs.",
+      "description": "Committing, PR creation and review triage, dependency upgrades, and Linear ticket extraction.",
       "source": "./plugins/engineering/git-pr",
-      "version": "1.0.3"
+      "version": "2.0.0"
     },
     {
       "name": "testing",

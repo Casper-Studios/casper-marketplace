@@ -44,7 +44,7 @@ The `--all` flag is idempotent — it installs new skills and overwrites existin
 
 ```bash
 npx skills add https://github.com/Casper-Studios/casper-marketplace --skill commit
-npx skills add https://github.com/Casper-Studios/casper-marketplace --skill pr-comments
+npx skills add https://github.com/Casper-Studios/casper-marketplace --skill resolve-pr-comments
 ```
 
 ### Install via /plugin command
