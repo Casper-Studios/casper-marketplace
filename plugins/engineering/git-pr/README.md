@@ -1,12 +1,12 @@
 # git-pr - Development Workflow Plugin for Claude Code
 
-A collection of skills for automating common development workflows like planning, committing, PR management, code polishing, and session handoffs.
+A collection of skills for automating common development workflows like committing, PR management, dependency upgrades, and Linear ticket extraction.
 
 ## Features
 
 - **Git Workflows**: Conventional commits, PR creation with templates, and PR comment triage
-- **Code Quality**: Automated polishing that removes AI artifacts, checks guidelines, and runs review
-- **Session Continuity**: Branch context recovery and structured handoff documentation
+- **Maintenance**: Safe dependency upgrades with breaking-change analysis
+- **Linear Integration**: Extract and draft actionable tickets from unstructured input and transcripts
 
 ## Setup
 
@@ -79,10 +79,6 @@ Re-run the sync script at any time:
 
 Generate conventional commit messages and commit staged changes. Follows the conventional commits format (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`) with messages focused on "why" not "what".
 
-### `/implement-plan` - Execute Plans
-
-Execute approved implementation plans phase-by-phase with progress tracking. Reads plans from `.claude/scratchpad/` and adapts to codebase reality while maintaining plan intent.
-
 ### `/pr-summary` - Create Pull Requests
 
 Generate and create pull requests using a PR template. Compares against the dev branch, writes a draft to `.claude/scratchpad/PR.md` for review, then submits via GitHub API.
@@ -91,21 +87,9 @@ Generate and create pull requests using a PR template. Compares against the dev 
 
 Fetch unresolved PR review threads, deduplicate across bots, classify by severity (Critical/Major/Medium/Minor/Nitpick), and spawn parallel sub-agents to fix or resolve each issue.
 
-### `/polishing` - Polish Code Changes
-
-End-to-end code polishing that recovers branch context, checks against skill guidelines, removes AI artifacts (unnecessary comments, defensive code), and runs a final review pass.
-
 ### `/bump-deps` - Upgrade Dependencies
 
 Analyze outdated dependencies and safely upgrade them. Detects the package manager (pnpm for frontend, uv for backend), analyzes breaking changes, and generates a PR with a safety analysis.
-
-### `/recover-branch-context` - Recover Branch Context
-
-Get up to speed on the current branch by analyzing commit history, uncommitted changes, and optional Linear tickets. Groups changes by intent and suggests next steps.
-
-### `/create-handoff` - Create Session Handoffs
-
-Create structured handoff documentation with YAML frontmatter for transitioning work-in-progress to another agent. Includes task status, critical references, learnings, and next steps.
 
 ### `/send-to-linear` - Send to Linear
 
@@ -114,14 +98,6 @@ Extract actionable Linear tickets from unstructured input — Slack conversation
 ### `/extract-my-action-items` - Extract Action Items
 
 Extract action items from Fireflies transcripts using parallel subagents. Supports single-person and all-attendees modes, with an optional Linear ticket proposal workflow that matches action items to existing cycle tickets and drafts new tickets for review before creation.
-
-### `/planner` - Interactive Planning
-
-Interactive planning with parallel research sub-agents.
-
-### `/research-codebase` - Deep Codebase Research
-
-Deep codebase research with parallel sub-agents.
 
 ## Directory Structure
 
@@ -137,23 +113,15 @@ git-pr/
 │   │   └── references/
 │   ├── commit/
 │   │   └── SKILL.md
-│   ├── create-handoff/
-│   │   └── SKILL.md
 │   ├── extract-my-action-items/
 │   │   ├── SKILL.md
 │   │   ├── references/
 │   │   └── scripts/
-│   ├── implement-plan/
-│   │   └── SKILL.md
-│   ├── polishing/
-│   │   └── SKILL.md
 │   ├── pr-comments/
 │   │   └── SKILL.md
 │   ├── pr-summary/
 │   │   ├── SKILL.md
 │   │   └── assets/
-│   ├── recover-branch-context/
-│   │   └── SKILL.md
 │   └── send-to-linear/
 │       ├── SKILL.md
 │       └── references/
