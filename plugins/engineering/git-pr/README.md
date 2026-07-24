@@ -79,11 +79,11 @@ Re-run the sync script at any time:
 
 Generate conventional commit messages and commit staged changes. Follows the conventional commits format (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`) with messages focused on "why" not "what".
 
-### `/pr-summary` - Create Pull Requests
+### `/open-pr` - Create Pull Requests
 
-Generate and create pull requests using a PR template. Compares against the dev branch, writes a draft to `.claude/scratchpad/PR.md` for review, then submits via GitHub API.
+Generate and create pull requests using a PR template. Compares against the dev branch, writes a draft to `.agents/scratchpad/PR.md` for review, then submits via GitHub API.
 
-### `/pr-comments` - Triage PR Review Comments
+### `/resolve-pr-comments` - Triage PR Review Comments
 
 Fetch unresolved PR review threads, deduplicate across bots, classify by severity (Critical/Major/Medium/Minor/Nitpick), and spawn parallel sub-agents to fix or resolve each issue.
 
@@ -117,11 +117,11 @@ git-pr/
 │   │   ├── SKILL.md
 │   │   ├── references/
 │   │   └── scripts/
-│   ├── pr-comments/
-│   │   └── SKILL.md
-│   ├── pr-summary/
+│   ├── open-pr/
 │   │   ├── SKILL.md
 │   │   └── assets/
+│   ├── resolve-pr-comments/
+│   │   └── SKILL.md
 │   └── send-to-linear/
 │       ├── SKILL.md
 │       └── references/

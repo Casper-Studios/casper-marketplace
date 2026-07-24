@@ -1,5 +1,5 @@
 ---
-name: pr-summary
+name: open-pr
 description: Create a PR to provided base branch using the pull request template. Use when opening a new PR.
 user-invocable: true
 argument-hint: "[base-branch]"
