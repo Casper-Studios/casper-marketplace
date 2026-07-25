@@ -1,5 +1,5 @@
 ---
-name: pr-comments
+name: resolve-pr-comments
 description: Triage unresolved PR review comments, produce a severity-ordered fix plan, then resolve or fix each issue with subagents. Use when addressing PR feedback before merge.
 user-invocable: true
 ---
@@ -10,8 +10,8 @@ Fetch all unresolved PR review threads, deduplicate across bots, triage by sever
 
 ## Invocation
 
-- `/pr-comments` — auto-detect PR from current branch
-- `/pr-comments 608` — specific PR number
+- `/resolve-pr-comments` — auto-detect PR from current branch
+- `/resolve-pr-comments 608` — specific PR number
 
 ## Phase 1: Fetch Unresolved Threads
 
@@ -87,7 +87,6 @@ Each bot uses different severity markers:
 | Bot | Format | Example |
 |-----|--------|---------|
 | `coderabbitai[bot]` | Emoji badge in body | `🟠 Major`, `🟡 Minor`, `🔴 Critical` |
-| `gemini-code-assist[bot]` | SVG image alt text | `![medium]`, `![high]`, `![low]` |
 | `chatgpt-codex-connector[bot]` | Shield badge | `P1`, `P2`, `P3` |
 | `devin-ai-integration[bot]` | HTML comment metadata | Parse `devin-review-comment` JSON for severity |
 
@@ -120,7 +119,7 @@ Flag as **ignore candidate** if ANY of these apply:
 
 ## Phase 3: Write the Fix Plan
 
-Write the plan to `.claude/scratchpad/pr-{PR_NUMBER}-review-plan.md`.
+Write the plan to `.agents/scratchpad/pr-{PR_NUMBER}-review-plan.md`.
 
 ### Plan Format
 
@@ -180,7 +179,7 @@ Each ignored item appears ONLY here — not duplicated in the Issues to Fix sect
 
 After writing the plan, tell the user:
 
-> Review plan written to `.claude/scratchpad/pr-{PR_NUMBER}-review-plan.md`.
+> Review plan written to `.agents/scratchpad/pr-{PR_NUMBER}-review-plan.md`.
 > **{N} issues to fix**, **{K} ignored**. Please review and confirm to proceed.
 
 **STOP HERE.** Wait for the user to review and approve. Do not proceed until they confirm.

@@ -1,7 +1,7 @@
 {
   "name": "git-pr",
-  "version": "1.0.3",
-  "description": "Planning, committing, PR management, code polishing, action item extraction, and session handoffs.",
+  "version": "2.0.0",
+  "description": "Committing, PR creation and review triage, dependency upgrades, and Linear ticket extraction.",
   "author": {
     "name": "Casper Studios"
   }
