@@ -1,0 +1,17 @@
+{
+  "name": "create-ppt",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Runtime dependencies for the create-ppt skill.",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "test": "node --check scripts/render.js && node --check scripts/render_outline.js && node --check assets/layouts.js && node --check assets/themes.js && bash scripts/check_tokens.sh"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}

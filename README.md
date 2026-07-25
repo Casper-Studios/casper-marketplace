@@ -12,7 +12,7 @@ Plugins are organized by workstream under `plugins/`.
 |------------|--------|-------------|
 | bizdev | [crm](./plugins/bizdev/crm/) | CRM operations for companies, contacts, and notes via Attio |
 | bizdev | [research](./plugins/bizdev/research/) | Social media, web, and market research scraping |
-| design | [doc-format](./plugins/design/doc-format/) | AI-powered document, image, and flowchart generation |
+| design | [doc-format](./plugins/design/doc-format/) | Editable PowerPoint plus AI-powered document, image, and flowchart generation |
 | design | [design-system](./plugins/design/design-system/) | Casper Studios design system and Liquid Glass UI guidance |
 | design | [content-marketing](./plugins/design/content-marketing/) | LinkedIn posts, video production, and YouTube tooling |
 | engineering | [code-review](./plugins/engineering/code-review/) | Codebase audits for AI-agent readiness and code review |
@@ -45,6 +45,7 @@ The `--all` flag is idempotent — it installs new skills and overwrites existin
 ```bash
 npx skills add https://github.com/Casper-Studios/casper-marketplace --skill commit
 npx skills add https://github.com/Casper-Studios/casper-marketplace --skill pr-comments
+npx skills add https://github.com/Casper-Studios/casper-marketplace --skill create-ppt
 ```
 
 ### Install via /plugin command
