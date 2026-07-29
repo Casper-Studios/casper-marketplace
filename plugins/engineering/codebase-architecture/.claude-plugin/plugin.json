@@ -1,0 +1,6 @@
+{
+	"name": "codebase-architecture",
+	"version": "0.1.0",
+	"description": "Architecture, code-style, and testing guidance for maintainable software.",
+	"author": { "name": "Casper Studios" }
+}
