@@ -1,8 +1,6 @@
 {
-  "name": "stack-patterns",
-  "version": "1.0.0",
-  "description": "Idiomatic usage patterns for React, TanStack Table, and better-all.",
-  "author": {
-    "name": "Casper Studios"
-  }
+	"name": "stack-patterns",
+	"version": "2.0.0",
+	"description": "Best-practice guidance for React, TanStack Query and Table, TypeScript, Python, Zod, Valibot, Better All, and OpenTelemetry.",
+	"author": { "name": "Casper Studios" }
 }

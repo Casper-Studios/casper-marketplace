@@ -1,119 +1,106 @@
 {
-  "name": "casper-studios",
-  "version": "2.0.0",
-  "description": "A collection of Claude Code plugins for business automation, data analysis, and productivity",
-  "owner": {
-    "name": "Casper Studios",
-    "github": "Casper-Studios"
-  },
-  "plugins": [
-    {
-      "name": "crm",
-      "description": "CRM operations for companies, contacts, and notes management via Attio",
-      "source": "./plugins/bizdev/crm",
-      "version": "1.0.0"
-    },
-    {
-      "name": "research",
-      "description": "Social media, web, and market research scraping for lead and prospect research",
-      "source": "./plugins/bizdev/research",
-      "version": "1.0.0"
-    },
-    {
-      "name": "doc-format",
-      "description": "AI-powered document, image, and flowchart generation and formatting",
-      "source": "./plugins/design/doc-format",
-      "version": "1.0.0"
-    },
-    {
-      "name": "design-system",
-      "description": "Casper Studios design system and Apple Liquid Glass UI guidance",
-      "source": "./plugins/design/design-system",
-      "version": "1.0.0"
-    },
-    {
-      "name": "content-marketing",
-      "description": "LinkedIn post generation, video production, and YouTube tooling for marketing content",
-      "source": "./plugins/design/content-marketing",
-      "version": "1.0.0"
-    },
-    {
-      "name": "code-review",
-      "description": "Codebase audits for AI-agent readiness and code review",
-      "source": "./plugins/engineering/code-review",
-      "version": "1.0.0"
-    },
-    {
-      "name": "skill-authoring",
-      "description": "Guidance and tooling for creating and updating Claude Code skills",
-      "source": "./plugins/engineering/skill-authoring",
-      "version": "1.0.0"
-    },
-    {
-      "name": "marketplace-setup",
-      "description": "Security hooks, safe .env loading, and privacy settings for Claude Code",
-      "source": "./plugins/engineering/marketplace-setup",
-      "version": "1.0.0"
-    },
-    {
-      "name": "git-pr",
-      "description": "Committing, PR creation and review triage, dependency upgrades, and Linear ticket extraction.",
-      "source": "./plugins/engineering/git-pr",
-      "version": "2.0.0"
-    },
-    {
-      "name": "testing",
-      "description": "Browser automation and testing using ref-based element targeting",
-      "source": "./plugins/engineering/testing",
-      "version": "1.0.0"
-    },
-    {
-      "name": "integrations",
-      "description": "Google Workspace and universal third-party app integrations (Composio)",
-      "source": "./plugins/engineering/integrations",
-      "version": "1.0.0"
-    },
-    {
-      "name": "cf-saas-stack",
-      "description": "Cloudflare Workers + React Router v7 + tRPC + D1/Drizzle + Better Auth conventions and commands for building SaaS applications on the edge",
-      "source": "./plugins/engineering/cf-saas-stack",
-      "version": "1.0.0"
-    },
-    {
-      "name": "stack-patterns",
-      "description": "Idiomatic usage patterns for React, TanStack Table, and better-all.",
-      "source": "./plugins/engineering/stack-patterns",
-      "version": "1.0.0"
-    },
-    {
-      "name": "data-analysis",
-      "description": "Data analysis, visualization, and storytelling skill for financial and RevOps contexts",
-      "source": "./plugins/product/data-analysis",
-      "version": "1.0.0"
-    },
-    {
-      "name": "csv-analyzer",
-      "description": "CSV data analysis, profiling, and visualization",
-      "source": "./plugins/product/csv-analyzer",
-      "version": "1.0.0"
-    },
-    {
-      "name": "discovery",
-      "description": "AI voice agent creation for client discovery and feedback calls",
-      "source": "./plugins/product/discovery",
-      "version": "1.0.0"
-    },
-    {
-      "name": "brain",
-      "description": "Client project brain - company info, project PRDs, client onboarding, and meeting transcripts",
-      "source": "./plugins/project-management/brain",
-      "version": "1.0.0"
-    },
-    {
-      "name": "comms",
-      "description": "Email triage and Slack channel automation for team communications",
-      "source": "./plugins/project-management/comms",
-      "version": "1.0.0"
-    }
-  ]
+	"name": "casper-studios",
+	"version": "2.2.0",
+	"description": "A collection of Claude Code plugins for business automation, data analysis, and productivity",
+	"owner": {
+		"name": "Casper Studios",
+		"github": "Casper-Studios"
+	},
+	"plugins": [
+		{
+			"name": "crm",
+			"source": "./plugins/bizdev/crm",
+			"strict": true
+		},
+		{
+			"name": "research",
+			"source": "./plugins/bizdev/research",
+			"strict": true
+		},
+		{
+			"name": "doc-format",
+			"source": "./plugins/design/doc-format",
+			"strict": true
+		},
+		{
+			"name": "design-system",
+			"source": "./plugins/design/design-system",
+			"strict": true
+		},
+		{
+			"name": "content-marketing",
+			"source": "./plugins/design/content-marketing",
+			"strict": true
+		},
+		{
+			"name": "code-review",
+			"source": "./plugins/engineering/code-review",
+			"strict": true
+		},
+		{
+			"name": "skill-authoring",
+			"source": "./plugins/engineering/skill-authoring",
+			"strict": true
+		},
+		{
+			"name": "marketplace-setup",
+			"source": "./plugins/engineering/marketplace-setup",
+			"strict": true
+		},
+		{
+			"name": "git-pr",
+			"source": "./plugins/engineering/git-pr",
+			"strict": true
+		},
+		{
+			"name": "testing",
+			"source": "./plugins/engineering/testing",
+			"strict": true
+		},
+		{
+			"name": "integrations",
+			"source": "./plugins/engineering/integrations",
+			"strict": true
+		},
+		{
+			"name": "codebase-architecture",
+			"source": "./plugins/engineering/codebase-architecture",
+			"strict": true
+		},
+		{
+			"name": "stack-patterns",
+			"source": "./plugins/engineering/stack-patterns",
+			"strict": true
+		},
+		{
+			"name": "marketplace",
+			"source": "./plugins/governance/marketplace",
+			"strict": true
+		},
+		{
+			"name": "data-analysis",
+			"source": "./plugins/product/data-analysis",
+			"strict": true
+		},
+		{
+			"name": "csv-analyzer",
+			"source": "./plugins/product/csv-analyzer",
+			"strict": true
+		},
+		{
+			"name": "discovery",
+			"source": "./plugins/product/discovery",
+			"strict": true
+		},
+		{
+			"name": "brain",
+			"source": "./plugins/project-management/brain",
+			"strict": true
+		},
+		{
+			"name": "comms",
+			"source": "./plugins/project-management/comms",
+			"strict": true
+		}
+	]
 }

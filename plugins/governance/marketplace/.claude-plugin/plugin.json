@@ -1,0 +1,6 @@
+{
+	"name": "marketplace",
+	"version": "0.1.0",
+	"description": "Agent skill and plugin governance guidance for focused, distributable marketplace packages.",
+	"author": { "name": "Casper Studios" }
+}
