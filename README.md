@@ -23,6 +23,7 @@ Plugins are organized by workstream under `plugins/`.
 | engineering | [integrations](./plugins/engineering/integrations/) | Google Workspace and universal third-party app integrations |
 | engineering | [cf-saas-stack](./plugins/engineering/cf-saas-stack/) | Cloudflare SaaS stack patterns - auth, database, workflows, emails, Stripe, and more |
 | engineering | [stack-patterns](./plugins/engineering/stack-patterns/) | Idiomatic usage patterns for React, TanStack Table, and better-all |
+| governance | [marketplace](./plugins/governance/marketplace/) | Agent skill and plugin governance for focused marketplace packages |
 | product | [data-analysis](./plugins/product/data-analysis/) | Data analysis and storytelling for financial and RevOps contexts |
 | product | [csv-analyzer](./plugins/product/csv-analyzer/) | CSV data analysis, profiling, and visualization |
 | product | [discovery](./plugins/product/discovery/) | AI voice agent creation for client discovery and feedback calls |
