@@ -57,9 +57,9 @@
     },
     {
       "name": "git-pr",
-      "description": "Committing, PR creation and review triage, dependency upgrades, and Linear ticket extraction.",
+      "description": "Committing, PR creation and review triage, and dependency upgrades.",
       "source": "./plugins/engineering/git-pr",
-      "version": "2.0.0"
+      "version": "3.0.0"
     },
     {
       "name": "testing",
