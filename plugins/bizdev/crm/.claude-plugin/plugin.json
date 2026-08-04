@@ -1,7 +1,0 @@
-{
-  "name": "crm",
-  "version": "1.0.0",
-  "description": "CRM operations for companies, contacts, and notes management via Attio",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["bizdev", "crm", "attio"]
-}

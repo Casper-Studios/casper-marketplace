@@ -8,18 +8,8 @@
 	},
 	"plugins": [
 		{
-			"name": "crm",
-			"source": "./plugins/bizdev/crm",
-			"strict": true
-		},
-		{
 			"name": "research",
 			"source": "./plugins/bizdev/research",
-			"strict": true
-		},
-		{
-			"name": "doc-format",
-			"source": "./plugins/design/doc-format",
 			"strict": true
 		},
 		{
@@ -33,33 +23,8 @@
 			"strict": true
 		},
 		{
-			"name": "code-review",
-			"source": "./plugins/engineering/code-review",
-			"strict": true
-		},
-		{
-			"name": "skill-authoring",
-			"source": "./plugins/engineering/skill-authoring",
-			"strict": true
-		},
-		{
-			"name": "marketplace-setup",
-			"source": "./plugins/engineering/marketplace-setup",
-			"strict": true
-		},
-		{
 			"name": "git-pr",
 			"source": "./plugins/engineering/git-pr",
-			"strict": true
-		},
-		{
-			"name": "testing",
-			"source": "./plugins/engineering/testing",
-			"strict": true
-		},
-		{
-			"name": "integrations",
-			"source": "./plugins/engineering/integrations",
 			"strict": true
 		},
 		{
@@ -80,26 +45,6 @@
 		{
 			"name": "data-analysis",
 			"source": "./plugins/product/data-analysis",
-			"strict": true
-		},
-		{
-			"name": "csv-analyzer",
-			"source": "./plugins/product/csv-analyzer",
-			"strict": true
-		},
-		{
-			"name": "discovery",
-			"source": "./plugins/product/discovery",
-			"strict": true
-		},
-		{
-			"name": "brain",
-			"source": "./plugins/project-management/brain",
-			"strict": true
-		},
-		{
-			"name": "comms",
-			"source": "./plugins/project-management/comms",
 			"strict": true
 		}
 	]

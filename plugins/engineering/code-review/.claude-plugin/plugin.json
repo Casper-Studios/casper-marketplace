@@ -1,7 +1,0 @@
-{
-  "name": "code-review",
-  "version": "1.0.0",
-  "description": "Codebase audits for AI-agent readiness and code review",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["engineering", "code-review", "audit"]
-}
