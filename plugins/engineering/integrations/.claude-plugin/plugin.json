@@ -1,7 +1,0 @@
-{
-  "name": "integrations",
-  "version": "1.0.0",
-  "description": "Google Workspace and universal third-party app integrations (Composio)",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["engineering", "integrations", "google-workspace", "composio"]
-}

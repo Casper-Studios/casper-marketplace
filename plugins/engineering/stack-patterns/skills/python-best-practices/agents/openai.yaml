@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Python Best Practices'
+  short_description: 'Write modern, typed, package-safe Python.'
+  default_prompt: 'Apply modern Python typing, validation, imports, packaging, and async resource-lifetime conventions.'

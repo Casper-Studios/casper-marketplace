@@ -6,7 +6,6 @@ A collection of skills for automating common development workflows like committi
 
 - **Git Workflows**: Conventional commits, PR creation with templates, and PR comment triage
 - **Maintenance**: Safe dependency upgrades with breaking-change analysis
-- **Linear Integration**: Extract and draft actionable tickets from unstructured input and transcripts
 
 ## Setup
 
@@ -91,14 +90,6 @@ Fetch unresolved PR review threads, deduplicate across bots, classify by severit
 
 Analyze outdated dependencies and safely upgrade them. Detects the package manager (pnpm for frontend, uv for backend), analyzes breaking changes, and generates a PR with a safety analysis.
 
-### `/send-to-linear` - Send to Linear
-
-Extract actionable Linear tickets from unstructured input — Slack conversations, call transcripts, screenshots, meeting notes. Drafts tickets to a scratchpad for review, then creates them in Linear on approval. Supports `config.local.json` overrides for team, project, assignee, and labels.
-
-### `/extract-my-action-items` - Extract Action Items
-
-Extract action items from Fireflies transcripts using parallel subagents. Supports single-person and all-attendees modes, with an optional Linear ticket proposal workflow that matches action items to existing cycle tickets and drafts new tickets for review before creation.
-
 ## Directory Structure
 
 ```
@@ -113,18 +104,11 @@ git-pr/
 │   │   └── references/
 │   ├── commit/
 │   │   └── SKILL.md
-│   ├── extract-my-action-items/
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   └── scripts/
 │   ├── open-pr/
 │   │   ├── SKILL.md
 │   │   └── assets/
-│   ├── resolve-pr-comments/
-│   │   └── SKILL.md
-│   └── send-to-linear/
-│       ├── SKILL.md
-│       └── references/
+│   └── resolve-pr-comments/
+│       └── SKILL.md
 └── README.md                    # This file
 ```
 

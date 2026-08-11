@@ -1,7 +1,0 @@
-{
-  "name": "testing",
-  "version": "1.0.0",
-  "description": "Browser automation and testing using ref-based element targeting",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["engineering", "testing", "browser-automation"]
-}

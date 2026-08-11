@@ -12,7 +12,6 @@ Plugins are organized by workstream under `plugins/`.
 |------------|--------|-------------|
 | bizdev | [crm](./plugins/bizdev/crm/) | CRM operations for companies, contacts, and notes via Attio |
 | bizdev | [research](./plugins/bizdev/research/) | Social media, web, and market research scraping |
-| design | [doc-format](./plugins/design/doc-format/) | Editable PowerPoint plus AI-powered document, image, and flowchart generation |
 | design | [design-system](./plugins/design/design-system/) | Casper Studios design system and Liquid Glass UI guidance |
 | design | [content-marketing](./plugins/design/content-marketing/) | LinkedIn posts, video production, and YouTube tooling |
 | engineering | [code-review](./plugins/engineering/code-review/) | Codebase audits for AI-agent readiness and code review |
@@ -23,6 +22,7 @@ Plugins are organized by workstream under `plugins/`.
 | engineering | [integrations](./plugins/engineering/integrations/) | Google Workspace and universal third-party app integrations |
 | engineering | [cf-saas-stack](./plugins/engineering/cf-saas-stack/) | Cloudflare SaaS stack patterns - auth, database, workflows, emails, Stripe, and more |
 | engineering | [stack-patterns](./plugins/engineering/stack-patterns/) | Idiomatic usage patterns for React, TanStack Table, and better-all |
+| governance | [marketplace](./plugins/governance/marketplace/) | Agent skill and plugin governance for focused marketplace packages |
 | product | [data-analysis](./plugins/product/data-analysis/) | Data analysis and storytelling for financial and RevOps contexts |
 | product | [csv-analyzer](./plugins/product/csv-analyzer/) | CSV data analysis, profiling, and visualization |
 | product | [discovery](./plugins/product/discovery/) | AI voice agent creation for client discovery and feedback calls |
@@ -45,7 +45,6 @@ The `--all` flag is idempotent — it installs new skills and overwrites existin
 ```bash
 npx skills add https://github.com/Casper-Studios/casper-marketplace --skill commit
 npx skills add https://github.com/Casper-Studios/casper-marketplace --skill resolve-pr-comments
-npx skills add https://github.com/Casper-Studios/casper-marketplace --skill create-ppt
 ```
 
 ### Install via /plugin command

@@ -1,7 +1,0 @@
-{
-  "name": "doc-format",
-  "version": "1.1.0",
-  "description": "Editable PowerPoint and AI-powered document, image, and flowchart generation",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["design", "documents", "powerpoint", "presentations", "content-generation"]
-}
