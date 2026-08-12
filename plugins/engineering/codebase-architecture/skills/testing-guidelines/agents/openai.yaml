@@ -1,2 +1,3 @@
 interface:
   display_name: 'Testing Guidelines'
+  short_description: 'Design valuable tests for project-owned behavior.'

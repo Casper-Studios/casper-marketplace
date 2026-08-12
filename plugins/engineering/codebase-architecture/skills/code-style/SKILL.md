@@ -24,7 +24,7 @@ Read as many linked references as are relevant to the current task before writin
 - Make contradictory field combinations unrepresentable by [enforcing invariants](./references/enforce-invariants.md).
 - When an internal guarantee is broken, [fail impossible states](./references/fail-impossible-states.md) instead of continuing with invented state.
 - Prevent new finite-state members from silently inheriting a fallback through [exhaustive decisions](./references/exhaustive-decisions.md).
-- Translate only the expected failure at its source with [narrow error boundaries](./references/narrow-error-boundaries.md), preserving unrelated errors.
+- Handle and record each failure once at its decision-owning [error boundary](./references/narrow-error-boundaries.md), preserving unrelated errors and their original causes.
 - Keep one-off or cosmetic indirection out of the design with [simple abstractions](./references/simple-abstractions.md).
 - Ensure a resource never escapes uninitialized or unreleased by binding [ownership to lifetime](./references/resources-own-lifetimes.md).
 - When a lower layer normalizes external data, [preserve caller-relevant information](./references/preserve-information.md) so continuation, retry, filtering, fallback, and other policy choices remain with the caller.

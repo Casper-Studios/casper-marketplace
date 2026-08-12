@@ -28,6 +28,7 @@ Read as many linked references as are relevant to the current task before writin
 - Reserve [effects](./references/external-system-effects.md) for reactive synchronization with systems React does not control.
 - Represent exclusive UI modes as one valid-state set with [state machines](./references/state-machines.md), not contradictory flags.
 - Apply [manual memoization](./references/manual-memoization.md) only for measured work or required stable identity, not as a default optimization.
+- When a state transition derives its next value from the same state, use a [functional state update](./references/functional-state-updates.md) so queued transitions compose and callbacks do not capture a render snapshot.
 - Split independent caches with [atomic memoization](./references/atomic-memoization.md) so unrelated inputs do not invalidate each other.
 - Make JSX absence and branch conditions explicit with [explicit rendering](./references/explicit-rendering.md), rather than relying on truthiness.
 - Establish [context ownership](./references/context-ownership.md) only when one subsystem owns state or behavior consumed across multiple depths.
