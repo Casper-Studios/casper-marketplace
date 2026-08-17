@@ -10,25 +10,14 @@ Plugins are organized by workstream under `plugins/`.
 
 | Workstream | Plugin | Description |
 |------------|--------|-------------|
-| bizdev | [crm](./plugins/bizdev/crm/) | CRM operations for companies, contacts, and notes via Attio |
 | bizdev | [research](./plugins/bizdev/research/) | Social media, web, and market research scraping |
-| design | [doc-format](./plugins/design/doc-format/) | AI-powered document, image, and flowchart generation |
 | design | [design-system](./plugins/design/design-system/) | Casper Studios design system and Liquid Glass UI guidance |
 | design | [content-marketing](./plugins/design/content-marketing/) | LinkedIn posts, video production, and YouTube tooling |
-| engineering | [code-review](./plugins/engineering/code-review/) | Codebase audits for AI-agent readiness and code review |
-| engineering | [skill-authoring](./plugins/engineering/skill-authoring/) | Tooling for creating and updating Claude Code skills |
-| engineering | [marketplace-setup](./plugins/engineering/marketplace-setup/) | Security hooks, safe .env loading, and privacy settings |
 | engineering | [git-pr](./plugins/engineering/git-pr/) | Committing, PR creation and review triage, dependency upgrades, and Linear ticket extraction |
-| engineering | [testing](./plugins/engineering/testing/) | Browser automation and testing |
-| engineering | [integrations](./plugins/engineering/integrations/) | Google Workspace and universal third-party app integrations |
-| engineering | [cf-saas-stack](./plugins/engineering/cf-saas-stack/) | Cloudflare SaaS stack patterns - auth, database, workflows, emails, Stripe, and more |
+| engineering | [codebase-architecture](./plugins/engineering/codebase-architecture/) | Architecture, code-style, and testing guidance for maintainable software |
 | engineering | [stack-patterns](./plugins/engineering/stack-patterns/) | Idiomatic usage patterns for React, TanStack Table, and better-all |
 | governance | [marketplace](./plugins/governance/marketplace/) | Agent skill and plugin governance for focused marketplace packages |
 | product | [data-analysis](./plugins/product/data-analysis/) | Data analysis and storytelling for financial and RevOps contexts |
-| product | [csv-analyzer](./plugins/product/csv-analyzer/) | CSV data analysis, profiling, and visualization |
-| product | [discovery](./plugins/product/discovery/) | AI voice agent creation for client discovery and feedback calls |
-| project-management | [brain](./plugins/project-management/brain/) | Context management for consulting projects - company info, project PRDs, meeting transcripts |
-| project-management | [comms](./plugins/project-management/comms/) | Email triage and Slack channel automation |
 
 ## Installation
 
