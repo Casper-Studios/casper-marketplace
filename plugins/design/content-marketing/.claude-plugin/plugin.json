@@ -2,6 +2,23 @@
   "name": "content-marketing",
   "version": "1.0.0",
   "description": "LinkedIn post generation and YouTube tooling for marketing content",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["design", "marketing", "content", "linkedin", "video"]
+  "author": {
+    "name": "Casper Studios"
+  },
+  "keywords": [
+    "design",
+    "marketing",
+    "content",
+    "linkedin",
+    "video"
+  ],
+  "interface": {
+    "displayName": "Content Marketing",
+    "shortDescription": "Create LinkedIn and YouTube marketing content.",
+    "longDescription": "LinkedIn post generation and YouTube tooling for marketing content",
+    "developerName": "Casper Studios",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Create marketing content from my source material."
+  }
 }

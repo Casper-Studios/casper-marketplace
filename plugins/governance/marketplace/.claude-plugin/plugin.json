@@ -1,6 +1,17 @@
 {
-	"name": "marketplace",
-	"version": "0.1.0",
-	"description": "Agent skill and plugin governance guidance for focused, distributable marketplace packages.",
-	"author": { "name": "Casper Studios" }
+  "name": "marketplace",
+  "version": "0.1.0",
+  "description": "Agent skill and plugin governance guidance for focused, distributable marketplace packages.",
+  "author": {
+    "name": "Casper Studios"
+  },
+  "interface": {
+    "displayName": "Marketplace Governance",
+    "shortDescription": "Agent skill and plugin governance guidance for focused, distributable marketplace packages.",
+    "longDescription": "Apply governance conventions for focused, maintainable agent skills and distributable plugins.",
+    "developerName": "Casper Studios",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Review this skill or plugin package against marketplace guidance."
+  }
 }

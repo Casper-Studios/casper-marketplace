@@ -2,6 +2,26 @@
   "name": "data-analysis",
   "version": "1.0.0",
   "description": "Data analysis, visualization, and storytelling skill for financial and RevOps contexts",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["data", "analysis", "visualization", "financial", "revops", "saas", "dashboard", "marimo"]
+  "author": {
+    "name": "Casper Studios"
+  },
+  "keywords": [
+    "data",
+    "analysis",
+    "visualization",
+    "financial",
+    "revops",
+    "saas",
+    "dashboard",
+    "marimo"
+  ],
+  "interface": {
+    "displayName": "Data Analysis",
+    "shortDescription": "Data analysis, visualization, and storytelling skill for financial and RevOps contexts.",
+    "longDescription": "Analyze, validate, visualize, and communicate financial, SaaS, and RevOps data.",
+    "developerName": "Casper Studios",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Analyze this dataset and document important decisions and caveats."
+  }
 }

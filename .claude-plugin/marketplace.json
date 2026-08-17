@@ -1,51 +1,51 @@
 {
-	"name": "casper-studios",
-	"version": "2.2.0",
-	"description": "A collection of Claude Code plugins for business automation, data analysis, and productivity",
-	"owner": {
-		"name": "Casper Studios",
-		"github": "Casper-Studios"
-	},
-	"plugins": [
-		{
-			"name": "research",
-			"source": "./plugins/bizdev/research",
-			"strict": true
-		},
-		{
-			"name": "design-system",
-			"source": "./plugins/design/design-system",
-			"strict": true
-		},
-		{
-			"name": "content-marketing",
-			"source": "./plugins/design/content-marketing",
-			"strict": true
-		},
-		{
-			"name": "git-pr",
-			"source": "./plugins/engineering/git-pr",
-			"strict": true
-		},
-		{
-			"name": "codebase-architecture",
-			"source": "./plugins/engineering/codebase-architecture",
-			"strict": true
-		},
-		{
-			"name": "stack-patterns",
-			"source": "./plugins/engineering/stack-patterns",
-			"strict": true
-		},
-		{
-			"name": "marketplace",
-			"source": "./plugins/governance/marketplace",
-			"strict": true
-		},
-		{
-			"name": "data-analysis",
-			"source": "./plugins/product/data-analysis",
-			"strict": true
-		}
-	]
+  "name": "casper-studios",
+  "version": "2.2.0",
+  "description": "A collection of Claude Code plugins for business automation, data analysis, and productivity",
+  "owner": {
+    "name": "Casper Studios",
+    "github": "Casper-Studios"
+  },
+  "plugins": [
+    {
+      "name": "research",
+      "source": "./plugins/bizdev/research",
+      "strict": true
+    },
+    {
+      "name": "design-system",
+      "source": "./plugins/design/design-system",
+      "strict": true
+    },
+    {
+      "name": "content-marketing",
+      "source": "./plugins/design/content-marketing",
+      "strict": true
+    },
+    {
+      "name": "git-pr",
+      "source": "./plugins/engineering/git-pr",
+      "strict": true
+    },
+    {
+      "name": "codebase-architecture",
+      "source": "./plugins/engineering/codebase-architecture",
+      "strict": true
+    },
+    {
+      "name": "stack-patterns",
+      "source": "./plugins/engineering/stack-patterns",
+      "strict": true
+    },
+    {
+      "name": "marketplace",
+      "source": "./plugins/governance/marketplace",
+      "strict": true
+    },
+    {
+      "name": "data-analysis",
+      "source": "./plugins/product/data-analysis",
+      "strict": true
+    }
+  ]
 }
