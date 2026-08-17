@@ -51,6 +51,16 @@ npx skills add https://github.com/Casper-Studios/casper-marketplace --skill reso
 /plugin install cf-saas-stack
 ```
 
+### Install in Codex
+
+From this repository root:
+
+```bash
+codex plugin marketplace add .
+codex plugin add research@casper-marketplace
+```
+
+Replace `research` with any plugin name from the table above. Native Codex manifests live in each plugin's `.codex-plugin/` directory; the Codex marketplace is `.agents/plugins/marketplace.json`.
 ### Auto-sync on session start
 
 Add `sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/claude-code/hooks) to keep all marketplace plugins up-to-date automatically:

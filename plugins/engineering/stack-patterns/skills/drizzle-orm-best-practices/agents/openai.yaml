@@ -1,2 +1,4 @@
 interface:
-  display_name: 'Drizzle ORM Best Practices'
+  display_name: "Drizzle Orm Best Practices"
+  short_description: "Help with Drizzle Orm Best Practices tasks"
+  default_prompt: "Use $drizzle-orm-best-practices to review this database code."

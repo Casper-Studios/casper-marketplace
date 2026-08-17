@@ -1,2 +1,4 @@
 interface:
-  display_name: 'OpenTelemetry Best Practices'
+  display_name: "Open Telemetry Best Practices"
+  short_description: "Help with Open Telemetry Best Practices tasks"
+  default_prompt: "Use $open-telemetry-best-practices to review this telemetry."

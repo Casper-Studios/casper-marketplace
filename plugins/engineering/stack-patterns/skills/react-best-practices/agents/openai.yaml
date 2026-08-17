@@ -1,2 +1,4 @@
 interface:
-  display_name: 'React Best Practices'
+  display_name: "React Best Practices"
+  short_description: "Help with React Best Practices tasks"
+  default_prompt: "Use $react-best-practices to review this React code."

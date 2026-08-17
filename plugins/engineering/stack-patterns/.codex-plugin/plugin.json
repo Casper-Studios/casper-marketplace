@@ -1,0 +1,20 @@
+{
+    "name":  "stack-patterns",
+    "version":  "2.1.0",
+    "description":  "Best-practice guidance for common frontend, backend, schema, and observability libraries.",
+    "author":  {
+                   "name":  "Casper Studios"
+               },
+    "skills":  "./skills/",
+    "interface":  {
+                      "displayName":  "Stack Patterns",
+                      "shortDescription":  "Apply reliable framework and library patterns.",
+                      "longDescription":  "Use opinionated patterns for React, TanStack, TypeScript, Python, Drizzle, schemas, concurrency, and telemetry.",
+                      "developerName":  "Casper Studios",
+                      "category":  "Productivity",
+                      "capabilities":  [
+
+                                       ],
+                      "defaultPrompt":  "Apply the relevant stack patterns to this implementation."
+                  }
+}

@@ -1,2 +1,4 @@
 interface:
-  display_name: 'TanStack React Query Best Practices'
+  display_name: "Tanstack React Query Best Practices"
+  short_description: "Help with Tanstack React Query Best Practices tasks"
+  default_prompt: "Use $tanstack-react-query-best-practices to review this query code."

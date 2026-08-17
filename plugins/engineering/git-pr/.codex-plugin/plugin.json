@@ -1,0 +1,20 @@
+{
+    "name":  "git-pr",
+    "version":  "3.0.0",
+    "description":  "Committing, PR creation and review triage, and dependency upgrades.",
+    "author":  {
+                   "name":  "Casper Studios"
+               },
+    "skills":  "./skills/",
+    "interface":  {
+                      "displayName":  "Git and PR",
+                      "shortDescription":  "Manage commits, pull requests, and dependencies.",
+                      "longDescription":  "Create commits and pull requests, resolve review feedback, and upgrade dependencies safely.",
+                      "developerName":  "Casper Studios",
+                      "category":  "Productivity",
+                      "capabilities":  [
+
+                                       ],
+                      "defaultPrompt":  "Help me complete this Git or pull-request workflow."
+                  }
+}

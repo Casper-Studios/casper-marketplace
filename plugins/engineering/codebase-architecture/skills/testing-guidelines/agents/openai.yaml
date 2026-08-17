@@ -1,3 +1,4 @@
 interface:
-  display_name: 'Testing Guidelines'
-  short_description: 'Design valuable tests for project-owned behavior.'
+  display_name: "Testing Guidelines"
+  short_description: "Help with Testing Guidelines tasks"
+  default_prompt: "Use $testing-guidelines to design focused tests."
