@@ -1,2 +1,4 @@
 interface:
-  display_name: 'Code Style'
+  display_name: "Code Style"
+  short_description: "Help with Code Style tasks"
+  default_prompt: "Use $code-style to review this implementation."

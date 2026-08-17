@@ -2,6 +2,21 @@
   "name": "design-system",
   "version": "1.0.0",
   "description": "Casper Studios design system and Apple Liquid Glass UI guidance",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["design", "design-system", "ui"]
+  "author": {
+    "name": "Casper Studios"
+  },
+  "keywords": [
+    "design",
+    "design-system",
+    "ui"
+  ],
+  "interface": {
+    "displayName": "Design System",
+    "shortDescription": "Casper Studios design system and Apple Liquid Glass UI guidance.",
+    "longDescription": "Create polished interfaces using Casper Studios and Apple Liquid Glass design guidance.",
+    "developerName": "Casper Studios",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Design this interface using the appropriate design-system guidance."
+  }
 }

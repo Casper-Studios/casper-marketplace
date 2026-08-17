@@ -2,6 +2,21 @@
   "name": "research",
   "version": "1.0.0",
   "description": "Social media, web, and market research scraping for lead and prospect research",
-  "author": { "name": "Casper Studios" },
-  "keywords": ["bizdev", "research", "scraping"]
+  "author": {
+    "name": "Casper Studios"
+  },
+  "keywords": [
+    "bizdev",
+    "research",
+    "scraping"
+  ],
+  "interface": {
+    "displayName": "Research",
+    "shortDescription": "Research markets, prospects, and social media.",
+    "longDescription": "Social media, web, and market research scraping for lead and prospect research.",
+    "developerName": "Casper Studios",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Research this market or prospect using the available workflows."
+  }
 }

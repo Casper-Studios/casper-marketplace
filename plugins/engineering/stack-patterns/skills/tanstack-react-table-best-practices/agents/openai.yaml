@@ -1,2 +1,4 @@
 interface:
-  display_name: 'TanStack React Table Best Practices'
+  display_name: "Tanstack React Table Best Practices"
+  short_description: "Help with Tanstack React Table Best Practices tasks"
+  default_prompt: "Use $tanstack-react-table-best-practices to review this table."

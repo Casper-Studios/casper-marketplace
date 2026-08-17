@@ -2,7 +2,7 @@
 name: bump-deps
 description: Analyze and upgrade dependencies with breaking change detection. Use when updating frontend (pnpm) or backend (uv) dependencies.
 user-invocable: true
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: <guidelines>
 metadata:
   author: BastiDood <basti@casperstudios.xyz>

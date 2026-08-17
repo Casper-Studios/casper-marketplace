@@ -1,2 +1,4 @@
 interface:
-  display_name: 'Agent Skills Best Practices'
+  display_name: "Agent Skills Best Practices"
+  short_description: "Help with Agent Skills Best Practices tasks"
+  default_prompt: "Use $agent-skills-best-practices to review this agent skill."

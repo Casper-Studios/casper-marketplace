@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Analysis"
+  short_description: "Analyze financial and RevOps datasets clearly."
+  default_prompt: "Use $data-analysis to analyze this dataset and document caveats."

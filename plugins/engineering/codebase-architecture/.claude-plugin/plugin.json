@@ -1,6 +1,17 @@
 {
-	"name": "codebase-architecture",
-	"version": "0.3.0",
-	"description": "Architecture, code-style, and testing guidance for maintainable software.",
-	"author": { "name": "Casper Studios" }
+  "name": "codebase-architecture",
+  "version": "0.3.0",
+  "description": "Architecture, code-style, and testing guidance for maintainable software.",
+  "author": {
+    "name": "Casper Studios"
+  },
+  "interface": {
+    "displayName": "Codebase Architecture",
+    "shortDescription": "Architecture, code-style, and testing guidance for maintainable software.",
+    "longDescription": "Apply feature-oriented architecture, explicit code-style rules, and focused testing guidance.",
+    "developerName": "Casper Studios",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Review this codebase architecture and recommend focused improvements."
+  }
 }

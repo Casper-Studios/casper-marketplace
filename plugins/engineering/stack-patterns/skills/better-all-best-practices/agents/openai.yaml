@@ -1,2 +1,4 @@
 interface:
-  display_name: 'Better-All Best Practices'
+  display_name: "Better All Best Practices"
+  short_description: "Help with Better All Best Practices tasks"
+  default_prompt: "Use $better-all-best-practices to structure this async workflow."

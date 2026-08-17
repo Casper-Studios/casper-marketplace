@@ -4,5 +4,14 @@
   "description": "Committing, PR creation and review triage, and dependency upgrades.",
   "author": {
     "name": "Casper Studios"
+  },
+  "interface": {
+    "displayName": "Git and PR",
+    "shortDescription": "Committing, PR creation and review triage, and dependency upgrades.",
+    "longDescription": "Create commits and pull requests, resolve review feedback, and upgrade dependencies safely.",
+    "developerName": "Casper Studios",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Help me complete this Git or pull-request workflow."
   }
 }

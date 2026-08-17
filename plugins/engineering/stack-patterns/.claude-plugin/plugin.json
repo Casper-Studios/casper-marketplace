@@ -1,6 +1,17 @@
 {
-	"name": "stack-patterns",
-	"version": "2.1.0",
-	"description": "Best-practice guidance for React, TanStack Query and Table, TypeScript, Python, Drizzle ORM, Zod, Valibot, Better All, and OpenTelemetry.",
-	"author": { "name": "Casper Studios" }
+  "name": "stack-patterns",
+  "version": "2.1.0",
+  "description": "Best-practice guidance for React, TanStack Query and Table, TypeScript, Python, Drizzle ORM, Zod, Valibot, Better All, and OpenTelemetry.",
+  "author": {
+    "name": "Casper Studios"
+  },
+  "interface": {
+    "displayName": "Stack Patterns",
+    "shortDescription": "Best-practice guidance for commmon framework and library patterns.",
+    "longDescription": "Best-practice guidance for React, TanStack Query and Table, TypeScript, Python, Drizzle ORM, Zod, Valibot, Better All, and OpenTelemetry.",
+    "developerName": "Casper Studios",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Apply the relevant stack patterns to this implementation."
+  }
 }

@@ -51,6 +51,17 @@ npx skills add https://github.com/Casper-Studios/casper-marketplace --skill reso
 /plugin install cf-saas-stack
 ```
 
+### Install in Codex
+
+From this repository root:
+
+```bash
+codex plugin marketplace add .
+codex plugin add research@casper-studios
+```
+
+Replace `research` with any plugin name from the table above. Codex uses the shared `.claude-plugin/marketplace.json` and `.claude-plugin/plugin.json` manifests, avoiding duplicate product-specific configuration.
+
 ### Auto-sync on session start
 
 Add `sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/claude-code/hooks) to keep all marketplace plugins up-to-date automatically:
@@ -78,12 +89,12 @@ Add `sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/
 
 ## Plugin Structure
 
-Plugins are grouped by workstream under `plugins/<workstream>/<plugin-name>/`. Each plugin follows the standard Claude Code plugin structure:
+Plugins are grouped by workstream under `plugins/<workstream>/<plugin-name>/`. Each plugin follows the shared Claude Code and Codex plugin structure:
 
 ```
 plugins/<workstream>/<plugin-name>/
 ├── .claude-plugin/
-│   └── plugin.json          # Plugin manifest
+│   └── plugin.json          # Shared Claude Code and Codex manifest
 ├── skills/                  # Skills with SKILL.md and references/
 ├── commands/                # Slash commands
 ├── scripts/                 # Utility scripts
@@ -96,7 +107,7 @@ plugins/<workstream>/<plugin-name>/
 To add a new plugin:
 
 1. Create a new directory under `plugins/<workstream>/` (add a new workstream folder if none fits)
-2. Add the required `.claude-plugin/plugin.json` manifest
+2. Add the required `.claude-plugin/plugin.json` manifest, including Codex `interface` metadata
 3. Add commands, scripts, and documentation
 4. Submit a PR
 
