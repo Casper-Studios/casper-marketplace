@@ -31,6 +31,7 @@ Read as many linked references as are relevant to the current task before writin
 - Preserve missing IDs with [absent identifiers](./references/absent-identifiers.md) and disable the request instead of fabricating a record key.
 - Partition visibility-sensitive cached data through [actor identity and secrets](./references/actor-identity-and-secrets.md) without exposing credentials in keys.
 - Destructure only consumed query fields with [result destructuring](./references/result-destructuring.md) so dependencies and props express semantic needs.
+- Always consume named fields through [mutation result destructuring](./references/mutation-result-destructuring.md), because the complete `useMutation` result is not referentially stable.
 - Pass changing operation input through [mutation variables](./references/mutation-variables.md), not a mutation hook's construction closure.
 - Parse user-controlled values before mutation invocation with [mutation form integration](./references/mutation-form-integration.md).
 - When mutation outcomes trigger follow-up work, [separate callback lifecycles](./references/mutation-callback-lifecycle.md) by putting every-invocation policy in the definition and mounted UI consequences at the call site instead of aggregate-status effects.
