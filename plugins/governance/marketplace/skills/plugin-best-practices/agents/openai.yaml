@@ -1,4 +1,3 @@
 interface:
-  display_name: "Plugin Best Practices"
-  short_description: "Help with Plugin Best Practices tasks"
-  default_prompt: "Use $plugin-best-practices to review this plugin package."
+  display_name: 'Plugin Best Practices'
+  short_description: 'Write cohesive plugins with clear packaging boundaries.'

@@ -1,4 +1,3 @@
 interface:
-  display_name: "Vertically Sliced Feature Modules"
-  short_description: "Help with Vertically Sliced Feature Modules tasks"
-  default_prompt: "Use $vertically-sliced-feature-modules to review this architecture."
+  display_name: 'Vertically Sliced Feature Modules'
+  short_description: 'Structure code around cohesive feature boundaries.'

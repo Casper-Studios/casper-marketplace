@@ -13,7 +13,7 @@ const displayName = buildDisplayName(user);
 const directDisplayName = `${user.firstName} ${user.lastName}`;
 ```
 
-Do not extract a helper used by one call site unless it establishes a real boundary or isolates independently testable complex logic. Do not create shared code before multiple owners need it.
+One consumer can justify a function that hides meaningful work. Typically, give a utility its own file because its sans-I/O behavior needs a separate colocated test; keep both under their owner. Do not invent tests for trivial glue or promote a utility merely because its test also imports it.
 
 Do not wrap a library only to rename its operations. Do not create a package, manager, provider, model, or exception unless it hides a dependency, enforces a contract, owns a lifecycle, preserves type safety, or gives consumers a smaller stable capability.
 

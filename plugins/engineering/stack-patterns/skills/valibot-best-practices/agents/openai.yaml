@@ -1,4 +1,3 @@
 interface:
-  display_name: "Valibot Best Practices"
-  short_description: "Help with Valibot Best Practices tasks"
-  default_prompt: "Use $valibot-best-practices to review these schemas."
+  display_name: 'Valibot Best Practices'
+  short_description: 'Design explicit and reliable Valibot schemas.'

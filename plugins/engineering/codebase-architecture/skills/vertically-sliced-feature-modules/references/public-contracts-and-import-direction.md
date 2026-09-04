@@ -14,11 +14,6 @@ import { showSubmissionReceipt } from '@/features/receipts';
 import { calculateEligibility } from '@/shared/eligibility';
 ```
 
-```typescript
-// GOOD: a feature root exposes only its caller-facing capability.
-export { submitApplication } from './submit-application';
-```
-
 A feature entry is a contract for an orchestrator, route, page, layout, application root, or runtime registry. It is not permission for peer features to depend on one another.
 
 When multiple features need the same behavior, promote that behavior to a shared module with an explicit owner. When one workflow needs multiple feature capabilities, keep the sequencing in the caller. Do not make either feature the hidden orchestrator.

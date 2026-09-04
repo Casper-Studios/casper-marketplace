@@ -33,6 +33,8 @@ features/
     calculations.test
 ```
 
+Keep each private subsystem's entry, views, queries, actions, transformations, utilities, and tests beneath its nearest owner. Do not split one capability into technical-role siblings at the parent level.
+
 Follow the business journey when a feature has meaningful phases, roles, or states. Let the parent entry select the active phase. Do not flatten phase-specific forms, dialogs, tables, and helpers into broad sibling directories.
 
 The same ownership shape applies to asynchronous use cases:

@@ -1,24 +1,37 @@
 # Absent Identifiers
 
-Disable a query when a required identifier is absent. Preserve that absence in the key.
+Disable a query when a required identifier is absent. Preserve that absence in the key, then use `skipToken` instead of fabricating a request value.
 
 ```typescript
+// Query-options excerpt.
 // BAD: absence becomes a request for a fabricated record.
-const queryKey = jobQueryKeys.job(jobId ?? '');
+const queryKey = ['team-report', teamId ?? ''] as const;
+```
 
-// GOOD: preserve absence and do not execute a request.
+```typescript
 import { skipToken, useQuery } from '@tanstack/react-query';
 
-export function useGetJob(jobId: string | undefined) {
+// GOOD: preserve absence and do not execute a request.
+function useTeamReport(teamId: string | undefined) {
 	return useQuery({
-		queryKey: jobQueryKeys.job(jobId),
-		queryFn: typeof jobId === 'undefined' ? skipToken : async () => await fetchJob(jobId),
+		queryKey: ['team-report', teamId] as const,
+		queryFn:
+			typeof teamId === 'undefined'
+				? skipToken
+				: async ({ queryKey: [, keyTeamId], signal }) => {
+						if (typeof keyTeamId === 'undefined') throw new Error('Expected a team ID');
+						const response = await fetch('/api/team-report/' + encodeURIComponent(keyTeamId), {
+							signal,
+						});
+						if (!response.ok) throw new Error('Team report request failed');
+						return await response.text();
+					},
 	});
 }
 ```
 
-Do not replace an absent identifier with `''`, `0`, a sentinel UUID, or another fabricated request value.
+The key preserves the optional identifier's type. Selecting `skipToken` does not narrow the context value, so the query function guards its own ID before constructing the request. This avoids a capture, cast, non-null assertion, or fake default while the hook still runs unconditionally.
 
-Use `skipToken` when the installed TanStack Query version supports it. The disabled state is part of the query contract, not a request for an empty record.
+The disabled state is part of the query contract, not a request for an empty record. `skipToken` does not support manual refetch; model a manually triggered request explicitly instead of bypassing the absent-ID rule.
 
 Model `null` separately when the domain distinguishes it from `undefined`.

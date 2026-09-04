@@ -24,8 +24,14 @@ Move content behind a reference only when it is conditional, detail-oriented, or
 
 # API Best Practices
 
-- Design APIs around stable domain contracts rather than transport convenience.
-- Keep caller policy visible and preserve information across boundaries.
+Design APIs around stable domain contracts rather than transport convenience. Keep caller policy visible and preserve information across boundaries.
+
+## Effective Strategies
+
+1. Validate external data before it becomes a domain value.
+   - [Parse untrusted input at the controlled boundary.](./references/input-validation.md)
+2. Preserve information needed for caller-owned policy.
+   - [Expose pagination without choosing when traversal stops.](./references/pagination.md)
 ```
 
 </progressive_disclosure_examples>

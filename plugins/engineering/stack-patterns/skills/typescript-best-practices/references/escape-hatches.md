@@ -1,6 +1,6 @@
 # Type Escape Hatches
 
-Do not use `any` or broad `object` as placeholders. They erase type information that callers need. Use `unknown` only for genuinely untrusted input or a caught error, then narrow or validate it in the same boundary-handling code.
+Do not use `any` or broad `object` as placeholders. They erase type information that callers need. Accept `unknown` only at a genuinely untrusted boundary or for a caught error, then narrow or validate it in that boundary-handling code.
 
 ```typescript
 // BAD: disables checking.
@@ -18,4 +18,4 @@ function parseResponse(value: unknown) {
 if (error instanceof Error) logger.error(error.message);
 ```
 
-Do not carry `unknown` into domain state, parameters, or return values.
+Contain `any` and `unknown` inside the boundary that receives them. Return only narrowed or validated values; never let an escape hatch propagate to callers or into domain state and parameters.

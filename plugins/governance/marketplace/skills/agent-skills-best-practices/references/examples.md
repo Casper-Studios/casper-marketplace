@@ -1,10 +1,10 @@
 # Examples
 
-Use examples to demonstrate an opinion that prose alone can leave ambiguous. Do not teach ordinary API syntax or reproduce a tutorial that current documentation can supply.
+Show, don't tell. Contrast approaches to the same problem, then briefly explain why one is better. Change only the decision being taught. Use a single example when no useful contrast exists.
 
-Add a "BAD"/"GOOD" counterpart when the rejected approach is plausible, compiles, or appears to work. Keep a single example when the reference only establishes one canonical syntax or declarative shape.
+Label examples with `BAD:` and `GOOD:` comments inside code fences, not Markdown headings. Do not comment out the implementation.
 
-Put the labels inside the code fence as comments. The BAD implementation must remain real code; never comment it out. Use the same small scenario for both sides and change only the decision under review.
+Teach the decision, not basic API syntax or a tutorial.
 
 ```tsx
 // BAD: the state change hides a click-driven operation behind reactivity.
@@ -32,8 +32,6 @@ function SaveButton() {
 }
 ```
 
-Make every snippet self-contained and valid for its claimed language or framework. Do not leave undefined placeholders, invalid imports, conflicting declarations, or deprecated APIs in "GOOD" examples.
+The second version calls `save` directly from the click handler, removing the extra state and effect. Explain that difference instead of narrating each line.
 
-Use a fence language that matches the snippet. A `json` fence cannot contain comments; use `jsonc` when comments are part of the example, or keep the explanation outside the fence.
-
-Do not use secondary Markdown headings for "GOOD" and "BAD". Do not preserve a bad example merely to achieve visual symmetry.
+Keep excerpts focused and identify omitted setup. Syntax and APIs must remain correct. Complete or runnable examples must compile on their own; excerpts need not become standalone programs.

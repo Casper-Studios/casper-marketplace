@@ -1,21 +1,28 @@
 # Cell Rendering
 
-Render column definitions through the v9 table instance. Never place a header, cell, or footer definition itself in JSX.
+Render column definitions through the table instance. Never place a header, cell, or footer definition itself in JSX.
 
 ```tsx
-// BAD: raw definitions are not React children.
+import { tableFeatures, type Cell, type ReactTable, type TableState } from '@tanstack/react-table';
+
+interface Person {
+	name: string;
+}
+
+const features = tableFeatures({});
+
+interface CellProps {
+	cell: Cell<typeof features, Person, unknown>;
+	table: ReactTable<typeof features, Person, TableState<typeof features>>;
+}
+
+// BAD: coercing the definition renders schema data or function source, not the cell result.
 function RawCell({ cell }: CellProps) {
-	return <td>{cell.column.columnDef.cell}</td>;
-}
-```
-
-```tsx
-// GOOD: delegate definition rendering to the table that owns its generics and context.
-function HeaderCell({ table, header }: HeaderCellProps) {
-	return <th>{header.isPlaceholder ? null : <table.FlexRender header={header} />}</th>;
+	return <td>{String(cell.column.columnDef.cell)}</td>;
 }
 
-function BodyCell({ table, cell }: BodyCellProps) {
+// GOOD: the owning table supplies the cell context and preserves feature-local types.
+function BodyCell({ cell, table }: CellProps) {
 	return (
 		<td>
 			<table.FlexRender cell={cell} />
@@ -24,4 +31,4 @@ function BodyCell({ table, cell }: BodyCellProps) {
 }
 ```
 
-Use the same pattern for a footer definition. Prefer `table.FlexRender` over manually pairing a definition with a context: the instance preserves the schema's generic and feature contract.
+Apply the same pattern to headers and footers. Suppress placeholder headers before rendering them.
