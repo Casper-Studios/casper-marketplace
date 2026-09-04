@@ -1,35 +1,37 @@
 # Query Function Inputs
 
-Keep request construction visibly aligned with cache identity.
+Capturing request variables in a query closure is forbidden, even when the key contains the same values. Put application request arguments in the typed `queryKey` and destructure them from `queryFn`'s context. Receive cancellation through `context.signal` and an infinite-query cursor through `context.pageParam`.
 
-A closure is valid when every captured request-changing value is represented in the query key.
-
-Declare every `queryFn` as `async` and `await` its request. Do not return a bare promise expression.
+Declare every `queryFn` as `async` and `await` its request.
 
 ```typescript
-// BAD: locale changes the request but is absent from cache identity.
-function useJobs(locale: string) {
+import { useQuery } from '@tanstack/react-query';
+
+// BAD: the key contains the ID, but the query function still captures it.
+function useCapturedReport(reportId: string) {
 	return useQuery({
-		queryKey: ['jobs'] as const,
-		queryFn: async () => await fetchJobs(locale),
+		queryKey: ['report', reportId] as const,
+		queryFn: async ({ signal }) => {
+			const response = await fetch('/api/reports/' + encodeURIComponent(reportId), { signal });
+			if (!response.ok) throw new Error('Report request failed');
+			return await response.text();
+		},
 	});
 }
 
-// GOOD: the request and key expose the same response-changing input.
-function useJob(jobId: string) {
+// GOOD: the request reads the ID from context, not the hook's closure.
+function useReport(reportId: string) {
 	return useQuery({
-		queryKey: jobQueryKeys.job(jobId),
-		queryFn: async () => await fetchJob(jobId),
+		queryKey: ['report', reportId] as const,
+		queryFn: async ({ queryKey: [, keyReportId], signal }) => {
+			const response = await fetch('/api/reports/' + encodeURIComponent(keyReportId), { signal });
+			if (!response.ok) throw new Error('Report request failed');
+			return await response.text();
+		},
 	});
 }
 ```
 
-Derive request inputs from `QueryFunctionContext` when that makes the key-to-request correspondence clearer or lets one query function serve several callers.
+This makes request identity visible at the I/O boundary. Do not mutate key values or React state from `queryFn`. Never put secrets, functions, clients, or `AbortSignal` instances in a key; use a non-secret actor or session partition when visibility changes the response.
 
-Do not claim closures are inherently stale. The defect is hidden request input that does not participate in cache identity.
-
-Keep values used only for client-side presentation outside the query function and key.
-
-Do not capture a mutable module variable, current timestamp, or implicit global that changes the request without changing the key.
-
-If the request intentionally uses ambient configuration that is constant for the cache lifetime, document that ownership at the request boundary.
+Do not hide response-changing arguments in `meta`, mutable module state, ambient configuration, or an imported helper's closure. Keep presentation-only values outside the query function and key.

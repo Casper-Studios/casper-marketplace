@@ -6,7 +6,7 @@ Use a non-secret identifier such as an actor ID, tenant ID, or stable session pa
 
 Never include bearer tokens, API keys, cookies, authorization codes, or other credentials in a query key. Query keys can appear in developer tools, logs, persistence, and diagnostics.
 
-Keep credential acquisition in the request boundary. Cache identity represents visibility, not the credential material used to authenticate the request.
+Let the HTTP client attach credentials to the request. Cache identity represents visibility, not the credential material used to authenticate the request.
 
 ```typescript
 // BAD: credential material becomes cache metadata.

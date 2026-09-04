@@ -1,4 +1,3 @@
 interface:
-  display_name: "Zod Best Practices"
-  short_description: "Help with Zod Best Practices tasks"
-  default_prompt: "Use $zod-best-practices to review these schemas."
+  display_name: 'Zod Best Practices'
+  short_description: 'Design explicit and reliable Zod schemas.'

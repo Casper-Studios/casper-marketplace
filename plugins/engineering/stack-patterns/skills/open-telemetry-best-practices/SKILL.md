@@ -1,6 +1,7 @@
 ---
 name: open-telemetry-best-practices
-description: Opinionated, language-agnostic OpenTelemetry conventions for span inputs and outputs, named log events, log severity, structured attributes, and operational errors. Use when adding or reviewing OpenTelemetry-compatible telemetry; deciding between span, event, and log attributes; choosing log severity; naming attributes; recording exceptions or cause chains; setting error.type; or setting span status.
+description: Language-agnostic OpenTelemetry conventions for queryable signals and explicit operational outcomes. Use when adding or reviewing spans, structured logs, attributes, or exception recording.
+compatibility: Requires OpenTelemetry-compatible systems using the official SDKs.
 license: MPL-2.0
 metadata:
   author: 'Basti Ortiz <ortiz@bastidood.dev>'
@@ -34,11 +35,13 @@ Treat this guidance as language-agnostic. Adapt illustrative JavaScript SDK exam
 - Specification GitHub and DeepWiki: `open-telemetry/opentelemetry-specification`
 - Semantic Conventions GitHub and DeepWiki: `open-telemetry/semantic-conventions`
 
-## References
+## Effective Strategies for OpenTelemetry
 
-Read as many linked references as are relevant to the current task.
+Read the linked guidance that governs the current task.
 
-- When placing or naming queryable context, applying official semantic-convention libraries, or instrumenting loops, apply [structured attribute conventions](./references/structured-attributes.md) to distinguish operation attributes from occurrence attributes without copying correlated context by default.
-- When a log occurrence needs an impact level, apply the [log severity model](./references/log-severity.md) without deriving severity from control flow or span status.
-- When an operation fails, apply [failed-operation outcomes](./references/operation-failure-outcomes.md) so span status and any available `error.type` describe that operation independently from exception emission.
-- When an exception is observed, propagated, recovered, retried, or terminally handled, apply [exception recording](./references/exception-recording.md) to preserve its causal chain without gaps or repeated payloads.
+1. Make telemetry fields queryable, interoperable, and bounded.
+   - When placing or naming queryable context, applying official semantic-convention libraries, or instrumenting loops, apply [structured attribute conventions](./references/structured-attributes.md) to distinguish operation attributes from occurrence attributes without copying correlated context by default.
+   - When a log occurrence needs an impact level, apply the [log severity model](./references/log-severity.md) without deriving severity from control flow or span status.
+2. Preserve the operational outcome and exception causal chain independently.
+   - When an operation fails, apply [failed-operation outcomes](./references/operation-failure-outcomes.md) so span status and any available `error.type` describe that operation independently from exception emission.
+   - When an exception is observed, propagated, recovered, retried, or terminally handled, apply [exception recording](./references/exception-recording.md) to preserve its causal chain without gaps or repeated payloads.

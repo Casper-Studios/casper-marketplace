@@ -23,6 +23,8 @@ features/
 
 Calculations, transformations, state transitions, and other sans-I/O behavior stay with the leaf that implements them. Move their tests and leaf-specific fixtures with that implementation during a structural refactor.
 
+Keep a helper with its consumer when its behavior is incidental to that file. Extract a utility file when meaningful project-owned sans-I/O behavior needs a direct colocated test, even with one production consumer. Do not invent tests for trivial glue or promote the utility to shared code until multiple owners require a stable contract.
+
 A test that crosses leaf, feature, persistence, route, process, or external-adapter boundaries is an integration test. Hoist it to the nearest caller, orchestrator, package, or dedicated integration boundary that owns the combined behavior. Do not place it inside one participating feature and imply that the feature owns the other participants.
 
 ```text

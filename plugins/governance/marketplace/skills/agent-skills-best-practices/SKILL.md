@@ -1,6 +1,6 @@
 ---
 name: agent-skills-best-practices
-description: Opinionated conventions for authoring, restructuring, and reviewing agent skills. Use when deciding whether guidance belongs in `SKILL.md`, a conditional reference, or a smaller skill; writing trigger descriptions and reference routers; naming procedural or documentary skills; creating examples; keeping skill context focused; or bundling static assets and their licenses.
+description: Agent-skill design conventions for focused scope, precise discovery, and progressive disclosure. Use when creating, restructuring, or reviewing `SKILL.md`-based skills.
 license: MPL-2.0
 metadata:
   author: 'Basti Ortiz <ortiz@bastidood.dev>'
@@ -9,21 +9,28 @@ metadata:
 
 # Agent Skills Best Practices
 
-Treat agent skills as opinionated context engineering, not as mirrors of documentation that an agent can fetch elsewhere. A skill earns its context cost by preserving distinctive judgment, repeatable procedure, or peripheral knowledge that materially changes how an agent works.
+Use skills for decisions, procedures, and knowledge that change how the agent works. Do not repeat documentation it can look up.
 
-Keep the governing model and the minimum explainer needed to understand a skill in `SKILL.md`. Inline content that every invocation needs. Reserve progressive disclosure for conditional or detail-oriented guidance, and route to that guidance with concise prose that explains why it matters.
+Keep essential guidance in `SKILL.md`. Put conditional detail in references and explain when to read each.
+
+Show, don't tell: pair contrasting examples with a short explanation.
 
 ## References
 
-Read as many linked references as are relevant to the authoring or review task.
-
-- When a capability must read clearly in discovery and invocation surfaces, choose a [procedural or documentary name](./references/skill-naming.md) that communicates what the skill provides.
-- When one skill begins collecting unrelated triggers or decisions, restore a [cohesive skill scope](./references/skill-scope.md) instead of growing an umbrella package.
-- When discovery is too broad, too narrow, or vague, make the [trigger description](./references/trigger-descriptions.md) name the capability and concrete situations that need it.
-- When deciding what enters the always-loaded entry point, use [context and disclosure](./references/context-and-disclosure.md) to separate the governing model from conditional detail.
-- When an index must make conditional material discoverable, write [reference routing](./references/reference-routing.md) that primes the agent with the relevant situation and decision.
-- When examples can expose or obscure the actual opinion, follow the [example conventions](./references/examples.md) instead of turning the skill into a tutorial.
-- When prose or Markdown formatting can distract from the rule, keep [skill writing](./references/prose-and-formatting.md) direct, compact, and mechanically consistent.
-- When resources begin forming subtrees, restore a [flat directory structure](./references/directory-structure.md) so every conditional resource stays one hop from its entry point.
-- When a skill governs one external library, keep [library source identifiers](./references/library-sources.md) visible without copying documentation into the skill.
-- When a skill would bundle images, fonts, documents, templates, or other blobs, apply the [asset distribution](./references/asset-distribution.md) policy before including them.
+1. Make the skill easy to find and invoke.
+   - [Name the procedure or subject the skill covers.](./references/skill-naming.md)
+   - [Describe what the skill does and when to invoke it.](./references/trigger-descriptions.md)
+2. Keep each skill focused.
+   - [Split unrelated triggers or decisions into separate skills.](./references/skill-scope.md)
+   - [Separate essential guidance from conditional detail.](./references/context-and-disclosure.md)
+   - [Explain when each reference applies.](./references/reference-routing.md)
+   - [Contrast approaches and explain why the difference matters.](./references/examples.md)
+   - [Keep prose direct and formatting consistent.](./references/prose-and-formatting.md)
+3. Use scripts for deterministic work and models for judgment. Prefer existing tools and standard libraries. Declare required third-party Python dependencies with [PEP 723](https://peps.python.org/pep-0723/) and lock them with `uv`.
+   - [Make scripts reproducible and usable from read-only installations.](./references/executable-scripts.md)
+4. Make guidance usable outside its source project.
+   - [Write portable guidance with framework-appropriate examples.](./references/agnostic-references.md)
+5. Keep resources portable and in the skill that owns them.
+   - [Keep resource paths flat and one hop from the entry point.](./references/directory-structure.md)
+   - [Identify external libraries without copying their documentation.](./references/library-sources.md)
+   - [Check distribution and licensing rules before bundling assets.](./references/asset-distribution.md)
