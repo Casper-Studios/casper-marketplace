@@ -2,7 +2,7 @@ name: Registry Export
 
 # Publishes the skill registry to Logfire as one log record per skill, so the
 # claude-telemtery dashboard can tell Casper skills from everything else without
-# a hand-typed list. Runs on merge to main and weekly (records age out).
+# a hand-typed list. Runs on merge to main and daily: dashboard panels only see records inside their time range.
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
       - '.github/scripts/registry-sync/**'
       - '.github/workflows/registry-export.yml'
   schedule:
-    - cron: '0 6 * * 1'
+    - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
       dry_run:

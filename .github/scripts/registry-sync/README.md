@@ -127,8 +127,9 @@ hand-typed list. It writes `telemetry/casper-skills.json` for review and sends o
 newest snapshot per repository.
 
 `.github/workflows/registry-export.yml` runs it on every push to `main` that touches
-`plugins/`, `.claude-plugin/`, `telemetry/` or these scripts, and weekly (Logfire records
-age out, so the newest snapshot has to be re-sent). It needs the repository secret
+`plugins/`, `.claude-plugin/`, `telemetry/` or these scripts, and once a day. The daily run matters
+because a dashboard panel only sees records inside its time range, so the newest snapshot has to be
+re-sent often enough to be inside a one-day view. It needs the repository secret
 `LOGFIRE_WRITE_TOKEN`, a write token for the `claude-telemtery` project. Manual runs are
 dry runs unless you untick `dry_run`.
 
