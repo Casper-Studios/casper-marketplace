@@ -1,0 +1,54 @@
+name: Registry Export
+
+# Publishes the skill registry to Logfire as one log record per skill, so the
+# claude-telemtery dashboard can tell Casper skills from everything else without
+# a hand-typed list. Runs on merge to main and daily: dashboard panels only see records inside their time range.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+      - '.claude-plugin/**'
+      - 'telemetry/**'
+      - '.github/scripts/registry-sync/**'
+      - '.github/workflows/registry-export.yml'
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Build the payload, send nothing'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: registry-export
+  cancel-in-progress: false
+
+jobs:
+  export:
+    if: contains(fromJSON('["Casper-Studios/casper-secret-sauce", "Casper-Studios/casper-marketplace"]'), github.repository)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: .github/scripts/registry-sync/sync.py.lock
+
+      - name: Unit tests
+        run: uv run --locked --script .github/scripts/registry-sync/sync.py test
+
+      - name: Export the registry to Logfire
+        env:
+          GH_REPO: ${{ github.repository }}
+          LOGFIRE_WRITE_TOKEN: ${{ secrets.LOGFIRE_WRITE_TOKEN }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+        run: uv run --locked --script .github/scripts/registry-sync/sync.py export
