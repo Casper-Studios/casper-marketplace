@@ -3,7 +3,7 @@
 When the next value of a state variable depends on its previous value, pass a pure updater function to its setter. Do not read the render's state snapshot solely to calculate that transition.
 
 ```tsx
-// BAD: the callback captures isToggled and must be recreated when it changes.
+// BAD: the callback captures `isToggled` and must be recreated when it changes.
 import { useCallback, useState } from 'react';
 
 function ToggleButton() {

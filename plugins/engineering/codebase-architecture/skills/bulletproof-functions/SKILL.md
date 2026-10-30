@@ -38,7 +38,7 @@ To align on a shared glossary for the rest of this reference, we define the foll
 
 Language/runtime-owned primitives are not application dependencies merely because they are available through globals. Use stable APIs such as `crypto`, Web Crypto, `TextEncoder`, `TextDecoder`, `atob`, `btoa`, and equivalent standard-library primitives directly. Do not create factories, synthetic environment objects, dependency bags, or wrapper ports merely to inject them. This direct access does not make hidden nondeterminism or side effects honest: mutable, configurable, and policy-controlled global state remains external. Reserve dependency injection and explicit external handles for application-owned or stateful resources such as databases, network clients, file systems, configurable services, test-owned collaborators, and clocks when policy requires control.
 
-Dishonest functions remain dishonest despite invoking some honest functions. The converse is false; honest functions that now invoke dishonest functions are themselves dishonest. Keep application-owned dependencies explicit throughout the call graph.
+Calling honest work does not erase a function's hidden dependencies. Keep application-owned dependencies explicit throughout the call graph. An injected callback is an explicit capability for handling a result, and may perform effects; this does not make the composition pure or expose dependencies hidden inside the callback implementation. Judge the callback's own honesty by the same dependency rule.
 
 Minimize hidden dependencies, not function size. Keep orchestration cohesive; do not add forwarding wrappers to increase the count of honest functions. Honesty does not imply purity: an explicit resource handle still permits I/O, while sans-I/O decisions operate only on values.
 
@@ -160,7 +160,7 @@ Read the references relevant to the function boundary being designed or reviewed
 3. Show empathy for callers.
    - [Prefer flexible parameter types/interfaces/generics instead of over-constrained concrete types.](./references/flexible-generic-parameters.md)
 4. Strongly consider hoisting invariants/preconditions/post-conditions to the type system to make invalid states irrepresentable.
-   - [Pass tokens as proof of completion/validity instead of relying on runtime checks.](./references/proof-of-completion-tokens.md)
+   - [Use owner-issued tokens tied to the operation, resource, and lifetime they certify.](./references/proof-of-completion-tokens.md)
    - [Use wrapper types to encode validated runtime values in the type system.](./references/validated-wrapper-types.md)
 5. Stay at one level of abstraction.
    - [Keep one level of intent with the "Same Indentation Rule"; do not extract ordinary control flow mechanically.](./references/same-indentation-rule.md)

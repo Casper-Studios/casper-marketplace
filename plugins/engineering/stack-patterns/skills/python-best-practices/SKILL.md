@@ -9,7 +9,8 @@ metadata:
 
 # Python Best Practices
 
-This skill applies modern Python mechanisms without adding annotation or packaging ceremony. It favors inference, precise structural contracts, explicit runtime validation, side-effect-free imports, and context-managed resource ownership.
+> [!IMPORTANT]
+> Apply the `codebase-architecture:code-style` principles through modern Python mechanisms without annotation or packaging ceremony: favor inference, precise structural contracts, explicit runtime validation, side-effect-free imports, and context-managed resource ownership.
 
 ## Effective Strategies for Python
 

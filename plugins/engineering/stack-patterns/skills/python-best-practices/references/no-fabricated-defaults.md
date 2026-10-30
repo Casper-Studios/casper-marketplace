@@ -1,6 +1,6 @@
 # Do Not Fabricate Defaults
 
-Do not replace missing required data with an invented value solely to satisfy a type checker. Preserve absence or raise at the operation boundary.
+Do not use `or` to supply a value for missing required data. `or` replaces every falsy operand, so it also overwrites valid values such as `0`, `False`, and `""`.
 
 ```python
 # BAD: changes missing data into a misleading valid-looking value.
@@ -15,5 +15,3 @@ def email_receipt(email: str | None):
 
     send_email(email)
 ```
-
-An empty address changes the meaning of the failure and sends an invalid value into another layer.

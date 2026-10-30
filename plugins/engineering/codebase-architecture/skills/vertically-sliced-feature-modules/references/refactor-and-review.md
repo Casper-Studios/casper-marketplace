@@ -1,29 +1,34 @@
 # Refactor and Review
 
-Write the intended ownership tree before moving files. Every directory must have a named owner, entry point, consumer set, and dependency direction.
+Analyze ownership to a fixed point before declaring a structural refactor complete.
 
-Use this placement test:
+1. Inventory production imports and existing build, runtime, and framework boundaries.
+2. Identify the complete operation exposed to each external consumer.
+3. Record every file's direct production consumers.
+4. Move exclusive dependencies beneath their narrowest consumer.
+5. Place multi-consumer dependencies at their lowest common owning ancestor.
+6. Repeat steps 2 through 5 inside every newly formed subsystem.
+7. Verify that external callers import operational entries and do not bypass them for private leaves.
+8. Stop when another analysis pass produces no ownership move.
 
-- Which capability changes when this code changes?
-- Which entry point imports and composes it?
-- Does another feature consume the same stable behavior today?
-- Can callers target a public capability instead of a private leaf?
-- Does the placement reduce navigation and unrelated coupling?
-- Does a separate package insulate a real dependency or runtime closure?
+Write the intended ownership tree before moving files. Every directory must have a named owner, an operation or concept, an entry when external callers need one, a consumer set, and a dependency direction.
 
-Move existing files instead of recreating them. Preserve behavior, tests, public contracts, resource ownership, and framework entry points while changing structure. Delete obsolete paths only after import and test discovery proves that no consumer remains.
+Move existing files instead of recreating them. Preserve behavior, tests, public contracts, resource ownership, and framework entry points while changing structure. Delete obsolete paths only after import and test discovery proves that no consumer remains. Do not redesign business behavior under cover of a structural move.
 
-Keep meaningful existing tests when moving or merging implementation. Do not treat a test caller as a shared-code owner.
+Keep meaningful tests with the behavior they protect. Do not treat a test caller as a reason to promote production code.
 
-Reject these review smells:
+Audit the final import graph, not only the directory tree. Reject these conditions:
 
-- One feature requires edits across distant technical-layer directories.
+- One capability requires edits across distant technical-role directories.
+- Files with a common prefix imitate a subsystem without owning an operation.
+- A child operation's private action, query, state, view, or utility leaks into its parent or sibling.
+- A child imports an ancestor-private or sibling-private implementation file.
 - A route or registry contains reusable business behavior.
-- A shared module has only one real consumer.
 - A feature imports another feature.
-- Sibling implementation folders have no owning entry point.
-- An entry is a barrel-only re-export, a ceremonial directory has no boundary, or internal code imports its own entry point/module root.
-- A private capability's implementation escapes its nearest owning subtree without a real consumer boundary.
-- A trivial helper was extracted only to assert its private details, or an internal helper was promoted without an independently meaningful contract. A focused sans-I/O utility with colocated tests remains valid with one production consumer.
-- A package exists only to mirror a feature folder.
-- Tests live far from the behavior they protect.
+- A broadly shared module has one real production consumer.
+- A subsystem has no operational entry, or its entry only re-exports implementation leaves.
+- Internal code imports its own entry or module root.
+- A package exists only to mirror a feature directory.
+- Tests live outside the narrowest owner of the behavior they protect.
+
+Run the repository's normal static checks and relevant tests after moving files. Search for retired import paths and direct external imports of private leaves. Tooling can prove that imports resolve; the ownership audit must still prove that they point in the correct direction.

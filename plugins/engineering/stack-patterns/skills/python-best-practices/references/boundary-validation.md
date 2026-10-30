@@ -1,6 +1,6 @@
 # Validate Serialized Boundaries
 
-Treat JSON, HTTP bodies, webhooks, TOML, environment-derived structured values, and untyped database JSON as untrusted. Parse them once at the first controlled boundary, then pass typed internal values onward.
+Validate serialized input into a typed model at the boundary that decodes it. Do not decode it into a mapping first.
 
 ```python
 import json
@@ -23,4 +23,4 @@ def decode_event(body: bytes):
     return WebhookEvent.model_validate_json(body)
 ```
 
-Authentication does not prove payload shape. Do not return unvalidated `dict[str, object]` from an integration boundary.
+Do not return unvalidated `dict[str, object]` from an integration boundary.

@@ -35,7 +35,7 @@ function useBadItemTable(data: Item[], onEdit: (id: string) => void) {
 	return useTable({ features, columns, data });
 }
 
-// GOOD: schema is static; table meta supplies per-instance capability.
+// GOOD: schema is static; table `meta` supplies per-instance capability.
 const columns = columnHelper.columns([
 	columnHelper.accessor('name', { header: 'Name', cell: info => info.getValue() }),
 	columnHelper.display({

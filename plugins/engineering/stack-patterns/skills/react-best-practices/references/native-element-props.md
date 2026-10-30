@@ -30,4 +30,4 @@ Use `ComponentPropsWithRef<'element'>` when callers can pass a ref. Use `Compone
 
 Do not recreate native props by hand. A narrow handwritten interface silently drops `aria-*`, `data-*`, form attributes, keyboard handlers, and future platform additions.
 
-Resolve prop-name collisions deliberately with `Omit` before adding a component-specific meaning. Preserve the native semantic element unless the component contract requires another element.
+Resolve prop-name collisions deliberately with `Omit` before adding a component-specific meaning. Use links for navigation and forms for submission; choose the existing semantic platform or design-system control before emulating its behavior with events.

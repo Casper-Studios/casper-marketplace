@@ -6,29 +6,26 @@ Represent related mutually exclusive state as one discriminated union rather tha
 const enum RequestStatus {
 	Idle = 'idle',
 	Loading = 'loading',
-	Error = 'error',
 	Success = 'success',
+	Failure = 'failure',
 }
 
-interface IdleRequest {
+interface IdleState {
 	status: RequestStatus.Idle;
 }
-
-interface LoadingRequest {
+interface LoadingState {
 	status: RequestStatus.Loading;
 }
-
-interface FailedRequest {
-	status: RequestStatus.Error;
+interface SuccessState<Data> {
+	status: RequestStatus.Success;
+	data: Data;
+}
+interface FailureState {
+	status: RequestStatus.Failure;
 	error: Error;
 }
 
-interface SuccessfulRequest<T> {
-	status: RequestStatus.Success;
-	data: T;
-}
-
-type RequestState<T> = IdleRequest | LoadingRequest | FailedRequest | SuccessfulRequest<T>;
+type RequestState<Data> = IdleState | LoadingState | SuccessState<Data> | FailureState;
 
 function BadRequestView() {
 	// BAD: invalid combinations are representable.
@@ -52,22 +49,14 @@ function RequestStateView({ request }: { request: RequestState<JobData> }) {
 			return <IdleNotice />;
 		case RequestStatus.Loading:
 			return <Spinner />;
-		case RequestStatus.Error:
-			return <ErrorBanner error={request.error} />;
 		case RequestStatus.Success:
 			return <JobDetailInner data={request.data} />;
-		default: {
-			const unreachable: never = request;
-			throw new Error(`Unhandled request state: ${String(unreachable)}`);
-		}
+		case RequestStatus.Failure:
+			return <ErrorBanner error={request.error} />;
 	}
 }
 ```
 
-Define an enum-backed discriminant and variants that contain only the fields valid for that state. Render each discriminant exhaustively.
-
 Use a state machine when one state changes the valid fields, actions, or rendering of another. Do not introduce one for independent local values such as an input string and an open flag.
 
 Transition through named events or functions that construct only valid variants. Do not mutate one field of a union-shaped state while leaving fields from the previous variant behind.
-
-Treat an unhandled discriminant as an internal invariant failure rather than rendering a fabricated fallback.

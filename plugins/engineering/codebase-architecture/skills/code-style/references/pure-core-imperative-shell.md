@@ -26,8 +26,6 @@ function decideApproval(paymentResult: PaymentResult) {
 			return Decision.ApproveOrder;
 		case PaymentResult.Declined:
 			return Decision.RejectPayment;
-		default:
-			throw new Error('unknown payment result');
 	}
 }
 ```

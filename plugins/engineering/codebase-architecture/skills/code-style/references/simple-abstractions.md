@@ -3,15 +3,23 @@
 Use the most direct code that preserves the domain model and required behavior. An abstraction must remove real duplication, establish a stable boundary, own a dependency closure or resource lifetime, or give a precise name to a domain concept.
 
 ```typescript
-// BAD: a single-use helper hides trivial work.
-function buildDisplayName(user: User) {
-	return `${user.firstName} ${user.lastName}`;
+// BAD: an invented source contract only packs a query for immediate unpacking.
+function buildFileSource(database: Database) {
+	return { query: buildFilesQuery(database) };
 }
-const displayName = buildDisplayName(user);
 
-// GOOD: keep one obvious operation at its call site.
-const directDisplayName = `${user.firstName} ${user.lastName}`;
+function buildPeopleSource(source: { query: FilesQuery }) {
+	return { query: buildPeopleQuery(source.query) };
+}
+
+const source = buildPeopleSource(buildFileSource(database));
+const query = source.query.as(alias);
+
+// GOOD: compose the existing query contracts directly.
+const directQuery = buildPeopleQuery(buildFilesQuery(database)).as(alias);
 ```
+
+Keep the same contract through adjacent layers when an adapter only packs values for the next layer to unpack. Keep meaningful builders, discriminated state objects, and separate representations that enforce an invariant, change domain meaning, or provide a stable boundary.
 
 One consumer can justify a function that hides meaningful work. Typically, give a utility its own file because its sans-I/O behavior needs a separate colocated test; keep both under their owner. Do not invent tests for trivial glue or promote a utility merely because its test also imports it.
 

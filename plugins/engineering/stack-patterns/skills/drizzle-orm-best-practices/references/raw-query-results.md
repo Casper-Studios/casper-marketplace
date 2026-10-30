@@ -11,7 +11,7 @@ import { sql } from 'drizzle-orm';
 const IsolationRowSchema = v.object({ transaction_isolation: v.string() });
 const parseIsolationRows = v.parser(v.array(IsolationRowSchema));
 
-// node-postgres: SHOW is not represented by a Drizzle query builder.
+// `node-postgres`: `SHOW` is not represented by a Drizzle query builder.
 const result = await db.execute(sql`SHOW transaction_isolation`);
 const rows = parseIsolationRows(result.rows);
 ```

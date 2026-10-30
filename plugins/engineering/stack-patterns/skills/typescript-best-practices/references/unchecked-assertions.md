@@ -12,4 +12,4 @@ if (!result.success) throw new Error('Invalid response');
 const data = result.output;
 ```
 
-Treat network responses, JSON columns, and form data as untrusted. Use a schema skill for the concrete parser pattern.
+Use a schema skill for the concrete parser pattern.

@@ -9,7 +9,8 @@ metadata:
 
 # Zod Best Practices
 
-Treat a Zod schema as the owned contract at an untrusted data boundary: it defines accepted wire values, produces trusted domain values, and makes invalid input an explicit, intentional outcome.
+> [!IMPORTANT]
+> Apply the `codebase-architecture:code-style` principles to Zod: treat a schema as the owned contract at an untrusted data boundary that defines accepted wire values, produces trusted domain values, and makes invalid input an explicit, intentional outcome.
 
 ## Library Sources
 
@@ -19,13 +20,12 @@ Treat a Zod schema as the owned contract at an untrusted data boundary: it defin
 
 Use Context7 for current documentation and DeepWiki for implementation details.
 
-## Effective Strategies for Zod
+## References
 
 Read the references that apply to the current task before defining or reviewing Zod schemas and parsing code.
 
 1. Make schemas the owned, trusted contract for wire data.
-   - [Keep a schema and its standard string formats as the single source of truth](./references/schema-ownership-and-formats.md) instead of duplicating types or custom format logic.
-   - [Validate serialized data at its trust boundary](./references/serialized-trust-boundaries.md), including authenticated external payloads, before it becomes a domain value.
+   - [Keep a schema and its standard string formats as the single source of truth](./references/schema-ownership-and-formats.md), inferring types when needed and exposing schema/type pairs only as intentional public contracts.
    - [Keep constructors and format validators under one `z` import](./references/zod-imports.md) rather than mixing import forms.
    - [Infer the correct side of a schema](./references/schema-input-output.md) with `z.input` or `z.infer` when a transform or default changes accepted input from parsed output instead of hand-writing either type.
 2. Express the complete protocol contract in the schema.

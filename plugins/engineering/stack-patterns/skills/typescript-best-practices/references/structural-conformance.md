@@ -10,7 +10,7 @@ const routes: Record<string, `/${string}`> = {
 };
 
 const usersRoute: '/users' = routes.users;
-// Error: `/${string}` is not assignable to '/users'.
+// Error: `/${string}` is not assignable to `'/users'`.
 ```
 
 ```typescript

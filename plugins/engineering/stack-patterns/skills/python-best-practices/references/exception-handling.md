@@ -22,4 +22,4 @@ def load_template(path: Path):
         raise RuntimeError(f"Could not load template: {path}") from error
 ```
 
-Do not catch `Exception` to turn unrelated programming failures into ordinary control flow. Do not add a `try` block when a caller can handle the original exception directly.
+Do not catch `Exception` to turn unrelated programming failures into ordinary control flow.

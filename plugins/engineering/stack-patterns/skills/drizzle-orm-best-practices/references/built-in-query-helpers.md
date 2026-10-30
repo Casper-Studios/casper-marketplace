@@ -47,7 +47,7 @@ const rawSummary = await db.select({ total: sql`count(*)`.mapWith(Number) }).fro
 ```
 
 ```typescript
-// GOOD: count owns SQL generation and runtime conversion.
+// GOOD: `count` owns SQL generation and runtime conversion.
 import { count } from 'drizzle-orm';
 
 const summary = await db.select({ total: count() }).from(users);

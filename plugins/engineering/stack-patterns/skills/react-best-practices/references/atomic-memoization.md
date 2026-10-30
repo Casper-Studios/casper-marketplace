@@ -4,7 +4,7 @@ Memoize each independent pure render-time computation worse than O(1) separately
 
 ```tsx
 // Render-body excerpt.
-// BAD: changing selectedIds recomputes total unnecessarily.
+// BAD: changing `selectedIds` recomputes `total` unnecessarily.
 const { selected, total } = useMemo(() => {
 	const selectedIdSet = new Set(selectedIds);
 	return {

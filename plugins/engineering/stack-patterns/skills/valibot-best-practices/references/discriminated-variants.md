@@ -14,7 +14,7 @@ const Response = v.union([
 	v.object({ status: v.literal(ResponseStatus.Failed), error: v.string() }),
 ]);
 
-// GOOD: dispatches by the status tag.
+// GOOD: dispatches by the `status` tag.
 const Response = v.variant('status', [
 	v.object({ status: v.literal(ResponseStatus.Success), data: v.string() }),
 	v.object({ status: v.literal(ResponseStatus.Failed), error: v.string() }),

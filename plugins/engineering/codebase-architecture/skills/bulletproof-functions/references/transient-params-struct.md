@@ -100,6 +100,36 @@ set_timer(
 )
 ```
 
+## Preserve Structured Boundary Inputs
+
+When an action boundary already accepts structured data, preserve distinct domain fields instead of joining them into an ad hoc delimited identifier and splitting them at the next layer. Assume the action validates its external input before the domain operation:
+
+```typescript
+// BAD: joining and splitting discards the domain field contract.
+await bookmarkAction(`${artifact.type}:${artifact.id}`);
+
+async function bookmarkAction(compoundId: string) {
+	const [artifactType, artifactId] = compoundId.split(':');
+	return saveBookmark(parseArtifactType(artifactType), parseArtifactId(artifactId));
+}
+```
+
+```typescript
+interface BookmarkInput {
+	artifactType: ArtifactType;
+	artifactId: string;
+}
+
+// GOOD: the structured action contract keeps the fields distinct.
+await bookmarkAction({ artifactType: artifact.type, artifactId: artifact.id });
+
+async function bookmarkAction(input: BookmarkInput) {
+	return saveBookmark(input.artifactType, input.artifactId);
+}
+```
+
+Use an existing discriminated domain contract when fields depend on one another. Keep required endpoint validation and authorization at the trust boundary. A wire protocol or established opaque identifier can legitimately require a string representation. This is not a reason to replace short, clearly hierarchical positional signatures with parameter bags.
+
 ## Important: Not to be Confused for Passing God Classes
 
 This technique should not be confused for the anti-pattern of passing entire class instances as parameters. Not only does this oversubscribe the function's interface (i.e., many fields/methods are irrelevant), but it also implies coupling between the function and the class, which is typically not the intention.

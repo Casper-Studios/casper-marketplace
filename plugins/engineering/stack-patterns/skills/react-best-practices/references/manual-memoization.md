@@ -15,7 +15,7 @@ function BadItemList({ items }: ItemListProps) {
 
 ```tsx
 // Component excerpt.
-// GOOD: cache the O(n) derivation until items changes.
+// GOOD: cache the O(n) derivation until `items` changes.
 function ItemList({ items }: ItemListProps) {
 	const visibleItems = useMemo(() => items.filter(item => item.isVisible), [items]);
 	return <Rows items={visibleItems} />;
