@@ -2,8 +2,6 @@
 
 Capturing request variables in a query closure is forbidden, even when the key contains the same values. Put application request arguments in the typed `queryKey` and destructure them from `queryFn`'s context. Receive cancellation through `context.signal` and an infinite-query cursor through `context.pageParam`.
 
-Declare every `queryFn` as `async` and `await` its request.
-
 ```typescript
 import { useQuery } from '@tanstack/react-query';
 

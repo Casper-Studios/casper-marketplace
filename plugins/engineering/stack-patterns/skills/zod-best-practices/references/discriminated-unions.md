@@ -14,7 +14,7 @@ const Response = z.union([
 	z.object({ status: z.literal(ResponseStatus.Failed), error: z.string() }),
 ]);
 
-// GOOD: dispatches by the status tag.
+// GOOD: dispatches by the `status` tag.
 const Response = z.discriminatedUnion('status', [
 	z.object({ status: z.literal(ResponseStatus.Success), data: z.string() }),
 	z.object({ status: z.literal(ResponseStatus.Failed), error: z.string() }),

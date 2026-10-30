@@ -3,7 +3,7 @@
 Use a ternary when a JSX branch can render a value.
 
 ```tsx
-// BAD: && can render 0 or an empty string.
+// BAD: `&&` can render `0` or an empty string.
 function BadBadgeSlot({ count }: { count: number }) {
 	return count && <Badge count={count} />;
 }
@@ -15,10 +15,6 @@ function BadgeSlot({ count }: { count: number }) {
 ```
 
 Use early returns for full component states such as loading, error, empty, and success. Use a ternary for local optional fragments.
-
-Do not hide semantic conditions inside coercion, truthiness, or string interpolation.
-
-Prefer affirmative predicates that state what renders. Name a non-trivial predicate before JSX when that makes the condition readable.
 
 Render an explicit empty branch with `null`; do not rely on an omitted expression to communicate absence.
 

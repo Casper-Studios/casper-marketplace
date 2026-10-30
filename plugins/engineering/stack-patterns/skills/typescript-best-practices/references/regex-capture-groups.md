@@ -3,7 +3,7 @@
 Treat named and positional regular-expression captures as optional. Validate a required capture before assigning it to a required domain field.
 
 ```typescript
-// BAD: either expression can be undefined.
+// BAD: either expression can be `undefined`.
 content: match.groups?.name ?? match[1];
 
 // GOOD: preserve absence until the operation establishes its invariant.

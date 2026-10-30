@@ -1,21 +1,13 @@
 # Finite-State Exhaustiveness
 
-Represent a finite state space with a `Literal`, `Enum`, or discriminated model. Pass the unmatched value to a `Never`-typed failure function so a new member becomes a type-checking failure.
+Represent a finite state space with a `Literal`, `Enum`, or discriminated model. Match every member explicitly so a new member becomes a type-checking failure. Do not add a `case _` branch to a `match` that already covers every member.
 
 ```python
-from typing import Literal, Never
+from typing import Literal
 
 type JobState = Literal["queued", "running", "complete"]
 
 
-# BAD: a new state silently inherits an unrelated label.
-def label_with_fallback(state: JobState):
-    if state == "queued":
-        return "Waiting"
-    return "Done"
-
-
-# GOOD: the type checker rejects an unmatched state.
 def label(state: JobState):
     match state:
         case "queued":
@@ -24,8 +16,6 @@ def label(state: JobState):
             return "In progress"
         case "complete":
             return "Done"
-        case _:
-            raise RuntimeError("Unhandled state")
 ```
 
-The type checker rejects the `Never` assignment when a newly added state lacks a case. The runtime failure remains active under optimization.
+Configure the type checker to report non-exhaustive `match` statements. Add a `case _` branch only when the matched type is open, such as `str` or `int`, and the remaining values share one defined behavior.

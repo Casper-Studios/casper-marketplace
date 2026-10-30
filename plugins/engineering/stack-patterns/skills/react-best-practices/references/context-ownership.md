@@ -1,33 +1,37 @@
 # Context Ownership
 
-Keep props for short, explicit composition paths. Use context when one coherent component subsystem owns shared state or behavior consumed at multiple depths.
+Keep props for short, explicit composition paths. Use context when one coherent subsystem owns state or behavior consumed at multiple depths, rather than to hide ordinary prop forwarding.
+
+Component excerpts:
 
 ```tsx
-// BAD: a short composition path does not need ambient state.
-function SearchToolbar() {
-	const [value, setValue] = useState('');
+// BAD: a context exists only to forward one value to one direct child.
+const SessionContext = createContext<Session | null>(null);
+
+function BadToolbar({ session }: ToolbarProps) {
 	return (
-		<Toolbar value={value}>
-			<FilterInput value={value} onChange={setValue} />
-		</Toolbar>
+		<SessionContext value={session}>
+			<Toolbar />
+		</SessionContext>
 	);
 }
 
-// GOOD: a subsystem owns state consumed at several depths.
-interface ValueContextValue {
-	value: string;
-	setValue(value: string): void;
-}
-
-const ValueContext = createContext<ValueContextValue | null>(null);
-
-function useValue() {
-	const value = useContext(ValueContext);
-	if (value === null) throw new Error('useValue must be within ValueProvider');
-	return value;
+// GOOD: the direct dependency stays visible.
+function SessionToolbar({ session }: ToolbarProps) {
+	return <Toolbar session={session} />;
 }
 ```
 
-Forwarding one prop does not justify context. Use an external store only when independent subtrees need the same state or consumers require selective subscriptions.
+Create context around a coherent multi-depth subsystem and validate its provider boundary when absence is invalid. An external store earns its place when independent subtrees share state or consumers need selective subscriptions; reuse the project's instance/provider pattern and intended lifetime.
 
-Keep state and actions in a context boundary that has one coherent owner. Do not use context as a hidden global parameter channel.
+Existing selector-hook excerpts:
+
+```tsx
+// BAD: the consumer subscribes to the entire store before selecting fields.
+const { selectedIds } = useDocumentSelection();
+
+// GOOD: the consumer subscribes only to what it uses.
+const selectedIds = useDocumentSelection(state => state.selectedIds);
+```
+
+Keep selectors narrow through convenience hooks instead of returning the whole store for later destructuring. Preserve separate subscriptions for unrelated state and stable actions. A count of actions alone does not require a store.

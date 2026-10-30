@@ -42,9 +42,9 @@ int main() { // framework hook
 
 Now we can invoke/test `all_permutations` in isolation. For instance, we can trivially switch the entry point so that it tests for a file stream instead of a console stream. That's the beauty of insulating application-owned resources and stateful external handles at the topmost level while stable standard-library algorithms remain inside the honest work.
 
-## Performance Optimization: Out-Parameter Injection
+## Reuse Caller-Owned Storage
 
-One performance optimization is to use an out-parameter instead of a return value. Allocating a `std::vector` (or any other expensive analogous resource) can be expensive, so it's preferable to defer that decision to the caller.
+If measured allocation cost matters, a caller may supply reusable output storage. This example receives a vector by value, appends permutations, and returns it. Moving a vector into the call can reuse its capacity; passing an lvalue copies it. This is a move-in/move-out contract, not a mutable-reference out-parameter. Prefer an ordinary return value when caller storage reuse is not required.
 
 ```cpp
 auto all_permutations(std::vector<std::string> permutations, std::string input) {
@@ -56,16 +56,16 @@ auto all_permutations(std::vector<std::string> permutations, std::string input) 
 }
 ```
 
-## Performance Optimization: Dependency Inversion
+## Caller-Controlled Result Handling
 
-In the spirit of functional programming, a generalization of the previous technique involves injecting a callback for each intermediate result. The honest walker never allocates a result collection and never prints. The caller injects printing, collection, or test assertions as the callback.
+A callback lets the caller handle each result without requiring the walker to allocate a collection. The callback is an explicit dependency, but invoking it may perform effects: the walker is not guaranteed pure. Injection does not expose application dependencies hidden inside the callback. Keep valid callback composition; choose a collection, callback, or lazy producer according to the consumption contract and measured costs.
 
 ```cpp
 template <std::invocable<const std::string&> F>
 void for_each_permutation(std::string input, F&& on_permutation) {
     std::sort(input.begin(), input.end()); // honest
     do {
-        std::invoke(std::forward<F>(on_permutation), input); // honest: side effects live in the callback
+        std::invoke(std::forward<F>(on_permutation), input); // explicit callback invocation; effects depend on its implementation
     } while (std::next_permutation(input.begin(), input.end())); // honest
 }
 
@@ -89,7 +89,7 @@ auto all_permutations(std::string input) {
 }
 ```
 
-In languages like Python and JavaScript, we can instead use generators to `yield` values lazily. In Go, the analogous mechanism involves channels and message passing.
+When the algorithm can yield values, a lazy producer lets the caller collect, print, or stop without embedding result handling in the producer. Python and JavaScript have generators; channels and message passing provide a different concurrency contract in Go.
 
 ```typescript
 function* forEachPermutation(input: string) {

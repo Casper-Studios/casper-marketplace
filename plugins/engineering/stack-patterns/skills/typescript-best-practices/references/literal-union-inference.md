@@ -13,7 +13,7 @@ const enum RequestStatus {
 const [state, setState] = useState(RequestStatus.Idle);
 
 setState(RequestStatus.Loading);
-// Error: RequestStatus.Loading is not assignable to RequestStatus.Idle.
+// Error: `RequestStatus.Loading` is not assignable to `RequestStatus.Idle`.
 ```
 
 ```typescript

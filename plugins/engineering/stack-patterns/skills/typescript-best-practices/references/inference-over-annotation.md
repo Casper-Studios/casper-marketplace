@@ -1,84 +1,144 @@
 # Inference Over Annotation
 
-Let TypeScript infer a type when that inference already proves the intended contract. Add an annotation when inference cannot express the required contract or when the function deliberately owns a stable output contract. Do not duplicate an inferred type merely for documentation.
+Infer locals and returns whenever TypeScript proves the intended contract. Add type information where inference cannot establish a required contract, or to establish an empty collection's contract at construction.
 
 ```typescript
-// BAD: `void` and `async` results are derivable from the implementation.
-
-function registerUser({ token, user }: Registration): void {
-	users.set(token, user);
+// BAD: the valued async return is already inferred.
+async function annotatedPort(port: number): Promise<number> {
+	return port;
 }
 
-async function listen(port = 4001): Promise<number> {
+// GOOD: infer valued, valueless, sync, and async returns.
+// Keep parameter contracts when context or an initializer cannot supply them.
+async function portValue(port: number) {
 	return port;
+}
+
+// GOOD: continuing branches establish the local's type before use.
+// A missing initializer alone does not justify an annotation.
+function roleLabel(isOwner: boolean) {
+	let label;
+	if (isOwner) label = 'Owner';
+	else label = 'Member';
+	return label.toUpperCase();
 }
 ```
 
 ```typescript
-// GOOD: retain parameter contracts and infer derivable returns.
-
-function registerUser({ token, user }: Registration) {
-	users.set(token, user);
+interface User {
+	name: string;
 }
 
-async function listen(port = 4001) {
-	return port;
-}
-```
-
-Annotate declared parameters unless an initializer or contextual type supplies the intended type. Return inference applies equally to valued, valueless, synchronous, and asynchronous functions and methods.
-
-Use an explicit return annotation when inference would not express the required contract. A function declaration that only throws can infer `void`; annotate `never` to state that it cannot return. Assertion signatures likewise require explicit annotations.
-
-```typescript
-// GOOD: inference alone cannot communicate the required control-flow contract.
+// GOOD: a throwing declaration can infer `void`; `never` states that it cannot return.
 function fail(message: string): never {
 	throw new Error(message);
 }
 
-// GOOD: runtime evidence establishes the asserted contract.
+// GOOD: assertion signatures need annotations and actual validation.
+// Never annotate unvalidated input as trusted.
 function assertUser(value: unknown): asserts value is User {
-	if (!isUser(value)) throw new Error('Invalid user');
+	if (
+		typeof value !== 'object' ||
+		value === null ||
+		!('name' in value) ||
+		typeof value.name !== 'string'
+	) {
+		throw new Error('Invalid user');
+	}
 }
-```
 
-Use an explicit return annotation when a function owns a stable output contract that must constrain every returned value.
+const enum LoadStatus {
+	Loading = 'loading',
+	Loaded = 'loaded',
+}
 
-```typescript
 interface Loading {
-	status: 'loading';
+	status: LoadStatus.Loading;
 }
 
 interface Loaded {
-	status: 'loaded';
+	status: LoadStatus.Loaded;
 	value: string;
 }
 
 type LoadState = Loading | Loaded;
 
-// GOOD: the function boundary owns and enforces LoadState.
+// GOOD: the owner's intentional return contract constrains every branch.
 function createLoadState(value?: string): LoadState {
-	return value === undefined ? { status: 'loading' } : { status: 'loaded', value };
+	return typeof value === 'undefined'
+		? { status: LoadStatus.Loading }
+		: { status: LoadStatus.Loaded, value };
 }
-```
 
-Use `satisfies` on an ad-hoc returned value when it must conform to a contract while retaining narrower inferred literals for callers.
-
-```typescript
-// GOOD: prove conformance without widening the inferred result to LoadState.
+// GOOD: `satisfies` checks this value while retaining its narrower inferred type.
 function createLoadedState(value: string) {
-	return { status: 'loaded', value } satisfies LoadState;
+	return { status: LoadStatus.Loaded, value } satisfies LoadState;
 }
 ```
 
-An annotation is justified only when it adds information or enforces an intentional contract. Supply missing inference at the narrowest site.
+Give empty collections explicit element, key, and value contracts. Use an element annotation with an array literal and constructor generics for `Map` and `Set`. Do not rely on later insertions to evolve their types. Infer populated collections when their initial values establish the intended contract.
 
 ```typescript
-// GOOD: an empty array has no elements from which to infer User.
+// GOOD: the empty array's element contract constrains every later insertion.
 const users: User[] = [];
 
-// GOOD: the constructor needs its key and value contracts.
+// GOOD: constructor generics establish both key and value contracts.
 const usersById = new Map<string, User>();
 ```
 
-Prefer a generic argument to a variable annotation when a constructor or function accepts the missing information directly. Never use a return annotation to claim that unvalidated input is trusted.
+## Inferred Filter Predicates
+
+In TypeScript 5.5 and later, let supported filter callbacks infer their predicates from the boolean expression.
+
+```typescript
+const values = ['Ada', 0, '', 42];
+
+// BAD: the explicit predicate repeats inference and can assert an incorrect result.
+const assertedNames = values.filter((value): value is string => typeof value === 'string');
+
+// GOOD: the callback infers `string[]`; retain `filter` instead of substituting `flatMap`.
+const names = values.filter(value => typeof value === 'string');
+
+const candidates = [
+	{ active: true, visible: false },
+	{ active: true, visible: true },
+];
+
+// GOOD: pure conditions share one pass when behavior and narrowing are preserved.
+// Keep stages separate if combining them changes effects or callback index/array inputs.
+const visibleUsers = candidates.filter(user => user.active && user.visible);
+```
+
+Check the resulting type: compound or truthiness expressions do not always narrow. Preserve valid zero and empty values.
+
+## Defining-Module Result Contracts
+
+The defining module owns its named result contract. Do not derive `ReturnType` or `Awaited<ReturnType<...>>` from an imported function in a consumer.
+
+```typescript
+// reports.ts
+
+// Ordinary call results stay inferred in the defining module.
+export function summarize(rows: readonly number[]) {
+	return { count: rows.length, total: rows.reduce((sum, value) => sum + value, 0) };
+}
+
+// Export a contract only when consumers need it; reuse an existing domain/schema
+// type or an owner-local alias. No return annotation or forwarding wrapper is needed.
+export type Summary = ReturnType<typeof summarize>;
+```
+
+```typescript
+// BAD: the consumer derives a contract owned by `reports.ts`.
+import { summarize } from './reports';
+type Summary = ReturnType<typeof summarize>;
+```
+
+```typescript
+// GOOD: the consumer imports the owner's named contract.
+import type { Summary } from './reports';
+
+function renderSummary(summary: Summary) {
+	return summary.total.toFixed(2);
+}
+```

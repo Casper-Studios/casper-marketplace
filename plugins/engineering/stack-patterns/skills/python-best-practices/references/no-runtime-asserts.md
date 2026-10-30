@@ -15,5 +15,3 @@ def require[T](value: T | None, message: str):
         raise RuntimeError(message)
     return value
 ```
-
-Use a `Never`-typed explicit failure function for exhaustiveness after a closed-state match. Do not use an assertion as runtime validation.

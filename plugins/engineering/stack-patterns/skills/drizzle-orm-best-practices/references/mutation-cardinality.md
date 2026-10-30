@@ -16,7 +16,7 @@ Drizzle preserves the configured adapter's mutation result when `.returning()` i
 There is no portable Drizzle affected-row property. Verify the current adapter contract instead of inferring it from the SQL dialect. Keep the adapter-specific read at the database boundary. Normalize it into an application-owned mutation outcome only when several callers or adapters need the same contract.
 
 ```typescript
-// node-postgres
+// `node-postgres`
 import { and, eq, sql } from 'drizzle-orm';
 
 const result = await db

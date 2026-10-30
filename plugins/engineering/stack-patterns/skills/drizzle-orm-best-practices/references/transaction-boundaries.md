@@ -3,7 +3,7 @@
 Use `db.transaction` when several statements create or preserve one domain invariant and the configured driver supports transactions. Pass `tx` through every participating helper so no statement escapes the unit of work. Do not infer support from the presence of the method; MySQL Proxy exposes it but throws when called.
 
 ```typescript
-// node-postgres
+// `node-postgres`
 import { and, eq, gte, sql } from 'drizzle-orm';
 
 await db.transaction(async tx => {

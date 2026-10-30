@@ -1,6 +1,8 @@
 # Result Destructuring
 
-At call sites, destructure the stable query-result fields that the component uses.
+React query-hook consumers must destructure the named result fields they use. The top-level result object is not referentially stable: it has a new identity on every render. Do not retain it as a component-level alias or use it as a hook dependency, prop, or context value.
+
+Avoid object-rest destructuring: it reads the remaining tracked properties and defeats selective subscriptions.
 
 ```tsx
 // BAD: the complete result is an imprecise dependency and prop contract.
@@ -21,12 +23,6 @@ function JobDetail({ jobId }: { jobId: string }) {
 }
 ```
 
-Do not place the complete query result object in an effect dependency, memo dependency, context value, or prop contract merely for convenience. Its object identity is not the component's semantic dependency.
-
 Keep the complete result only when a library API explicitly requires it. Otherwise, name the fields that drive rendering or behavior.
-
-This rule improves dependency precision; it does not require destructuring inside reusable query hooks.
-
-Destructure close to the consumer so each component declares its own query-state needs.
 
 Do not pass unused status fields through intermediate components merely because the query result exposes them.

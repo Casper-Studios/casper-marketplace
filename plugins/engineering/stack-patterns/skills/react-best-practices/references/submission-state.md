@@ -1,45 +1,55 @@
 # Submission State
 
-Model pending work as form-wide state. Disable every submit control while submission is active.
+Read pending, result, and error state from the existing submission owner and pass that state to the form when the owner lives above it. Do not mirror the operation lifecycle in local flags or couple it to the controlled state used for live input feedback. Every submit control must reflect the same pending state.
 
 ```tsx
-// BAD: one button cannot represent keyboard or form-wide submission state.
-function BadForm() {
-	function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-		const submitter = event.nativeEvent.submitter;
-		if (submitter instanceof HTMLButtonElement) submitter.disabled = true;
-	}
+import type { FormEvent } from 'react';
+import { decode } from 'decode-formdata';
+import * as v from 'valibot';
 
-	return (
-		<form onSubmit={onSubmit}>
-			<button type="submit">Create</button>
-		</form>
-	);
+const SaveInput = v.object({ name: v.pipe(v.string(), v.minLength(1)) });
+type SaveInput = v.InferOutput<typeof SaveInput>;
+
+interface FormProps {
+	onSave: (input: SaveInput) => void;
+	isPending: boolean;
+	error: Error | null;
 }
 
-// GOOD: every submit action reflects the shared operation lifetime.
-function Form() {
-	const [isSubmitting, setIsSubmitting] = useState(false);
+// BAD: disabling one clicked element misses keyboard and other submit controls.
+function disableSubmitter(event: FormEvent<HTMLFormElement>) {
+	const nativeEvent = event.nativeEvent;
+	if (nativeEvent instanceof SubmitEvent) {
+		const { submitter } = nativeEvent;
+		if (submitter instanceof HTMLButtonElement) submitter.disabled = true;
+	}
+}
+
+// GOOD: the operation owner supplies status; submission parses its own snapshot.
+function Form({ onSave, isPending, error }: FormProps) {
+	function submit(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		const formData = new FormData(event.currentTarget);
+		onSave(v.parse(SaveInput, decode(formData)));
+	}
+
+	let alert;
+	if (error !== null) alert = <p role="alert">{error.message}</p>;
+
 	return (
-		<form>
-			<button type="submit" disabled={isSubmitting}>
-				Create
+		<form onSubmit={submit}>
+			<label>
+				Name
+				<input name="name" required />
+			</label>
+			<button type="submit" disabled={isPending}>
+				Save
 			</button>
-			<button type="submit" disabled={isSubmitting}>
-				Save Draft
-			</button>
+			<p role="status">{isPending ? 'Saving...' : null}</p>
+			{alert}
 		</form>
 	);
 }
 ```
 
-Do not mutate one submit button through `SubmitEvent.submitter`. The submitter is validly `null` for keyboard and programmatic submission, and one element does not represent the whole form lifecycle.
-
-Clear pending state when the submission settles. Keep validation errors distinct from pending state so a failed submission leaves controls usable.
-
-Keep cancellation, network failure, and validation messages explicit. Do not use a disabled control as the only indication that the form is submitting.
-
-When a form has multiple submit buttons, use the same form-wide pending state for every action.
-
-Announce pending work with accessible status text when the operation takes noticeable time. Keep the message independent of button identity so keyboard submission follows the same experience.
+Present validation, cancellation, and request failures separately from progress so controls remain usable after a settled failure. Choose draft reset behavior deliberately after the intended outcome; typing and submission status have separate lifetimes.

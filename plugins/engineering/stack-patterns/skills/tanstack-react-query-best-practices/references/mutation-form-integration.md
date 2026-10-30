@@ -1,35 +1,46 @@
 # Mutation Form Integration
 
-Decode and parse user-controlled form input before invoking a mutation.
+Intercept `onSubmit` for both controlled and uncontrolled forms. Prevent default navigation, decode and parse a fresh `FormData` snapshot, then pass the validated domain input through mutation variables. Controlled state belongs to live rendered feedback; submission must not assemble its payload from that changing state.
 
 ```tsx
+import type { FormEvent } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { decode } from 'decode-formdata';
 import * as v from 'valibot';
 
-// BAD: the mutation receives form transport data.
-function BadJobForm() {
-	const mutation = useMutation({ mutationFn: updateJob });
+const UpdateJobInput = v.object({ title: v.pipe(v.string(), v.minLength(1)) });
+type UpdateJobInput = v.InferOutput<typeof UpdateJobInput>;
 
-	function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-		mutation.mutate(decode(new FormData(event.currentTarget)));
-	}
+declare function updateJob(input: UpdateJobInput): Promise<void>;
 
-	return <form onSubmit={onSubmit} />;
+function useUpdateJob() {
+	return useMutation({ mutationFn: updateJob });
 }
 
-// GOOD: the form boundary parses domain variables before mutation work.
 function JobForm() {
-	const mutation = useMutation({ mutationFn: updateJob });
+	const { mutate, isPending, error } = useUpdateJob();
 
-	function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+	function submit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
-		const input = v.parse(updateJobInput, decode(new FormData(event.currentTarget)));
-		mutation.mutate(input);
+		const formData = new FormData(event.currentTarget);
+		const input = v.parse(UpdateJobInput, decode(formData));
+		mutate(input);
 	}
 
-	return <form onSubmit={onSubmit} />;
+	return (
+		<form onSubmit={submit}>
+			<label>
+				Title
+				<input name="title" required />
+			</label>
+			<button type="submit" disabled={isPending}>
+				Save
+			</button>
+			<p role="status">{isPending ? 'Saving...' : null}</p>
+			{error !== null ? <p role="alert">{error.message}</p> : null}
+		</form>
+	);
 }
 ```
 
-Keep mutation configuration stable in the hook. Pass changing operation input through `mutate` variables, and keep success/error consequences with the invocation that caused them. Use `decode-formdata` for representation conversion, then validate before invoking the mutation.
+Keep configuration stable and changing input in mutation variables. Use per-call callbacks for mounted UI consequences. Use `mutateAsync` when the caller must compose the returned promise into a larger asynchronous operation; do not recreate pending state or add ceremonial `finally` blocks. Reset drafts only after the intended successful outcome.

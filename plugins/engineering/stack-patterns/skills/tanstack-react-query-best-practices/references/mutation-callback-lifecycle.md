@@ -1,45 +1,52 @@
 # Mutation Callback Lifecycle
 
-Use synchronous event handlers and per-call mutation callbacks for operation outcomes.
+Put every-invocation policy in the mutation definition and mounted UI consequences at the call site. Choose callbacks for an event invocation or `mutateAsync` when the caller composes the promise into an action or larger operation.
 
 ```tsx
-// BAD: an effect loses the identity of the invocation that succeeded.
+import { useEffect, type ReactNode } from 'react';
+import { useMutation } from '@tanstack/react-query';
+
+interface UpdateJobRequest {
+	id: string;
+	title: string;
+}
+
+declare function updateJob(input: UpdateJobRequest): Promise<void>;
+declare function closePanel(): void;
+
+interface JobEditorProps {
+	onSubmit: (input: UpdateJobRequest) => void;
+	disabled: boolean;
+	error: Error | null;
+}
+
+declare function JobEditor(props: JobEditorProps): ReactNode;
+
+function useUpdateJob() {
+	return useMutation({ mutationFn: updateJob });
+}
+
+// BAD: aggregate status loses the identity of the invocation that succeeded.
 function BadJobForm() {
 	const mutation = useUpdateJob();
 	useEffect(() => {
-		if (mutation.isSuccess === true) closePanel();
+		if (mutation.isSuccess) closePanel();
 	}, [mutation.isSuccess]);
 	return null;
 }
 
-// GOOD: mounted UI consequences belong to the call site.
+// GOOD: the mutation owns status; its call site owns the mounted consequence.
 function JobForm() {
-	const mutation = useUpdateJob();
-	const [formError, setFormError] = useState<string>();
-	const [isSubmitting, setIsSubmitting] = useState(false);
+	const { mutate, isPending, error } = useUpdateJob();
 
 	function submit(input: UpdateJobRequest) {
-		mutation.mutate(input, {
-			onSuccess() {
-				closePanel();
-			},
-			onError(error) {
-				setFormError(toExpectedMessage(error));
-			},
-			onSettled() {
-				setIsSubmitting(false);
-			},
-		});
+		mutate(input, { onSuccess: closePanel });
 	}
 
-	return <SubmitButton disabled={isSubmitting} error={formError} onSubmit={submit} />;
+	return <JobEditor onSubmit={submit} disabled={isPending} error={error} />;
 }
 ```
 
-Use `onSuccess` for success-only consequences. Use `onError` for expected failure presentation. Use `onSettled` for cleanup required after either outcome.
+Use `onSuccess` for success consequences and `onError` for expected failure presentation. Per-call callbacks stop when their observer unmounts and consecutive calls retain only the latest observer's callbacks. Put required persistence, cache policy, and operation-owned cleanup in the mutation definition, where each invocation receives them.
 
-Do not use an effect to react to `mutation.isSuccess`. Keep the consequence attached to the mutation invocation that caused it.
-
-Do not use `mutateAsync` with ceremonial `try`/`finally` merely to clear pending state. Use `mutateAsync` only when the caller genuinely composes the returned promise into a larger async operation.
-
-Keep mutation-specific UI callbacks at the call site when different submissions need different outcomes. Per-call callbacks do not run after their observer unmounts, and consecutive `mutate` calls guarantee them only for the latest observer. Put consequences that must run for every invocation in the mutation definition instead.
+Read pending and errors from their existing owner instead of clearing duplicate local flags in `onSettled`. Use `onSettled` only for real operation-owned cleanup required after either result; a promise-owning caller awaits its work without recreating the mutation lifecycle.

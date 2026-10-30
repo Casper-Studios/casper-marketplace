@@ -1,6 +1,6 @@
 # Optional Value Narrowing
 
-Narrow an optional value before passing it to an operation that requires a present value.
+Narrow an optional value with `typeof value === 'undefined'` or `typeof value !== 'undefined'` before passing it to an operation that requires a present value. Do not compare directly with `undefined`.
 
 ```typescript
 if (typeof value === 'undefined') throw new Error('Expected value to be defined');

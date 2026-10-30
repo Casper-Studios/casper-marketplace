@@ -39,9 +39,9 @@ const results = await all({
 	},
 });
 
-// `results.count` is number.
-// `results.name` is string.
-// `results.combined` is { count: number; name: string }.
+// `results.count` is `number`.
+// `results.name` is `string`.
+// `results.combined` is `{ count: number; name: string }`.
 ```
 
 Give a task an explicit generic or return annotation only when inference lacks information required by its consumer.

@@ -26,7 +26,6 @@ An explicit return annotation is an exception. Add one when:
 
 - A declaration has no implementation to infer, such as a `Protocol` member or overload.
 - Recursion prevents reliable inference.
-- A `Never` return is part of an exhaustiveness contract.
 - A decorator or generator API requires an explicit yielded-value contract.
 - Inference loses an intentional abstraction, union, or generic relationship.
 

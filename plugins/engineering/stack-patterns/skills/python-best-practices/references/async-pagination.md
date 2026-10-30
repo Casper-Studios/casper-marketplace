@@ -1,6 +1,6 @@
 # Yield Async Pages Lazily
 
-Use an async generator when a remote API paginates. Yield validated pages, preserve continuation tokens, and let the consumer choose when to stop or flatten.
+Use an async generator when a remote API paginates.
 
 ```python
 from collections.abc import AsyncIterator, Awaitable, Callable
@@ -38,5 +38,3 @@ async def iter_pages(
             return
         cursor = page.next_cursor
 ```
-
-Do not collect every page in the transport layer unless that is the explicit provider contract.

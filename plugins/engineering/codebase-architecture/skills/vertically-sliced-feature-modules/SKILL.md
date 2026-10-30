@@ -9,33 +9,34 @@ metadata:
 
 # Vertically Sliced Feature Modules
 
-This skill organizes systems around capabilities that own their implementation end to end. Feature roots, nested subsystems, compositional entry points, and deliberately promoted shared boundaries keep cohesion high and dependency direction visible.
+Organize systems around capabilities that own their implementation end to end. Reconstruct the production import graph and the build + runtime boundaries before proposing folders. Treat example names as adaptable ownership shapes, not prescribed filenames.
 
-Reconstruct the current ownership graph and build/runtime boundaries before proposing folders. Treat the example trees as adaptable ownership shapes, not prescribed filenames.
+## Recursive Ownership
 
-## Feature Ownership
+A feature or subsystem owns the complete private import closure required to provide its operation. Apply this rule recursively:
 
-A feature owns one user-visible or business capability end to end. Keep its complete private implementation closure under that owner, recursively, instead of scattering technical roles across global layers.
+1. Place each private dependency beneath its narrowest production consumer.
+2. Place a dependency used by several children at their lowest common owning ancestor.
+3. Let external consumers import only an operational entry.
+4. Do not import ancestor-private or sibling-private implementation files.
+5. Repeat the placement analysis inside every child until no dependency can move closer to its consumer.
 
-An entry implements or composes the operation its consumer needs. Keep setup options private when a caller only uses them to finish that operation. Do not introduce a forwarding wrapper or re-export barrel to manufacture an entry point.
+An entry implements or composes the operation its consumer needs. A file that only re-exports private leaves is a barrel, not an entry. Familiar entry filenames such as `index.ts`, `mod.rs`, `__init__.py`, `page.tsx`, and `+page.svelte` can make a boundary visible, but the filename does not create the boundary.
 
-Keep a readable private helper in its consumer. Extract a utility file when meaningful sans-I/O behavior needs a focused colocated test, even with one production consumer; this does not make the utility shared. Do not invent tests for trivial glue.
+Name operation-owning subsystems with verbs such as `filter`, `edit`, `review`, or `publish`. Use nouns for owned domain concepts, records, and infrastructure such as `policy`, `repository`, or `schema`. Follow an established repository convention when it communicates the same ownership clearly.
 
-Features are isolated siblings and do not import one another. Callers and orchestrators compose feature entries. When multiple features need the same stable logic, promote it to a focused shared owner instead of making either feature the dependency of the other.
+Features are isolated siblings and do not import one another. Callers and orchestrators compose feature entries. Promote stable behavior only when its real consumer set requires a broader owner.
 
 ## References
 
-Read the reference that matches the ownership or boundary being changed.
+Read the reference that matches the ownership decision being changed.
 
-1. Keep each capability's technical roles together under its owning feature.
-   - [Use a feature-first directory structure instead of scattering a capability by layer.](./references/directory-structure.md)
-   - [Give a single owner's private capability a deeper nested subsystem instead of a broad prefixed namespace.](./references/nested-subsystems.md)
-   - [Collocate unit tests with their narrowest leaf and hoist cross-cutting scenarios to an integration owner.](./references/test-placement.md)
-2. Compose features through deliberate entries and one-way public boundaries.
-   - [Keep routes and registries as composition surfaces; entry points must not absorb reusable business behavior.](./references/entry-points-and-composition.md)
-   - [Prevent feature-to-feature coupling through public contracts with downward import direction.](./references/public-contracts-and-import-direction.md)
-3. Promote shared ownership and package boundaries only when the system requires them.
-   - [Require multiple owners to share one stable responsibility before promoting code to a shared-code owner.](./references/shared-code-promotion.md)
+1. Derive the directory tree from the production import graph.
+   - [Recursively place every private dependency beneath its narrowest owning consumer.](./references/recursive-ownership.md)
+   - [Give each public boundary an operational entry and keep private imports inside that boundary.](./references/entries-and-import-boundaries.md)
+2. Broaden ownership only when the consumer set proves it is necessary.
+   - [Place shared behavior at its lowest common owner before promoting it across features.](./references/ownership-promotion.md)
    - [Admit an independently buildable package only for a real dependency, runtime, build, or deployment closure.](./references/package-admission.md)
-4. Preserve the existing ownership graph, contracts, and behavior during structural changes.
-   - [Refactor and review module moves without redesigning logic under the cover of a move.](./references/refactor-and-review.md)
+3. Preserve behavior and evidence while changing structure.
+   - [Apply the ownership analysis to a fixed point and audit the resulting import graph.](./references/refactor-and-review.md)
+   - [Collocate unit tests with their narrowest leaf and hoist cross-boundary scenarios to their composing owner.](./references/test-placement.md)
