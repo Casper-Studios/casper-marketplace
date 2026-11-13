@@ -64,7 +64,18 @@ Replace `research` with any plugin name from the table above. Codex uses the sha
 
 ### Auto-sync on session start
 
-Add `sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/claude-code/hooks) to keep all marketplace plugins up-to-date automatically:
+Add `sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/claude-code/hooks) to keep all marketplace plugins up-to-date automatically. It only reinstalls when the marketplace has a new commit.
+
+Installing skills globally does not copy the script, so download it first:
+
+```bash
+mkdir -p ~/.claude/hooks
+curl -sf https://raw.githubusercontent.com/Casper-Studios/casper-marketplace/main/plugins/engineering/git-pr/sync-skills.sh \
+  -o ~/.claude/hooks/sync-skills.sh
+chmod +x ~/.claude/hooks/sync-skills.sh
+```
+
+Then register it:
 
 ```jsonc
 // ~/.claude/settings.json
@@ -76,7 +87,7 @@ Add `sync-skills.sh` as a [Claude Code hook](https://docs.anthropic.com/en/docs/
         "hooks": [
           {
             "type": "command",
-            "command": "bash /path/to/sync-skills.sh",
+            "command": "~/.claude/hooks/sync-skills.sh",
             "timeout": 60,
             "async": true
           }
