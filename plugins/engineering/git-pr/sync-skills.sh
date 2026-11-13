@@ -15,17 +15,19 @@ STAMP="$HOME/.agents/.casper-marketplace-commit"
 # 1. Skip if the marketplace hasn't changed since the last successful sync
 # ---------------------------------------------------------------------------
 # Delete the stamp file to force a full resync.
-# `timeout` is GNU coreutils (`gtimeout` via Homebrew on macOS). Without
-# either, rely on the hook's own timeout.
+# Async hooks get no timeout from Claude Code, and stock macOS has no
+# `timeout`, so a watchdog gives the probe its own deadline.
 # ---------------------------------------------------------------------------
 remote_head() {
-  if command -v timeout &>/dev/null; then
-    timeout 20 git ls-remote "$MARKETPLACE" HEAD
-  elif command -v gtimeout &>/dev/null; then
-    gtimeout 20 git ls-remote "$MARKETPLACE" HEAD
-  else
-    git ls-remote "$MARKETPLACE" HEAD
-  fi
+  git ls-remote "$MARKETPLACE" HEAD &
+  local pid=$!
+  # Redirected so the watchdog doesn't hold the caller's output pipe open.
+  (sleep 20 && kill "$pid") >/dev/null 2>&1 &
+  local watchdog=$!
+  local status=0
+  wait "$pid" || status=$?
+  kill "$watchdog" 2>/dev/null || true
+  return "$status"
 }
 
 latest=$(remote_head 2>/dev/null | cut -f1 || true)
@@ -33,29 +35,32 @@ latest=$(remote_head 2>/dev/null | cut -f1 || true)
 [ "$latest" != "$(cat "$STAMP" 2>/dev/null || true)" ] || exit 0
 
 # ---------------------------------------------------------------------------
-# 2. Ensure the `skills` CLI is available
+# 2. Run a pinned `skills` CLI
 # ---------------------------------------------------------------------------
-if ! command -v skills &>/dev/null; then
-  if command -v bun &>/dev/null; then
-    bun add -g skills 2>/dev/null || true
-  elif command -v pnpm &>/dev/null; then
-    pnpm add -g skills 2>/dev/null || true
-  elif command -v npm &>/dev/null; then
-    npm i -g skills 2>/dev/null || true
-  else
-    exit 0
-  fi
-fi
+# 1.8.0+ skips agents without a global skills dir; older versions fail every
+# skill on them, so `--json` would never report success.
+# ---------------------------------------------------------------------------
+SKILLS_CLI="skills@1.8.1"
 
-command -v skills &>/dev/null || exit 0
+run_skills() {
+  if command -v bunx &>/dev/null; then
+    bunx "$SKILLS_CLI" "$@"
+  elif command -v pnpm &>/dev/null; then
+    pnpm dlx "$SKILLS_CLI" "$@"
+  elif command -v npx &>/dev/null; then
+    npx -y "$SKILLS_CLI" "$@"
+  else
+    return 1
+  fi
+}
 
 # ---------------------------------------------------------------------------
 # 3. Add or update all marketplace skills globally, then record the commit
 # ---------------------------------------------------------------------------
-# --all installs new skills and overwrites existing ones.
-# The CLI handles cloning, diffing, and symlinking internally.
+# --all installs new skills and overwrites existing ones. Without --json, a
+# partial failure still exits 0; with it, any failed skill exits nonzero.
 # ---------------------------------------------------------------------------
-if skills add "$MARKETPLACE" --all -g 2>/dev/null; then
+if run_skills add "$MARKETPLACE" --all --global --json >/dev/null 2>&1; then
   mkdir -p "$(dirname "$STAMP")"
   echo "$latest" > "$STAMP"
 fi
