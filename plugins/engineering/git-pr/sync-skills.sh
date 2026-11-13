@@ -15,8 +15,20 @@ STAMP="$HOME/.agents/.casper-marketplace-commit"
 # 1. Skip if the marketplace hasn't changed since the last successful sync
 # ---------------------------------------------------------------------------
 # Delete the stamp file to force a full resync.
+# `timeout` is GNU coreutils (`gtimeout` via Homebrew on macOS). Without
+# either, rely on the hook's own timeout.
 # ---------------------------------------------------------------------------
-latest=$(timeout 20 git ls-remote "$MARKETPLACE" HEAD 2>/dev/null | cut -f1 || true)
+remote_head() {
+  if command -v timeout &>/dev/null; then
+    timeout 20 git ls-remote "$MARKETPLACE" HEAD
+  elif command -v gtimeout &>/dev/null; then
+    gtimeout 20 git ls-remote "$MARKETPLACE" HEAD
+  else
+    git ls-remote "$MARKETPLACE" HEAD
+  fi
+}
+
+latest=$(remote_head 2>/dev/null | cut -f1 || true)
 [ -n "$latest" ] || exit 0
 [ "$latest" != "$(cat "$STAMP" 2>/dev/null || true)" ] || exit 0
 
