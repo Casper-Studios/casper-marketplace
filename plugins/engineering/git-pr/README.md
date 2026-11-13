@@ -15,7 +15,9 @@ One of: **bun** (preferred), **pnpm**, or **npm**.
 
 ### 1. Install the sync script
 
-The bundled `sync-skills.sh` clones the marketplace, discovers every skill directory automatically, and installs/updates them all. No hardcoded list — new skills are picked up every run.
+The bundled `sync-skills.sh` installs/updates every marketplace skill. No hardcoded list — new skills are picked up automatically. It checks the marketplace's latest commit first and only reinstalls when that commit has changed, so most runs do nothing.
+
+Installing the skills globally does not copy this script, so download it to a fixed location:
 
 ```bash
 mkdir -p ~/.claude/hooks
@@ -70,6 +72,12 @@ Re-run the sync script at any time:
 
 ```bash
 ~/.claude/hooks/sync-skills.sh
+```
+
+The script records the last synced commit in `~/.agents/.casper-marketplace-commit` and skips the reinstall if it matches. To force a full reinstall, delete that file first:
+
+```bash
+rm -f ~/.agents/.casper-marketplace-commit && ~/.claude/hooks/sync-skills.sh
 ```
 
 ## Skills
