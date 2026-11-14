@@ -26,3 +26,7 @@ calendar_token.pickle
 *.der
 *.jks
 *.keystore
+
+# Python bytecode
+__pycache__/
+*.pyc
